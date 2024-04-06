@@ -1,1 +1,1 @@
-# hot_foot_app
+# ChallengeApp
