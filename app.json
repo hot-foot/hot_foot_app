@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "text-expo",
-    "slug": "text-expo",
+    "name": "hot_foot",
+    "slug": "hot-foot",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/app_icon.png",
@@ -23,6 +23,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "92cf28cf-62ad-4456-aacd-d33c6d64b0dd"
+      }
+    },
+    "owner": "suyoooi"
   }
 }
