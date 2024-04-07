@@ -31,17 +31,6 @@ const ProcessScreen = () => {
 
   const [isInputFocused, setInputFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [open, setOpen] = useState(false);
-  const [board, setBoardSort] = useState("");
-
-  const handleSortClick = () => {
-    setOpen(!open);
-    console.log("정렬하시게씀까");
-  };
-
-  const handleCategorySelect = (data) => {
-    setBoardSort(data);
-  };
 
   const handleFocus = () => {
     setInputFocused(true);
