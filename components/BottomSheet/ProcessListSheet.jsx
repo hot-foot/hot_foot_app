@@ -13,7 +13,7 @@ import TodoCard from "../Card/todoCard";
 import PlusBtn from "../Btn/plusBtn";
 import { TODO_LIST } from "../../data/processData";
 
-const ProcessListSheet = ({ isVisible, onClose, onAdd }) => {
+const ProcessListSheet = ({ isVisible, onClose, onAdd, onPlus }) => {
   const screenHeight = Dimensions.get("window").height;
   const halfScreenHeight = screenHeight * 0.4;
 
@@ -59,14 +59,14 @@ const ProcessListSheet = ({ isVisible, onClose, onAdd }) => {
                 ))}
               </View>
             </ScrollView>
-            <TouchableOpacity style={styles.actionItem} onPress={() => {}}>
+            <View style={styles.actionItem}>
               <PlusBtn
                 color={"#FEAC54"}
                 width={40}
                 height={40}
-                onPress={() => {}}
+                onPress={onPlus}
               />
-            </TouchableOpacity>
+            </View>
           </View>
         </View>
       </TouchableOpacity>
