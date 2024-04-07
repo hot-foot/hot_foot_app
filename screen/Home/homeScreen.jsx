@@ -88,11 +88,8 @@ const HomeScreen = () => {
           onPress={handleBtnClick}
         />
       </Animated.View>
-      <Button title="타이머" onPress={() => {}}></Button>
     </View>
   );
 };
-
-
 
 export default HomeScreen;
