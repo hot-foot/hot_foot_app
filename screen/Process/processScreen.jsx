@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import TodoCard from "../../components/Card/todoCard";
 import PlusBtn from "../../components/Btn/plusBtn";
 import LargeBtn from "../../components/Btn/largeBtn";
+import BottomSheetModal from "../../components/BottomSheet/BottomSheetModal";
 
 const TODO_LIST = [
   {
@@ -30,6 +31,7 @@ const TODO_LIST = [
 const ProcessScreen = () => {
   const navigation = useNavigation();
   const [inputValue, setInputValue] = useState("");
+  const [isActionSheetVisible, setActionSheetVisible] = useState(false);
 
   const handleCloseBtnClick = () => {
     navigation.navigate("Home");
@@ -40,6 +42,14 @@ const ProcessScreen = () => {
     if (text.length <= 9) {
       setInputValue(text);
     }
+  };
+
+  const handlePluBtn = () => {
+    setActionSheetVisible(true);
+  };
+
+  const handleRemoveClick = () => {
+    console.log("클릭함::");
   };
 
   // 이동 시간 상태
@@ -148,12 +158,9 @@ const ProcessScreen = () => {
               <Text style={[styles.topSubText, { color: "#1B1B1B" }]}>
                 {formatAMPM(selectedDepartureTime)} {/* 이동 시간 표시 */}
               </Text>
-              {/* <Text style={[styles.topSubText, { color: "#B9B9B9" }]}>
-                00 시간
+              <Text style={[styles.topSubText, { color: "#B9B9B9" }]}>
+                00 시간 00 분
               </Text>
-              <Text style={[styles.topSubText, , { color: "#B9B9B9" }]}>
-                00 분
-              </Text> */}
             </View>
             <TouchableOpacity onPress={showDepartureTimePicker} style={{}}>
               <Image
@@ -177,12 +184,9 @@ const ProcessScreen = () => {
               <Text style={[styles.topSubText, { color: "#1B1B1B" }]}>
                 {formatAMPM2(selectedArrivalTime)} {/* 도착 시간 표시 */}
               </Text>
-              {/* <Text style={[styles.topSubText, { color: "#B9B9B9" }]}>
-                00 시간
+              <Text style={[styles.topSubText, { color: "#B9B9B9" }]}>
+                00 : 00 PM
               </Text>
-              <Text style={[styles.topSubText, , { color: "#B9B9B9" }]}>
-                00 분
-              </Text> */}
             </View>
             <TouchableOpacity onPress={showArrivalTimePicker} style={{}}>
               <Image
@@ -224,7 +228,7 @@ const ProcessScreen = () => {
             color={"#9BED94"}
             width={40}
             height={40}
-            onPress={() => {}}
+            onPress={handlePluBtn}
           />
         </View>
       </ScrollView>
@@ -266,6 +270,11 @@ const ProcessScreen = () => {
           </Text>
         </View>
       </View>
+      <BottomSheetModal
+        isVisible={isActionSheetVisible}
+        onClose={() => setActionSheetVisible(false)}
+        onRemove={handleRemoveClick}
+      />
     </View>
   );
 };
