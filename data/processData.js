@@ -45,3 +45,66 @@ export const TODO_LIST = [
     imagePath: require("../assets/img/action/procrastinate.png"),
   },
 ];
+
+export const TODO_ICON = [
+  {
+    id: 1,
+    imagePath: require("../assets/img/action/BB1.png"),
+  },
+  {
+    id: 2,
+    imagePath: require("../assets/img/action/BB2.png"),
+  },
+  {
+    id: 3,
+    imagePath: require("../assets/img/action/BB3.png"),
+  },
+  {
+    id: 4,
+    imagePath: require("../assets/img/action/BB4.png"),
+  },
+  {
+    id: 5,
+    imagePath: require("../assets/img/action/BB5.png"),
+  },
+  {
+    id: 6,
+    imagePath: require("../assets/img/action/BB6.png"),
+  },
+  {
+    id: 7,
+    imagePath: require("../assets/img/action/washface.png"),
+  },
+  {
+    id: 8,
+    imagePath: require("../assets/img/action/brushteeth.png"),
+  },
+  {
+    id: 9,
+    imagePath: require("../assets/img/action/eat.png"),
+  },
+  {
+    id: 10,
+    imagePath: require("../assets/img/action/shower.png"),
+  },
+  {
+    id: 11,
+    imagePath: require("../assets/img/action/hair.png"),
+  },
+  {
+    id: 12,
+    imagePath: require("../assets/img/action/clothing.png"),
+  },
+  {
+    id: 13,
+    imagePath: require("../assets/img/action/makeup.png"),
+  },
+  {
+    id: 14,
+    imagePath: require("../assets/img/action/bag.png"),
+  },
+  {
+    id: 15,
+    imagePath: require("../assets/img/action/procrastinate.png"),
+  },
+];
