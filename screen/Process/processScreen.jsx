@@ -28,17 +28,7 @@ const TODO_LIST = [
 
 const ProcessScreen = () => {
   const navigation = useNavigation();
-
-  const [isInputFocused, setInputFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
-
-  const handleFocus = () => {
-    setInputFocused(true);
-  };
-
-  const handleBlur = () => {
-    setInputFocused(false);
-  };
 
   const handleCloseBtnClick = () => {
     navigation.navigate("Home");
@@ -70,8 +60,6 @@ const ProcessScreen = () => {
           placeholderTextColor={"#B9B9B9"}
           value={inputValue}
           onChangeText={handleInputChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
           maxLength={9}
           style={styles.textInput}
         />
