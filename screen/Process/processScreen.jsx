@@ -26,11 +26,6 @@ const TODO_LIST = [
   },
 ];
 
-const COMMUNITY_SORT = [
-  { title: "최신순", data: "LATEST" },
-  { title: "조회순", data: "VIEW" },
-];
-
 const ProcessScreen = () => {
   const navigation = useNavigation();
 
