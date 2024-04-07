@@ -16,7 +16,7 @@ const TodoCard = ({ title, time, imagePath }) => {
                 padding: 4,
               }}
             >
-              <Image source={localImage} style={styles.icon} />
+              <Image source={imagePath} style={styles.icon} />
             </View>
             <Text style={styles.text}>{title}</Text>
           </View>
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   text: {
     color: "#1B1B1B",
     fontSize: 16,
-    fontWeight: "400",
+    fontFamily: "Pretendard_Regular",
     alignSelf: "center",
   },
 });
