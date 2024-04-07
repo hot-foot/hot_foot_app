@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 
 const TodoCard = ({ title, time, imagePath }) => {
-  const localImage = require("../../assets/img/Icon/clothing.png");
+  const localImage = require("../../assets/img/action/clothing.png");
 
   return (
     <View>

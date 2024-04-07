@@ -17,12 +17,12 @@ const TODO_LIST = [
   {
     title: "세수하기",
     time: "3",
-    imagePath: "../../assets/img/Icon/clothing.png",
+    imagePath: "../../assets/img/action/clothing.png",
   },
   {
     title: "옷입기",
     time: "2",
-    imagePath: "../../assets/img/Icon/clothing.png",
+    imagePath: "../../assets/img/action/clothing.png",
   },
 ];
 
