@@ -14,12 +14,17 @@ import TodoCard from "../../components/Card/todoCard";
 import PlusBtn from "../../components/Btn/plusBtn";
 import LargeBtn from "../../components/Btn/largeBtn";
 import ProcessListSheet from "../../components/BottomSheet/ProcessListSheet";
+import TodoIconSheet from "../../components/BottomSheet/todoIcon";
 
 const ProcessScreen = () => {
   const navigation = useNavigation();
   const [inputValue, setInputValue] = useState("");
   const [isActionSheetVisible, setActionSheetVisible] = useState(false);
   const [selectedTasks, setSelectedTasks] = useState([]);
+
+  const handleDeleteTask = (id) => {
+    console.log("삭제", id);
+  };
 
   const handleCloseBtnClick = () => {
     navigation.navigate("Home");
@@ -202,10 +207,12 @@ const ProcessScreen = () => {
           {selectedTasks.map((task, index) => (
             <>
               <TodoCard
-                key={index}
+                key={task.id}
+                id={task.id}
                 title={task.title}
                 time={task.time}
                 imagePath={task.imagePath}
+                onDelete={() => handleDeleteTask(task.id)}
               />
             </>
           ))}
@@ -260,7 +267,12 @@ const ProcessScreen = () => {
           </Text>
         </View>
       </View>
-      <ProcessListSheet
+      {/* <ProcessListSheet
+        isVisible={isActionSheetVisible}
+        onClose={() => setActionSheetVisible(false)}
+        onAdd={handleAddProcess}
+      /> */}
+      <TodoIconSheet
         isVisible={isActionSheetVisible}
         onClose={() => setActionSheetVisible(false)}
         onAdd={handleAddProcess}

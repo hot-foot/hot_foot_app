@@ -44,14 +44,16 @@ const ProcessListSheet = ({ isVisible, onClose, onAdd }) => {
               <View style={{ gap: 8 }}>
                 {TODO_LIST.map((item) => (
                   <TouchableOpacity
-                    key={item.title}
+                    key={item.id}
                     activeOpacity={0.8}
                     onPress={() => onAdd(item)}
                   >
                     <TodoCard
+                      id={item.id}
                       title={item.title}
                       time={item.time}
                       imagePath={item.imagePath}
+                      onDelete={() => {}}
                     />
                   </TouchableOpacity>
                 ))}
