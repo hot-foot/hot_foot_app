@@ -59,7 +59,7 @@ export default StyleSheet.create({
   },
   topSubText: {
     fontSize: 16,
-    fontFamily: "Pretendard_Regular",
+    fontFamily: "Pretendard_SemiBold",
   },
   icon: {
     height: 24,

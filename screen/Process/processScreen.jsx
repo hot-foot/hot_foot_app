@@ -8,6 +8,7 @@ import {
   ScrollView,
   Image,
 } from "react-native";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useNavigation } from "@react-navigation/native";
 import TodoCard from "../../components/Card/todoCard";
 import PlusBtn from "../../components/Btn/plusBtn";
@@ -41,6 +42,81 @@ const ProcessScreen = () => {
     }
   };
 
+  // 이동 시간 상태
+  const [isDepartureTimePickerVisible, setDepartureTimePickerVisibility] =
+    useState(false);
+  const [selectedDepartureTime, setSelectedDepartureTime] = useState(
+    new Date()
+  );
+
+  // 도착 시간 상태
+  const [isArrivalTimePickerVisible, setArrivalTimePickerVisibility] =
+    useState(false);
+  const [selectedArrivalTime, setSelectedArrivalTime] = useState(new Date());
+
+  // 이동 시간 피커 보여주기
+  const showDepartureTimePicker = () => {
+    setDepartureTimePickerVisibility(true);
+  };
+
+  // 이동 시간 피커 숨기기
+  const hideDepartureTimePicker = () => {
+    setDepartureTimePickerVisibility(false);
+  };
+
+  // 이동 시간 선택 시
+  const handleDepartureTimeConfirm = (time) => {
+    setSelectedDepartureTime(time);
+    hideDepartureTimePicker();
+  };
+
+  // 도착 시간 피커 보여주기
+  const showArrivalTimePicker = () => {
+    setArrivalTimePickerVisibility(true);
+  };
+
+  // 도착 시간 피커 숨기기
+  const hideArrivalTimePicker = () => {
+    setArrivalTimePickerVisibility(false);
+  };
+
+  // 도착 시간 선택 시
+  const handleArrivalTimeConfirm = (time) => {
+    setSelectedArrivalTime(time);
+    hideArrivalTimePicker();
+  };
+
+  // 시간을 두 자리 문자열로 변환
+  const formatTime = (time) => {
+    return time < 10 ? `0${time}` : `${time}`;
+  };
+
+  // 24시간제 시간을 12시간제로 변환
+  const formatTo12HourClock = (hours) => {
+    const newHours = hours % 12 || 12;
+    return formatTime(newHours);
+  };
+
+  // 시간과 분을 AM/PM 형식으로 변환
+  const formatAMPM = (date) => {
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const formattedTime = `${formatTo12HourClock(hours)} 시간  ${formatTime(
+      minutes
+    )} 분 `;
+    return formattedTime;
+  };
+
+  const formatAMPM2 = (date) => {
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const formattedTime = `${formatTo12HourClock(hours)} : ${formatTime(
+      minutes
+    )}  ${ampm}`;
+    return formattedTime;
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.section}>
@@ -69,36 +145,60 @@ const ProcessScreen = () => {
           <View style={styles.timeSection}>
             <View style={{ flexDirection: "row", gap: 8 }}>
               <Text style={styles.topText}>이동 시간:</Text>
-              <Text style={[styles.topSubText, { color: "#B9B9B9" }]}>
+              <Text style={[styles.topSubText, { color: "#1B1B1B" }]}>
+                {formatAMPM(selectedDepartureTime)} {/* 이동 시간 표시 */}
+              </Text>
+              {/* <Text style={[styles.topSubText, { color: "#B9B9B9" }]}>
                 00 시간
               </Text>
               <Text style={[styles.topSubText, , { color: "#B9B9B9" }]}>
                 00 분
-              </Text>
+              </Text> */}
             </View>
-            <TouchableOpacity onPress={() => {}} style={{}}>
+            <TouchableOpacity onPress={showDepartureTimePicker} style={{}}>
               <Image
                 source={require("../../assets/img/Icon/control.png")}
                 style={styles.icon}
               />
             </TouchableOpacity>
+            {/* 이동 시간 선택 모달 */}
+            <DateTimePickerModal
+              isVisible={isDepartureTimePickerVisible}
+              mode="time"
+              onConfirm={handleDepartureTimeConfirm}
+              onCancel={hideDepartureTimePicker}
+              date={selectedDepartureTime}
+              is24Hour={true}
+            />
           </View>
           <View style={styles.timeSection}>
             <View style={{ flexDirection: "row", gap: 8 }}>
               <Text style={styles.topText}>도착 시간:</Text>
-              <Text style={[styles.topSubText, { color: "#B9B9B9" }]}>
+              <Text style={[styles.topSubText, { color: "#1B1B1B" }]}>
+                {formatAMPM2(selectedArrivalTime)} {/* 도착 시간 표시 */}
+              </Text>
+              {/* <Text style={[styles.topSubText, { color: "#B9B9B9" }]}>
                 00 시간
               </Text>
               <Text style={[styles.topSubText, , { color: "#B9B9B9" }]}>
                 00 분
-              </Text>
+              </Text> */}
             </View>
-            <TouchableOpacity onPress={() => {}} style={{}}>
+            <TouchableOpacity onPress={showArrivalTimePicker} style={{}}>
               <Image
                 source={require("../../assets/img/Icon/control.png")}
                 style={styles.icon}
               />
             </TouchableOpacity>
+            {/* 도착 시간 선택 모달 */}
+            <DateTimePickerModal
+              isVisible={isArrivalTimePickerVisible}
+              mode="time"
+              onConfirm={handleArrivalTimeConfirm}
+              onCancel={hideArrivalTimePicker}
+              date={selectedArrivalTime}
+              is24Hour={true}
+            />
           </View>
         </View>
       </View>
@@ -166,15 +266,6 @@ const ProcessScreen = () => {
           </Text>
         </View>
       </View>
-      {/* {open && (
-        <BottomSheetScreen
-          title={"정렬기준"}
-          data={COMMUNITY_SORT}
-          modalVisible={open}
-          modalDisable={handleSortClick}
-          onCategorySelect={handleCategorySelect}
-        />
-      )} */}
     </View>
   );
 };
