@@ -15,23 +15,11 @@ import PlusBtn from "../../components/Btn/plusBtn";
 import LargeBtn from "../../components/Btn/largeBtn";
 import ProcessListSheet from "../../components/BottomSheet/ProcessListSheet";
 
-const TODO_LIST = [
-  {
-    title: "세수하기",
-    time: "3",
-    imagePath: "../../assets/img/action/clothing.png",
-  },
-  {
-    title: "옷입기",
-    time: "2",
-    imagePath: "../../assets/img/action/clothing.png",
-  },
-];
-
 const ProcessScreen = () => {
   const navigation = useNavigation();
   const [inputValue, setInputValue] = useState("");
   const [isActionSheetVisible, setActionSheetVisible] = useState(false);
+  const [selectedTasks, setSelectedTasks] = useState([]);
 
   const handleCloseBtnClick = () => {
     navigation.navigate("Home");
@@ -48,8 +36,9 @@ const ProcessScreen = () => {
     setActionSheetVisible(true);
   };
 
-  const handleRemoveClick = () => {
-    console.log("클릭함::");
+  const handleAddProcess = (task) => {
+    setSelectedTasks([...selectedTasks, task]);
+    setActionSheetVisible(false);
   };
 
   // 이동 시간 상태
@@ -209,20 +198,21 @@ const ProcessScreen = () => {
       <View style={styles.line} />
       {/* todo card 추가 */}
       <ScrollView style={styles.middleSection}>
-        <View style={{ gap: 8 }}>
-          {/* {TODO_LIST.map((itme) => (
+        <View style={{ gap: 8, marginBottom: 16 }}>
+          {selectedTasks.map((task, index) => (
             <>
               <TodoCard
-                title={itme.title}
-                time={itme.time}
-                imagePath={itme.imagePath}
+                key={index}
+                title={task.title}
+                time={task.time}
+                imagePath={task.imagePath}
               />
             </>
-          ))} */}
-          <Text style={styles.buttonTopText}>
-            할 일은 최대 30개까지 추가 가능합니다.
-          </Text>
+          ))}
         </View>
+        <Text style={styles.buttonTopText}>
+          할 일은 최대 30개까지 추가 가능합니다.
+        </Text>
         <View style={styles.plusButtonContainer}>
           <PlusBtn
             color={"#9BED94"}
@@ -273,7 +263,7 @@ const ProcessScreen = () => {
       <ProcessListSheet
         isVisible={isActionSheetVisible}
         onClose={() => setActionSheetVisible(false)}
-        onRemove={handleRemoveClick}
+        onAdd={handleAddProcess}
       />
     </View>
   );
