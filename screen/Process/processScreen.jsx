@@ -129,7 +129,7 @@ const ProcessScreen = () => {
       {/* todo card 추가 */}
       <ScrollView style={styles.middleSection}>
         <View style={{ gap: 8 }}>
-          {TODO_LIST.map((itme) => (
+          {/* {TODO_LIST.map((itme) => (
             <>
               <TodoCard
                 title={itme.title}
@@ -137,9 +137,10 @@ const ProcessScreen = () => {
                 imagePath={itme.imagePath}
               />
             </>
-          ))}
-
-          <View style={{ height: 8 }} />
+          ))} */}
+          <Text style={styles.buttonTopText}>
+            할 일은 최대 30개까지 추가 가능합니다.
+          </Text>
         </View>
         <View style={styles.plusButtonContainer}>
           <PlusBtn
@@ -151,7 +152,8 @@ const ProcessScreen = () => {
         </View>
       </ScrollView>
       <View
-        style={{ position: "relative", bottom: 0, backgroundColor: "#D5F8D1" }}
+        style={{ marginBottom: 34 }}
+        // style={{ position: "relative", bottom: 0, backgroundColor: "#D5F8D1" }}
       >
         <View style={styles.line} />
         <View style={[styles.middleSection, { paddingBottom: 11 }]}>
