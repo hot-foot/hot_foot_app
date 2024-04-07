@@ -7,7 +7,7 @@ import ProcessScreen from "./screen/Process/processScreen";
 import * as Font from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Notifications from "expo-notifications";
-import { Platform } from "react-native";
+import { Platform, ActivityIndicator } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +32,7 @@ async function schedulePushNotification(data) {
 }
 
 function App() {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
   const [pushToken, setPushToken] = useState("");
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
@@ -52,6 +53,7 @@ function App() {
   };
   async function loadFonts() {
     await Font.loadAsync(customFonts);
+    setFontsLoaded(true);
   }
 
   useEffect(() => {
@@ -138,16 +140,20 @@ function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-        initialRouteName="Home"
-      >
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Setting" component={SettingScreen} />
-        <Stack.Screen name="Process" component={ProcessScreen} />
-      </Stack.Navigator>
+      {fontsLoaded ? (
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}
+          initialRouteName="Home"
+        >
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Setting" component={SettingScreen} />
+          <Stack.Screen name="Process" component={ProcessScreen} />
+        </Stack.Navigator>
+      ) : (
+        <ActivityIndicator size="large" color="#000" />
+      )}
     </NavigationContainer>
   );
 }
