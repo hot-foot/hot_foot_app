@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import TodoCard from "../../components/Card/todoCard";
 import PlusBtn from "../../components/Btn/plusBtn";
 import LargeBtn from "../../components/Btn/largeBtn";
-import BottomSheetModal from "../../components/BottomSheet/BottomSheetModal";
+import ProcessListSheet from "../../components/BottomSheet/ProcessListSheet";
 
 const TODO_LIST = [
   {
@@ -270,7 +270,7 @@ const ProcessScreen = () => {
           </Text>
         </View>
       </View>
-      <BottomSheetModal
+      <ProcessListSheet
         isVisible={isActionSheetVisible}
         onClose={() => setActionSheetVisible(false)}
         onRemove={handleRemoveClick}
