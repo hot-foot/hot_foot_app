@@ -13,12 +13,15 @@ import { useNavigation } from "@react-navigation/native";
 import TodoCard from "../../components/Card/todoCard";
 import PlusBtn from "../../components/Btn/plusBtn";
 import LargeBtn from "../../components/Btn/largeBtn";
+import TodoIconSheet from "../../components/BottomSheet/todoIconSheet";
+import AddProcessSheet from "../../components/BottomSheet/addProcessSheet";
 import ProcessListSheet from "../../components/BottomSheet/ProcessListSheet";
-import TodoIconSheet from "../../components/BottomSheet/todoIcon";
 
 const ProcessScreen = () => {
   const navigation = useNavigation();
   const [inputValue, setInputValue] = useState("");
+  const [isIconSheetVisible, setIconSheetVisible] = useState(false);
+  const [isAddSheetVisible, setAddSheetVisible] = useState(false);
   const [isActionSheetVisible, setActionSheetVisible] = useState(false);
   const [selectedTasks, setSelectedTasks] = useState([]);
 
@@ -44,6 +47,16 @@ const ProcessScreen = () => {
   const handleAddProcess = (task) => {
     setSelectedTasks([...selectedTasks, task]);
     setActionSheetVisible(false);
+  };
+
+  const handleSheetPlusBtn = () => {
+    setActionSheetVisible(false);
+    setAddSheetVisible(true);
+  };
+ 
+  const handleChangeIcon = () => {
+    setAddSheetVisible(false);
+    setIconSheetVisible(true);
   };
 
   // 이동 시간 상태
@@ -267,15 +280,21 @@ const ProcessScreen = () => {
           </Text>
         </View>
       </View>
-      {/* <ProcessListSheet
+      <ProcessListSheet
         isVisible={isActionSheetVisible}
         onClose={() => setActionSheetVisible(false)}
         onAdd={handleAddProcess}
-      /> */}
+        onPlus={handleSheetPlusBtn}
+      />
       <TodoIconSheet
-        isVisible={isActionSheetVisible}
-        onClose={() => setActionSheetVisible(false)}
-        onAdd={handleAddProcess}
+        isVisible={isIconSheetVisible}
+        onClose={() => setIconSheetVisible(false)}
+        onAdd={() => {}}
+      />
+      <AddProcessSheet
+        isVisible={isAddSheetVisible}
+        onClose={() => setAddSheetVisible(false)}
+        onChange={handleChangeIcon}
       />
     </View>
   );
