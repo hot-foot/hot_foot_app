@@ -18,10 +18,11 @@ export default StyleSheet.create({
     borderBottomWidth: 2,
   },
   inputTitle: {
-    padding: 8,
+    paddingLeft: 8,
+    paddingBottom: 4,
     color: "#636363",
     fontSize: 10,
-    fontWeight: "400",
+    fontFamily: "Pretendard_Regular",
   },
   text: {
     flex: 1,
@@ -30,7 +31,7 @@ export default StyleSheet.create({
     right: 10,
     color: "#1B1B1B",
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: "Pretendard_SemiBold",
   },
   textInput: {
     backgroundColor: "#fff",
@@ -47,16 +48,18 @@ export default StyleSheet.create({
     textAlign: "right",
     color: "#636363",
     fontSize: 12,
-    fontWeight: "400",
+    fontFamily: "Pretendard_Regular",
+    paddingRight: 8,
+    paddingTop: 2,
   },
   topText: {
     color: "#1B1B1B",
     fontSize: 16,
-    fontWeight: "400",
+    fontFamily: "Pretendard_Regular",
   },
   topSubText: {
     fontSize: 16,
-    fontWeight: "400",
+    fontFamily: "Pretendard_Regular",
   },
   icon: {
     height: 24,
@@ -64,7 +67,7 @@ export default StyleSheet.create({
     alignSelf: "center",
   },
   plusButtonContainer: {
-    marginTop: 16,
+    marginTop: 8,
     marginBottom: 32,
     alignItems: "center",
   },
@@ -84,11 +87,11 @@ export default StyleSheet.create({
   bottomText: {
     color: "#1B1B1B",
     fontSize: 20,
-    fontWeight: "400",
+    fontFamily: "Pretendard_Regular",
   },
   bottomSubText: {
     fontSize: 20,
-    fontWeight: "400",
+    fontFamily: "Pretendard_Regular",
   },
   middleSection: {
     paddingRight: 24,
@@ -101,6 +104,7 @@ export default StyleSheet.create({
     color: "#636363",
     fontSize: 10,
     fontFamily: "Pretendard_Medium",
+    textAlign: "center",
   },
   bottomSection: {
     paddingRight: 8,
@@ -112,5 +116,11 @@ export default StyleSheet.create({
     justifyContent: "flex-end",
     gap: 8,
     flexDirection: "row",
+  },
+  buttonTopText: {
+    fontSize: 12,
+    fontFamily: "Pretendard_Regular",
+    color: "#B9B9B9",
+    textAlign: "center",
   },
 });
