@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "hot_foot",
+    "name": "발등에 불",
     "slug": "hot-foot",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -13,7 +13,9 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.suyoooi.hotfoot",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
