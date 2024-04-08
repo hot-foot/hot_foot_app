@@ -8,6 +8,7 @@ import * as Font from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Notifications from "expo-notifications";
 import { Platform, ActivityIndicator } from "react-native";
+import TimerScreen from "./screen/Timer/timerScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -150,6 +151,7 @@ function App() {
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Setting" component={SettingScreen} />
           <Stack.Screen name="Process" component={ProcessScreen} />
+          <Stack.Screen name="Timer" component={TimerScreen} />
         </Stack.Navigator>
       ) : (
         <ActivityIndicator size="large" color="#000" />
