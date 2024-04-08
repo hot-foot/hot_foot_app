@@ -16,7 +16,10 @@ const TodoCard = ({ id, title, time, imagePath, onDelete }) => {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Swipeable renderRightActions={renderRightActions}>
+      <Swipeable
+        renderRightActions={renderRightActions}
+        onSwipeableOpen={() => onDelete(id)}
+      >
         <View style={styles.containter}>
           <View style={styles.section}>
             <View style={{ flexDirection: "row", gap: 8 }}>
@@ -66,6 +69,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F4595D",
     justifyContent: "center",
     alignItems: "center",
+    // width: 75,
     width: 75,
     height: "100%",
   },
