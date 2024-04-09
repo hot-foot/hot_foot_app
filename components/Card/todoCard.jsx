@@ -6,8 +6,6 @@ import {
 } from "react-native-gesture-handler";
 
 const TodoCard = ({ id, title, time, imagePath, onDelete }) => {
-  const localImage = require("../../assets/img/action/clothing.png");
-
   const renderRightActions = () => (
     <TouchableOpacity onPress={() => onDelete(id)} style={styles.deleteButton}>
       <Text style={styles.deleteButtonText}>삭제</Text>
