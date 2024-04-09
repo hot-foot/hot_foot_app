@@ -164,7 +164,7 @@ const SettingScreen = () => {
               <View>
                 <Image
                   source={require("../../assets/img/Icon/arrowRight.png")}
-                  style={styles.icon}
+                  style={[styles.icon, { top: 10 }]}
                 />
               </View>
             </TouchableOpacity>
