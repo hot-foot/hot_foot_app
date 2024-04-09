@@ -18,6 +18,7 @@ const AddProcessSheet = ({
   onClose,
   onChange,
   selectedIconPath,
+  onAddTodo,
 }) => {
   const screenHeight = Dimensions.get("window").height;
   const [isPressed, setIsPressed] = useState(false);
@@ -144,7 +145,16 @@ const AddProcessSheet = ({
               </View>
               <LargeBtn
                 text={"추가하기"}
-                onClick={() => {}}
+                onClick={() => {
+                  const newTodo = {
+                    id: Date.now(),
+                    title: inputValue,
+                    time: timeValue,
+                    imagePath: selectedIconPath,
+                  };
+                  onAddTodo(newTodo);
+                  onClose();
+                }}
                 backgroundColor={""}
                 isDisable={!isFormValid}
               />
