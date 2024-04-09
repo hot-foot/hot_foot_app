@@ -9,7 +9,9 @@ import {
   Dimensions,
   Button,
   Animated,
+  Platform,
 } from "react-native";
+import * as Linking from "expo-linking";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useNavigation } from "@react-navigation/native";
 import SlimToggleSwitch from "../../components/ToggleSwitch/slimToggleSwitch";
@@ -20,6 +22,16 @@ const SettingScreen = () => {
   const windowHeight = Dimensions.get("window").height;
   const navigation = useNavigation();
   const [selectedValue, setSelectedValue] = useState("단호하게");
+
+  const openSettings = () => {
+    if (Platform.OS === "ios") {
+      // iOS : 앱 설정 화면으로 직접 이동
+      Linking.openURL("app-settings:");
+    } else {
+      // Android : 시스템 설정 화면
+      Linking.openSettings();
+    }
+  };
 
   const handleRadioChange = (value) => {
     setSelectedValue(value);
@@ -138,7 +150,11 @@ const SettingScreen = () => {
           <View style={[styles.line, { height: 4 }]} />
           <Text style={styles.contentTitle}>음량</Text>
           <View style={styles.padding}>
-            <View style={styles.contentContainer}>
+            <TouchableOpacity
+              style={styles.contentContainer}
+              activeOpacity={0.8}
+              onPress={openSettings}
+            >
               <View style={{ gap: 6 }}>
                 <Text style={styles.contentText}>음량 설정</Text>
                 <Text style={styles.contentDes}>
@@ -146,14 +162,13 @@ const SettingScreen = () => {
                 </Text>
               </View>
               <View>
-                <TouchableOpacity>
-                  <Image
-                    source={require("../../assets/img/Icon/arrowRight.png")}
-                    style={styles.icon}
-                  />
-                </TouchableOpacity>
+                <Image
+                  source={require("../../assets/img/Icon/arrowRight.png")}
+                  style={styles.icon}
+                />
               </View>
-            </View>
+            </TouchableOpacity>
+
             <View style={[styles.line, { height: 2 }]} />
           </View>
         </View>
