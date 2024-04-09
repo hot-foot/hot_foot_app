@@ -29,7 +29,7 @@ export default StyleSheet.create({
     right: 10,
     color: "#1B1B1B",
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: "Pretendard_SemiBold",
   },
   totalSection: {
     flexDirection: "column",
@@ -41,18 +41,18 @@ export default StyleSheet.create({
   },
   totalTitleText: {
     fontSize: 22,
-    fontWeight: "700",
+    fontFamily: "Pretendard_Bold",
     marginBottom: 10,
     color: "#1B1B1B",
   },
   totalSubTitleText: {
     fontSize: 20,
-    fontWeight: "400",
+    fontFamily: "Pretendard_Regular",
     color: "#1B1B1B",
   },
   totalTimerText: {
     fontSize: 20,
-    fontWeight: "700",
+    fontFamily: "Pretendard_Bold",
     color: "#1B1B1B",
   },
   todoImageBackgound: {
@@ -86,12 +86,12 @@ export default StyleSheet.create({
   todoTitleText: {
     marginTop: 20,
     fontSize: 22,
-    fontWeight: "400",
+    fontFamily: "Pretendard_Regular",
     color: "#1B1B1B",
   },
   todoTimerText: {
     fontSize: 22,
-    fontWeight: "700",
+    fontFamily: "Pretendard_Bold",
     color: "#1B1B1B",
   },
   todoButton: {
@@ -128,7 +128,7 @@ export default StyleSheet.create({
   },
   skipTooltipText: {
     fontSize: 12,
-    fontWeight: "400",
+    fontFamily: "Pretendard_Regular",
     textAlign: "left",
     color: "#FFFFFF",
     left: 17,
@@ -166,7 +166,7 @@ export default StyleSheet.create({
   },
   todoListTitleText: {
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: "Pretendard_SemiBold",
     textAlign: "center",
     right: 20,
     marginTop: 10,
@@ -175,7 +175,7 @@ export default StyleSheet.create({
   },
   todoListTimeText: {
     fontSize: 14,
-    fontWeight: "400",
+    fontFamily: "Pretendard_Regular",
     textAlign: "center",
     right: 20,
     marginTop: 35,
