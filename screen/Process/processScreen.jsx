@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./styels";
 import {
   View,
@@ -33,6 +33,9 @@ const ProcessScreen = () => {
   );
   const [todoList, setTodoList] = useState(TODO_LIST);
   const [isVisible, setIsVisible] = useState(false);
+  const [totalTime, setTotalTime] = useState("00시간 00분");
+
+  console.log("선택함:::", selectedTasks);
 
   const showMessage = () => {
     setIsVisible(true);
@@ -164,6 +167,23 @@ const ProcessScreen = () => {
     return formattedTime;
   };
 
+  // 총 소요시간 계산
+  useEffect(() => {
+    const totalMinutes = selectedTasks.reduce(
+      (acc, task) => acc + Number(task.time),
+      0
+    );
+    // 시간과 분으로 변환
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    // 포맷에 맞게 설정
+    const formattedTime =
+      hours > 0
+        ? `${hours}시간 ${formatTime(minutes)}분`
+        : `${formatTime(minutes)}분`;
+    setTotalTime(formattedTime);
+  }, [selectedTasks]);
+
   const handleTodoIconSheet = () => {
     setIconSheetVisible(false);
     setAddSheetVisible(true);
@@ -292,19 +312,26 @@ const ProcessScreen = () => {
           <View style={styles.bottomSection}>
             <View style={styles.bottomBox}>
               <Text style={styles.bottomText}>소요 시간:</Text>
-              <Text style={[styles.bottomSubText, { color: "#B9B9B9" }]}>
-                총
-              </Text>
-              <Text style={[styles.bottomSubText, { color: "#B9B9B9" }]}>
-                00 시간
-              </Text>
-              <Text style={[styles.bottomSubText, { color: "#B9B9B9" }]}>
-                00 분
+              <Text
+                style={[
+                  styles.bottomSubText,
+                  {
+                    color: totalTime === "00시간 00분" ? "#B9B9B9" : "#1B1B1B",
+                    fontFamily: "Pretendard_SemiBold",
+                  },
+                ]}
+              >
+                총 {totalTime}
               </Text>
             </View>
             <View style={styles.bottomBox}>
               <Text style={styles.bottomText}>시작 시간:</Text>
-              <Text style={[styles.bottomSubText, { color: "#B9B9B9" }]}>
+              <Text
+                style={[
+                  styles.bottomSubText,
+                  { color: "#B9B9B9", fontFamily: "Pretendard_SemiBold" },
+                ]}
+              >
                 -- : 00 AM
               </Text>
             </View>
@@ -349,7 +376,7 @@ const ProcessScreen = () => {
       {isVisible && (
         <ToastMsg
           isVisible={isVisible}
-          message="할 일은 최대 30개까지 추가 가능합니다!"
+          message="할 일은 최대 30개까지 추가할 수 있어요."
           onClose={handleClose}
         />
       )}
