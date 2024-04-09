@@ -18,10 +18,12 @@ import AddProcessSheet from "../../components/BottomSheet/addProcessSheet";
 import ProcessListSheet from "../../components/BottomSheet/ProcessListSheet";
 import { TODO_ICON, TODO_LIST } from "../../data/processData";
 import ToastMsg from "../../components/Modal/toastMsg";
+import MsgModal from "../../components/Modal/msgModal";
 
 const ProcessScreen = () => {
   const navigation = useNavigation();
   const [inputValue, setInputValue] = useState("");
+  const [msgModal, setMsgModal] = useState(false);
   const [isIconSheetVisible, setIconSheetVisible] = useState(false);
   const [isAddSheetVisible, setAddSheetVisible] = useState(false);
   const [isActionSheetVisible, setActionSheetVisible] = useState(false);
@@ -30,7 +32,6 @@ const ProcessScreen = () => {
     TODO_ICON[0].imagePath
   );
   const [todoList, setTodoList] = useState(TODO_LIST);
-
   const [isVisible, setIsVisible] = useState(false);
 
   const showMessage = () => {
@@ -50,6 +51,11 @@ const ProcessScreen = () => {
   };
 
   const handleCloseBtnClick = () => {
+    setMsgModal(true);
+  };
+
+  const handleConfirm = () => {
+    setMsgModal(false);
     navigation.navigate("Home");
   };
 
@@ -347,6 +353,15 @@ const ProcessScreen = () => {
           onClose={handleClose}
         />
       )}
+      <MsgModal
+        isVisible={msgModal}
+        message1={"설정 중이던 중비 과정은 저장되지 않아요."}
+        message2={"나가시겠어요?"}
+        leftBtnText={"취소"}
+        rightBtnText={"나가기"}
+        onClose={() => setMsgModal(false)}
+        onConfirm={handleConfirm}
+      />
     </View>
   );
 };

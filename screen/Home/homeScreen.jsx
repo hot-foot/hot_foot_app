@@ -20,7 +20,7 @@ const HomeScreen = () => {
   const translateY = new Animated.Value(0);
 
   const handleBtnClick = () => {
-    navigation.navigate("Process");
+    navigation.replace("Process");
   };
 
   const handleSettingBtnClick = () => {
