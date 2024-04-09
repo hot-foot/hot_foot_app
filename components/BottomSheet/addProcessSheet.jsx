@@ -16,6 +16,7 @@ import LargeBtn from "../../components/Btn/largeBtn";
 const AddProcessSheet = ({ isVisible, onClose, onChange }) => {
   const screenHeight = Dimensions.get("window").height;
   const halfScreenHeight = screenHeight * 0.4;
+  const [isPressed, setIsPressed] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [timeValue, setTimeValue] = useState("");
   const localImage = require("../../assets/img/action/BB1.png");
@@ -91,8 +92,17 @@ const AddProcessSheet = ({ isVisible, onClose, onChange }) => {
                   <Text style={styles.inputTitle}>아이콘</Text>
                   <View>
                     <TouchableOpacity
-                      style={styles.iconContainer}
+                      activeOpacity={1}
+                      style={[
+                        styles.iconContainer,
+                        {
+                          backgroundColor: isPressed ? "#969696" : "#E1E1E1",
+                          borderColor: isPressed ? "#969696" : "#E1E1E1",
+                        },
+                      ]}
                       onPress={onChange}
+                      onPressIn={() => setIsPressed(true)}
+                      onPressOut={() => setIsPressed(false)}
                     >
                       <Image source={localImage} style={styles.todoIcon} />
                     </TouchableOpacity>
@@ -222,9 +232,9 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     borderRadius: 50,
-    backgroundColor: "#E1E1E1",
+    // backgroundColor: "#E1E1E1",
     borderWidth: 2,
-    borderColor: "#E1E1E1",
+    // borderColor: "#E1E1E1",
     borderStyle: "solid",
     padding: 8,
     marginLeft: 28,
