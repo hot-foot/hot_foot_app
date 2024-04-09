@@ -10,32 +10,11 @@ import {
   Button,
   Animated,
 } from "react-native";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useNavigation } from "@react-navigation/native";
 import SlimToggleSwitch from "../../components/ToggleSwitch/slimToggleSwitch";
 import RadioBtn2 from "../../components/Btn/RadioBtn2";
-
-const SETTING_ALARM = [
-  {
-    id: 1,
-    title: "시작 20분 전 알림",
-    description: "준비 과정 시작 20분 전, 알림을 보내드려요",
-  },
-  {
-    id: 2,
-    title: "시작 10분 전 알림",
-    description: "준비 과정 시작 10분 전, 알림을 보내드려요",
-  },
-  {
-    id: 3,
-    title: "외출 10분 전 알림",
-    description: "외출 10분 전, 알림을 보내드려요",
-  },
-  {
-    id: 4,
-    title: "외출 5분 전 알림",
-    description: "외출 5분 전, 알림을 보내드려요",
-  },
-];
+import { SETTING_ALARM } from "../../data/settingData";
 
 const SettingScreen = () => {
   const windowHeight = Dimensions.get("window").height;
@@ -44,6 +23,43 @@ const SettingScreen = () => {
 
   const handleRadioChange = (value) => {
     setSelectedValue(value);
+  };
+
+  // 시간을 두 자리 문자열로 변환
+  const formatTime = (time) => {
+    return time < 10 ? `0${time}` : `${time}`;
+  };
+
+  // 24시간제 시간을 12시간제로 변환
+  const formatTo12HourClock = (hours) => {
+    const newHours = hours % 12 || 12;
+    return formatTime(newHours);
+  };
+
+  const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
+  const [selectedTime, setSelectedTime] = useState(new Date());
+
+  const showTimePicker = () => {
+    setTimePickerVisibility(true);
+  };
+
+  const hideTimePicker = () => {
+    setTimePickerVisibility(false);
+  };
+
+  const handleTimeConfirm = (time) => {
+    setSelectedTime(time);
+    hideTimePicker();
+  };
+
+  const formatAMPM = (date) => {
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const formattedTime = `${formatTo12HourClock(hours)} : ${formatTime(
+      minutes
+    )}  ${ampm}`;
+    return formattedTime;
   };
 
   return (
@@ -89,9 +105,11 @@ const SettingScreen = () => {
                 <Text style={styles.contentDes}>
                   준비 과정 활성화를 위한 알림을 보내드려요
                 </Text>
-                <View style={styles.timeSection}>
-                  <Text style={styles.time}>00 : 00 AM</Text>
-                </View>
+                <TouchableOpacity onPress={showTimePicker}>
+                  <View style={styles.timeSection}>
+                    <Text style={styles.time}>{formatAMPM(selectedTime)}</Text>
+                  </View>
+                </TouchableOpacity>
               </View>
               <View>
                 <SlimToggleSwitch id={0} isEnable={false} onClick={() => {}} />
@@ -140,6 +158,14 @@ const SettingScreen = () => {
           </View>
         </View>
       </ScrollView>
+      <DateTimePickerModal
+        isVisible={isTimePickerVisible}
+        mode="time"
+        onConfirm={handleTimeConfirm}
+        onCancel={hideTimePicker}
+        date={selectedTime}
+        is24Hour={true}
+      />
     </View>
   );
 };
