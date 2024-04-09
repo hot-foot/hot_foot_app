@@ -8,6 +8,8 @@ import {
   Dimensions,
   Image,
   TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import LargeBtn from "../../components/Btn/largeBtn";
 
@@ -15,7 +17,12 @@ const AddProcessSheet = ({ isVisible, onClose, onChange }) => {
   const screenHeight = Dimensions.get("window").height;
   const halfScreenHeight = screenHeight * 0.4;
   const [inputValue, setInputValue] = useState("");
+  const [timeValue, setTimeValue] = useState("");
   const localImage = require("../../assets/img/action/BB1.png");
+
+  const isValidTimeValue =
+    !isNaN(timeValue) && timeValue >= 0 && timeValue <= 360;
+  const isFormValid = inputValue.trim() !== "" && isValidTimeValue;
 
   const handleInputChange = (text) => {
     // 9자 이하일 때만 상태를 업데이트
@@ -23,6 +30,18 @@ const AddProcessSheet = ({ isVisible, onClose, onChange }) => {
       setInputValue(text);
     }
   };
+
+  const handleTimeChange = (text) => {
+    const number = parseInt(text, 10);
+    if (!isNaN(number) && number >= 0 && number <= 360) {
+      // 유효한 경우에만 상태 업데이트
+      setTimeValue(text);
+    } else if (text === "") {
+      // 사용자가 입력을 모두 지운 경우를 처리
+      setTimeValue(text);
+    }
+  };
+
   return (
     <Modal
       animationType="none"
@@ -35,10 +54,13 @@ const AddProcessSheet = ({ isVisible, onClose, onChange }) => {
         onPress={onClose}
         activeOpacity={1}
       >
-        <View>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"} // 플랫폼에 맞게 behavior 설정
+          style={styles.container}
+        >
           <View style={styles.actionSheet}>
             <View style={styles.header}>
-              <Text style={styles.sheetTitle}>할 일 아이콘</Text>
+              <Text style={styles.sheetTitle}>할 일 직접 추가</Text>
               <TouchableOpacity onPress={onClose}>
                 <Image
                   source={require("../../assets/img/Icon/close.png")}
@@ -49,6 +71,7 @@ const AddProcessSheet = ({ isVisible, onClose, onChange }) => {
             <View style={{ marginBottom: 34 }}>
               <Text style={styles.inputTitle}>할 일 이름</Text>
               <TextInput
+                id="todoName"
                 placeholder={"할 일 이름"}
                 placeholderTextColor={"#B9B9B9"}
                 value={inputValue}
@@ -79,11 +102,13 @@ const AddProcessSheet = ({ isVisible, onClose, onChange }) => {
                   <Text style={styles.inputTitle}>소요 시간</Text>
                   <View style={{ flexDirection: "row", marginTop: 4 }}>
                     <TextInput
+                      id="360"
                       placeholder={"0"}
                       placeholderTextColor={"#B9B9B9"}
-                      value={inputValue}
-                      onChangeText={handleInputChange}
-                      maxLength={9}
+                      value={timeValue}
+                      onChangeText={handleTimeChange}
+                      maxLength={3}
+                      keyboardType="number-pad"
                       style={[styles.textInput, { width: 120, height: 35 }]}
                     />
                     <Text
@@ -104,14 +129,14 @@ const AddProcessSheet = ({ isVisible, onClose, onChange }) => {
                 text={"추가하기"}
                 onClick={() => {}}
                 backgroundColor={""}
-                isDisable={true}
+                isDisable={!isFormValid}
               />
               <Text style={styles.noticeText}>
                 할 일 이름, 아이콘, 소요 시간을 모두 입력해 주세요.
               </Text>
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </TouchableOpacity>
     </Modal>
   );
