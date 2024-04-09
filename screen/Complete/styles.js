@@ -1,0 +1,83 @@
+import { StyleSheet } from "react-native";
+
+export default StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FFC4CA",
+  },
+  section: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    backgroundColor: "#F5F5F5",
+    paddingTop: 57,
+    paddingBottom: 10,
+    paddingLeft: 24,
+    paddingRight: 24,
+    borderBottomColor: "#4B4B4B",
+    borderBottomWidth: 2,
+  },
+  text: {
+    flex: 1,
+    textAlign: "center",
+    alignSelf: "center",
+    right: 10,
+    color: "#1B1B1B",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  completeSection: {
+    flexDirection: "column",
+    gap: 10,
+    marginTop: 20,
+    textAlign: "center",
+    alignSelf: "center",
+    alignItems: "center",
+  },
+  completeTitle: {
+    fontSize: 22,
+    fontWeight: "700",
+    marginBottom: 30,
+    color: "#1B1B1B",
+  },
+  completeText: {
+    fontSize: 28,
+    fontWeight: "600",
+    color: "#1B1B1B",
+  },
+  animationSection: {
+    width: 160,
+    height: 210,
+    // borderWidth: 2,
+    // borderColor: '#4B4B4B',
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  questionText: {
+    fontSize: 22,
+    fontWeight: "400",
+    color: "#1B1B1B",
+  },
+  bottomSection: {
+    position: "absolute",
+    bottom: 0,
+    marginBottom: 40,
+    alignSelf: "center",
+  },
+  completeButton: {
+    borderRadius: 4,
+    borderWidth: 2,
+    borderColor: "#4B4B4B",
+    width: 327,
+    height: 46,
+    backgroundColor: "#FF8989",
+    marginBottom: 20,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonText: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: "#1B1B1B",
+  },
+});
