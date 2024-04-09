@@ -21,10 +21,9 @@ export default StyleSheet.create({
     flex: 1,
     textAlign: "center",
     alignSelf: "center",
-    right: 10,
     color: "#1B1B1B",
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: "Pretendard_SemiBold",
   },
   completeSection: {
     flexDirection: "column",
@@ -36,13 +35,13 @@ export default StyleSheet.create({
   },
   completeTitle: {
     fontSize: 22,
-    fontWeight: "700",
+    fontFamily: "Pretendard_Bold",
     marginBottom: 30,
     color: "#1B1B1B",
   },
   completeText: {
     fontSize: 28,
-    fontWeight: "600",
+    fontFamily: "Pretendard_SemiBold",
     color: "#1B1B1B",
   },
   animationSection: {
@@ -55,7 +54,7 @@ export default StyleSheet.create({
   },
   questionText: {
     fontSize: 22,
-    fontWeight: "400",
+    fontFamily: "Pretendard_Regular",
     color: "#1B1B1B",
   },
   bottomSection: {
@@ -77,7 +76,7 @@ export default StyleSheet.create({
   },
   buttonText: {
     fontSize: 20,
-    fontWeight: "700",
+    fontFamily: "Pretendard_Bold",
     color: "#1B1B1B",
   },
 });
