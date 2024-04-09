@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Text, TouchableOpacity, View, Dimensions } from "react-native";
 import styles from "./styles";
@@ -7,6 +7,7 @@ import LottieView from "lottie-react-native";
 const CompleteScreen = () => {
   const navigation = useNavigation();
   const windowWidth = Dimensions.get("window").width;
+  const animation = useRef(null);
 
   const handleComplete = () => {
     navigation.navigate("Home");
@@ -26,8 +27,8 @@ const CompleteScreen = () => {
             autoPlay
             ref={animation}
             style={{
-              width: windowWidth - 35,
-              height: windowWidth - 80,
+              width: 160,
+              height: 210,
             }}
             source={require("../../data/lottie/flame_animation.json")}
           />
