@@ -27,6 +27,7 @@ export default StyleSheet.create({
   icon: {
     height: 24,
     width: 24,
+    top: 10,
   },
   iconBox: { alignSelf: "center" },
   padding: { paddingLeft: 24, paddingRight: 24 },
