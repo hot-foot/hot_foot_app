@@ -16,6 +16,7 @@ import LargeBtn from "../../components/Btn/largeBtn";
 import TodoIconSheet from "../../components/BottomSheet/todoIconSheet";
 import AddProcessSheet from "../../components/BottomSheet/addProcessSheet";
 import ProcessListSheet from "../../components/BottomSheet/ProcessListSheet";
+import { TODO_ICON } from "../../data/processData";
 
 const ProcessScreen = () => {
   const navigation = useNavigation();
@@ -24,6 +25,9 @@ const ProcessScreen = () => {
   const [isAddSheetVisible, setAddSheetVisible] = useState(false);
   const [isActionSheetVisible, setActionSheetVisible] = useState(false);
   const [selectedTasks, setSelectedTasks] = useState([]);
+  const [selectedIconPath, setSelectedIconPath] = useState(
+    TODO_ICON[0].imagePath
+  );
 
   const handleDeleteTask = (id) => {
     console.log("삭제", id);
@@ -53,7 +57,7 @@ const ProcessScreen = () => {
     setActionSheetVisible(false);
     setAddSheetVisible(true);
   };
- 
+
   const handleChangeIcon = () => {
     setAddSheetVisible(false);
     setIconSheetVisible(true);
@@ -132,6 +136,17 @@ const ProcessScreen = () => {
       minutes
     )}  ${ampm}`;
     return formattedTime;
+  };
+
+  const handleTodoIconSheet = () => {
+    setIconSheetVisible(false);
+    setAddSheetVisible(true);
+  };
+
+  const handleAddProcessSheet = () => {
+    setAddSheetVisible(false);
+    setActionSheetVisible(true);
+    setSelectedIconPath(TODO_ICON[0].imagePath);
   };
 
   return (
@@ -288,13 +303,20 @@ const ProcessScreen = () => {
       />
       <TodoIconSheet
         isVisible={isIconSheetVisible}
-        onClose={() => setIconSheetVisible(false)}
-        onAdd={() => {}}
+        // onClose={() => setIconSheetVisible(false)}
+        onClose={handleTodoIconSheet}
+        onAdd={(iconPath) => {
+          setSelectedIconPath(iconPath);
+          setAddSheetVisible(true);
+          setIconSheetVisible(false);
+        }}
       />
       <AddProcessSheet
         isVisible={isAddSheetVisible}
-        onClose={() => setAddSheetVisible(false)}
+        // onClose={() => setAddSheetVisible(false)}
+        onClose={handleAddProcessSheet}
         onChange={handleChangeIcon}
+        selectedIconPath={selectedIconPath}
       />
     </View>
   );

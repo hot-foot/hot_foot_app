@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     fontFamily: "Pretendard_SemiBold",
     flex: 1,
     textAlign: "center",
+    left: 8,
   },
   actionItem: {
     // paddingVertical: 34,
