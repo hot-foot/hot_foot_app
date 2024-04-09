@@ -13,17 +13,18 @@ import {
 } from "react-native";
 import LargeBtn from "../../components/Btn/largeBtn";
 
-const AddProcessSheet = ({ isVisible, onClose, onChange }) => {
+const AddProcessSheet = ({
+  isVisible,
+  onClose,
+  onChange,
+  selectedIconPath,
+}) => {
   const screenHeight = Dimensions.get("window").height;
-  const halfScreenHeight = screenHeight * 0.4;
   const [isPressed, setIsPressed] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [timeValue, setTimeValue] = useState("");
-  const localImage = require("../../assets/img/action/BB1.png");
 
-  const isValidTimeValue =
-    !isNaN(timeValue) && timeValue >= 0 && timeValue <= 360;
-  const isFormValid = inputValue.trim() !== "" && isValidTimeValue;
+  const isFormValid = inputValue.trim() !== "" && timeValue !== "";
 
   const handleInputChange = (text) => {
     // 9자 이하일 때만 상태를 업데이트
@@ -86,6 +87,7 @@ const AddProcessSheet = ({ isVisible, onClose, onChange }) => {
                   flexDirection: "row",
                   justifyContent: "space-between",
                   marginBottom: 24,
+                  marginTop: 16,
                 }}
               >
                 <View>
@@ -100,11 +102,16 @@ const AddProcessSheet = ({ isVisible, onClose, onChange }) => {
                           borderColor: isPressed ? "#969696" : "#E1E1E1",
                         },
                       ]}
-                      onPress={onChange}
+                      onPress={() => {
+                        onChange();
+                      }}
                       onPressIn={() => setIsPressed(true)}
                       onPressOut={() => setIsPressed(false)}
                     >
-                      <Image source={localImage} style={styles.todoIcon} />
+                      <Image
+                        source={selectedIconPath}
+                        style={styles.todoIcon}
+                      />
                     </TouchableOpacity>
                   </View>
                 </View>
