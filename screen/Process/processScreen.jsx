@@ -16,7 +16,8 @@ import LargeBtn from "../../components/Btn/largeBtn";
 import TodoIconSheet from "../../components/BottomSheet/todoIconSheet";
 import AddProcessSheet from "../../components/BottomSheet/addProcessSheet";
 import ProcessListSheet from "../../components/BottomSheet/ProcessListSheet";
-import { TODO_ICON } from "../../data/processData";
+import { TODO_ICON, TODO_LIST } from "../../data/processData";
+import ToastMsg from "../../components/Modal/toastMsg";
 
 const ProcessScreen = () => {
   const navigation = useNavigation();
@@ -28,6 +29,21 @@ const ProcessScreen = () => {
   const [selectedIconPath, setSelectedIconPath] = useState(
     TODO_ICON[0].imagePath
   );
+  const [todoList, setTodoList] = useState(TODO_LIST);
+
+  const [isVisible, setIsVisible] = useState(false);
+
+  const showMessage = () => {
+    setIsVisible(true);
+  };
+
+  const handleClose = () => {
+    setIsVisible(false);
+  };
+
+  const handleAddTodo = (newTodo) => {
+    setTodoList([...todoList, newTodo]);
+  };
 
   const handleDeleteTask = (id) => {
     console.log("삭제", id);
@@ -54,8 +70,12 @@ const ProcessScreen = () => {
   };
 
   const handleSheetPlusBtn = () => {
-    setActionSheetVisible(false);
-    setAddSheetVisible(true);
+    if (selectedTasks.length >= 29) {
+      showMessage();
+    } else {
+      setActionSheetVisible(false);
+      setAddSheetVisible(true);
+    }
   };
 
   const handleChangeIcon = () => {
@@ -300,6 +320,7 @@ const ProcessScreen = () => {
         onClose={() => setActionSheetVisible(false)}
         onAdd={handleAddProcess}
         onPlus={handleSheetPlusBtn}
+        todoList={todoList}
       />
       <TodoIconSheet
         isVisible={isIconSheetVisible}
@@ -317,7 +338,15 @@ const ProcessScreen = () => {
         onClose={handleAddProcessSheet}
         onChange={handleChangeIcon}
         selectedIconPath={selectedIconPath}
+        onAddTodo={handleAddTodo}
       />
+      {isVisible && (
+        <ToastMsg
+          isVisible={isVisible}
+          message="할 일은 최대 30개까지 추가 가능합니다!"
+          onClose={handleClose}
+        />
+      )}
     </View>
   );
 };
