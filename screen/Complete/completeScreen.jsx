@@ -1,12 +1,11 @@
 import React, { useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Text, TouchableOpacity, View, Dimensions } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import styles from "./styles";
 import LottieView from "lottie-react-native";
 
 const CompleteScreen = () => {
   const navigation = useNavigation();
-  const windowWidth = Dimensions.get("window").width;
   const animation = useRef(null);
 
   const handleComplete = () => {
