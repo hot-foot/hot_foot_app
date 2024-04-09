@@ -36,7 +36,7 @@ const CompleteScreen = () => {
         <Text style={styles.questionText}>이제 밖으로 나가볼까요?</Text>
       </View>
       <View style={styles.bottomSection}>
-        <TouchableOpacity onPress={handleComplete}>
+        <TouchableOpacity onPress={handleComplete} activeOpacity={0.6}>
           <View style={styles.completeButton}>
             <Text style={styles.buttonText}>종료하고 외출하기</Text>
           </View>
