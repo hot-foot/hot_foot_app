@@ -1,45 +1,54 @@
 export const TODO_LIST = [
   {
+    id: 1,
     title: "세수하기",
     time: "10",
     imagePath: require("../assets/img/action/washface.png"),
   },
   {
+    id: 2,
     title: "양치하기",
     time: "3",
     imagePath: require("../assets/img/action/brushteeth.png"),
   },
   {
+    id: 3,
     title: "식사하기",
     time: "20",
     imagePath: require("../assets/img/action/eat.png"),
   },
   {
+    id: 4,
     title: "샤워하기",
     time: "20",
     imagePath: require("../assets/img/action/shower.png"),
   },
   {
+    id: 5,
     title: "머리 말리고 손질하기",
     time: "10",
     imagePath: require("../assets/img/action/hair.png"),
   },
   {
+    id: 6,
     title: "옷입기",
     time: "2",
     imagePath: require("../assets/img/action/clothing.png"),
   },
   {
+    id: 7,
     title: "화장하기",
     time: "15",
     imagePath: require("../assets/img/action/makeup.png"),
   },
   {
+    id: 8,
     title: "짐 챙기기",
     time: "5",
     imagePath: require("../assets/img/action/bag.png"),
   },
   {
+    id: 9,
     title: "여유 부리기",
     time: "10",
     imagePath: require("../assets/img/action/procrastinate.png"),
