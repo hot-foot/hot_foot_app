@@ -9,6 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Notifications from "expo-notifications";
 import { Platform, ActivityIndicator } from "react-native";
 import TimerScreen from "./screen/Timer/timerScreen";
+import CompleteScreen from "./screen/Complete/completeScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -152,6 +153,7 @@ function App() {
           <Stack.Screen name="Setting" component={SettingScreen} />
           <Stack.Screen name="Process" component={ProcessScreen} />
           <Stack.Screen name="Timer" component={TimerScreen} />
+          <Stack.Screen name="Complete" component={CompleteScreen} />
         </Stack.Navigator>
       ) : (
         <ActivityIndicator size="large" color="#000" />
