@@ -1,13 +1,15 @@
-import { useNavigation } from '@react-navigation/native';
-import { Text, TouchableOpacity, View } from 'react-native';
-import styles from './styles';
-
+import React from "react";
+import { useNavigation } from "@react-navigation/native";
+import { Text, TouchableOpacity, View, Dimensions } from "react-native";
+import styles from "./styles";
+import LottieView from "lottie-react-native";
 
 const CompleteScreen = () => {
   const navigation = useNavigation();
+  const windowWidth = Dimensions.get("window").width;
 
   const handleComplete = () => {
-    navigation.navigate('Home');
+    navigation.navigate("Home");
   };
 
   return (
@@ -20,7 +22,15 @@ const CompleteScreen = () => {
         <Text style={styles.completeText}>출근 준비 과정명</Text>
         <Text style={styles.completeText}>과정을 완료했어요!</Text>
         <View style={styles.animationSection}>
-          <Text>TODO:애니메이션표시</Text>
+          <LottieView
+            autoPlay
+            ref={animation}
+            style={{
+              width: windowWidth - 35,
+              height: windowWidth - 80,
+            }}
+            source={require("../../data/lottie/flame_animation.json")}
+          />
         </View>
         <Text style={styles.questionText}>이제 밖으로 나가볼까요?</Text>
       </View>
