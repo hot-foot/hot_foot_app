@@ -74,17 +74,17 @@ const ProcessScreen = () => {
   };
 
   const handleAddProcess = (task) => {
-    setSelectedTasks([...selectedTasks, task]);
-    setActionSheetVisible(false);
-  };
-
-  const handleSheetPlusBtn = () => {
     if (selectedTasks.length >= 29) {
       showMessage();
     } else {
+      setSelectedTasks([...selectedTasks, task]);
       setActionSheetVisible(false);
-      setAddSheetVisible(true);
     }
+  };
+
+  const handleSheetPlusBtn = () => {
+    setActionSheetVisible(false);
+    setAddSheetVisible(true);
   };
 
   const handleChangeIcon = () => {
