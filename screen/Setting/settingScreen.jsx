@@ -93,7 +93,7 @@ const SettingScreen = () => {
         <View style={styles.content}>
           <Text style={styles.contentTitle}>알림</Text>
           {SETTING_ALARM.map((item) => (
-            <View style={styles.padding}>
+            <View style={styles.padding} key={item.title}>
               <View style={styles.contentContainer}>
                 <View style={{ gap: 6 }}>
                   <Text style={styles.contentText}>{item.title}</Text>
