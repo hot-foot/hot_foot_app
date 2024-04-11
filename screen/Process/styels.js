@@ -42,7 +42,7 @@ export default StyleSheet.create({
     paddingBottom: verticalScale(8),
     borderBottomColor: "#B9B9B9",
     borderBottomWidth: moderateScale(2),
-    height: verticalScale(50),
+    height: verticalScale(40),
     fontSize: moderateScale(28),
   },
   textCount: {
