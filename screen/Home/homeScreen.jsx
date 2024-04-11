@@ -56,6 +56,14 @@ const HomeScreen = () => {
     };
   }, []);
 
+  const handleTimerClick = () => {
+    navigation.navigate("Timer");
+  };
+
+  const handleLottieClick = () => {
+    navigation.navigate("Complete");
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.section}>
@@ -78,6 +86,22 @@ const HomeScreen = () => {
           </Text>
         </View>
       </ScrollView>
+      <View style={{ padding: 30 }}>
+        <Text style={{ fontFamily: "Pretendard_Bold" }}>화면 확인용</Text>
+        <PlusBtn
+          color={"#FF8989"}
+          width={64}
+          height={64}
+          onPress={handleTimerClick}
+        />
+        <PlusBtn
+          color={"#FEAB53"}
+          width={64}
+          height={64}
+          onPress={handleLottieClick}
+        />
+      </View>
+
       <Animated.View
         style={[styles.plusButtonContainer, { transform: [{ translateY }] }]}
       >
