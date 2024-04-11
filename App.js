@@ -10,6 +10,7 @@ import * as Notifications from "expo-notifications";
 import { Platform, ActivityIndicator } from "react-native";
 import TimerScreen from "./screen/Timer/timerScreen";
 import CompleteScreen from "./screen/Complete/completeScreen";
+import { FontProvider } from "./context/fontContext";
 
 const Stack = createNativeStackNavigator();
 
@@ -34,33 +35,10 @@ async function schedulePushNotification(data) {
 }
 
 function App() {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
   const [pushToken, setPushToken] = useState("");
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
-
-  // 폰트 적용
-  const customFonts = {
-    // Pretendard
-    Pretendard_Thin: require("./assets/fonts/Pretendard-Thin.otf"),
-    Pretendard_ExtraLight: require("./assets/fonts/Pretendard-ExtraLight.otf"),
-    Pretendard_Light: require("./assets/fonts/Pretendard-Light.otf"),
-    Pretendard_Regular: require("./assets/fonts/Pretendard-Regular.otf"),
-    Pretendard_Medium: require("./assets/fonts/Pretendard-Medium.otf"),
-    Pretendard_SemiBold: require("./assets/fonts/Pretendard-SemiBold.otf"),
-    Pretendard_Bold: require("./assets/fonts/Pretendard-Bold.otf"),
-    Pretendard_ExtraBold: require("./assets/fonts/Pretendard-ExtraBold.otf"),
-    Pretendard_Black: require("./assets/fonts/Pretendard-Black.otf"),
-  };
-  async function loadFonts() {
-    await Font.loadAsync(customFonts);
-    setFontsLoaded(true);
-  }
-
-  useEffect(() => {
-    loadFonts();
-  }, []);
 
   useEffect(() => {
     const registerForPushNotificationsAsync = async () => {
@@ -141,8 +119,8 @@ function App() {
   };
 
   return (
-    <NavigationContainer>
-      {fontsLoaded ? (
+    <FontProvider>
+      <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
             headerShown: false,
@@ -155,10 +133,8 @@ function App() {
           <Stack.Screen name="Timer" component={TimerScreen} />
           <Stack.Screen name="Complete" component={CompleteScreen} />
         </Stack.Navigator>
-      ) : (
-        <ActivityIndicator size="large" color="#000" />
-      )}
-    </NavigationContainer>
+      </NavigationContainer>
+    </FontProvider>
   );
 }
 
