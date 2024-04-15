@@ -19,6 +19,8 @@ import ProcessListSheet from "../../components/BottomSheet/ProcessListSheet";
 import { TODO_ICON, TODO_LIST } from "../../data/processData";
 import ToastMsg from "../../components/Modal/toastMsg";
 import MsgModal from "../../components/Modal/msgModal";
+import { useDatabase } from "../../hooks/useDatabase";
+import { useCourse } from "../../hooks/useCourse";
 
 const ProcessScreen = () => {
   const navigation = useNavigation();
@@ -34,8 +36,22 @@ const ProcessScreen = () => {
   const [todoList, setTodoList] = useState(TODO_LIST);
   const [isVisible, setIsVisible] = useState(false);
   const [totalTime, setTotalTime] = useState("00시간 00분");
+  const [form, setForm] = useState({ todoIds: [2, 4, 7] });
+  const { openDatabase } = useDatabase();
+  const db = openDatabase();
+  const { createCourse } = useCourse(db);
 
   console.log("선택함:::", selectedTasks);
+
+  const koreanLocaleTime = (date) => {
+    const time = new Intl.DateTimeFormat("ko-KR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).format(date);
+    const splitTime = time.split(":");
+    return { hour: Number(splitTime[0]), minute: Number(splitTime[1]) };
+  };
 
   const showMessage = () => {
     setIsVisible(true);
@@ -62,10 +78,16 @@ const ProcessScreen = () => {
     navigation.navigate("Home");
   };
 
+  const handleSaveForm = () => {
+    createCourse(form);
+    navigation.navigate("Home");
+  };
+
   const handleInputChange = (text) => {
     // 9자 이하일 때만 상태를 업데이트
     if (text.length <= 9) {
       setInputValue(text);
+      setForm({ ...form, name: text });
     }
   };
 
@@ -116,6 +138,13 @@ const ProcessScreen = () => {
 
   // 이동 시간 선택 시
   const handleDepartureTimeConfirm = (time) => {
+    const localeTime = koreanLocaleTime(time);
+    console.log(form);
+    setForm({
+      ...form,
+      travelMinute: localeTime.hour * 60 + localeTime.minute,
+    });
+
     setSelectedDepartureTime(time);
     hideDepartureTimePicker();
   };
@@ -132,6 +161,15 @@ const ProcessScreen = () => {
 
   // 도착 시간 선택 시
   const handleArrivalTimeConfirm = (time) => {
+    const localeTime = koreanLocaleTime(time);
+    const arrivalTime = new Date();
+    arrivalTime.setHours(localeTime.hour);
+    arrivalTime.setMinutes(localeTime.minute);
+    console.log(form);
+    setForm({
+      ...form,
+      arrivalTime,
+    });
     setSelectedArrivalTime(time);
     hideArrivalTimePicker();
   };
@@ -338,9 +376,9 @@ const ProcessScreen = () => {
           </View>
           <LargeBtn
             text={"저장하기"}
-            onClick={() => {}}
+            onClick={handleSaveForm}
             backgroundColor={""}
-            isDisable={true}
+            isDisable={false}
           />
           <Text style={styles.noticeText}>
             과정 이름, 이동 시간, 도착 시간, 할 일 카드(1개 이상)를 모두 입력해

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,8 @@ import {
 import { useEffect } from "react";
 import SlimToggleSwitch from "../ToggleSwitch/slimToggleSwitch";
 import DotMenu from "./dotMenu";
+import { useDatabase } from "../../hooks/useDatabase";
+import { useCourse } from "../../hooks/useCourse";
 
 const PreparationCard = ({
   isDisabled,
@@ -20,7 +22,12 @@ const PreparationCard = ({
   id,
   setActiveModalId,
   activeModalId,
+  updateData,
 }) => {
+  const { openDatabase } = useDatabase();
+  const db = openDatabase();
+  const { deleteCourse, copyCourse } = useCourse(db);
+
   const getTextColorStyle = () => ({
     color: isDisabled ? "#969696" : "#1B1B1B",
   });
@@ -37,19 +44,21 @@ const PreparationCard = ({
     }
   }, [activeModalId]);
 
-  const optionModalRef = useRef < View > null;
+  const optionModalRef = useRef(null);
   const handlePressOutside = () => {
     if (optionModalRef.current) {
       setActiveModalId("");
     }
   };
 
-  const handleDeleteClick = () => {
-    console.log("delete", id);
+  const handleDeleteClick = async () => {
+    deleteCourse(id);
+    updateData();
   };
 
-  const handleCopyClick = () => {
-    console.log("copy", id);
+  const handleCopyClick = async () => {
+    copyCourse(id);
+    updateData();
   };
 
   console.log("id", id);

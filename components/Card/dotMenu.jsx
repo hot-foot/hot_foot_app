@@ -16,7 +16,7 @@ const DotMenu = ({ onCopy, onDelete, onPress }) => {
     width: 0,
     height: 0,
   });
-  const buttonRef = useRef < TouchableOpacity > null;
+  const buttonRef = useRef(null);
 
   const openModal = () => {
     buttonRef.current?.measure((x, y, width, height, pageX, pageY) => {
