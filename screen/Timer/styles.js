@@ -126,7 +126,7 @@ export default StyleSheet.create({
     top: verticalScale(10),
   },
   skipTooltipText: {
-    fontSize: moderateScale(12),
+    fontSize: moderateScale(11),
     fontFamily: "Pretendard_Regular",
     textAlign: "left",
     color: "#FFFFFF",
@@ -140,19 +140,19 @@ export default StyleSheet.create({
   },
   todoListSection: {
     position: "absolute",
-    bottom: 0,
+    bottom: verticalScale(20),
     width: "100%",
     height: verticalScale(100),
     backgroundColor: "#F5F5F5",
     borderTopColor: "#4B4B4B",
     borderTopWidth: moderateScale(2),
     borderBottomWidth: moderateScale(2),
-    flex: 1,
     flexDirection: "row",
     zIndex: 3,
   },
   todoNow: {
     width: "100%",
+    height: "100%",
     flex: 3,
   },
   todoNext1: {

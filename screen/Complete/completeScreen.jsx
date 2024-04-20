@@ -4,7 +4,9 @@ import { Text, TouchableOpacity, View } from "react-native";
 import styles from "./styles";
 import LottieView from "lottie-react-native";
 
-const CompleteScreen = () => {
+const CompleteScreen = ({ route }) => {
+  const { course } = route.params;
+
   const navigation = useNavigation();
   const animation = useRef(null);
 
@@ -18,8 +20,8 @@ const CompleteScreen = () => {
         <Text style={styles.text}>타이머</Text>
       </View>
       <View style={styles.completeSection}>
-        <Text style={styles.completeTitle}>출근 준비 과정명</Text>
-        <Text style={styles.completeText}>출근 준비 과정명</Text>
+        <Text style={styles.completeTitle}>{course.name}</Text>
+        <Text style={styles.completeText}>{`\’${course.name}\’`}</Text>
         <Text style={styles.completeText}>과정을 완료했어요!</Text>
         <View style={styles.animationSection}>
           <LottieView

@@ -41,7 +41,6 @@ const HomeScreen = () => {
   const initData = () => {
     createTables(db);
     initDefaultTodo();
-    fetchData(setCourses);
   };
 
   useEffect(() => {
@@ -81,11 +80,13 @@ const HomeScreen = () => {
   }, []);
 
   const handleTimerClick = () => {
-    navigation.navigate("Timer");
+    navigation.navigate("Timer", {
+      course: courses[0],
+    });
   };
 
   const handleLottieClick = () => {
-    navigation.navigate("Complete");
+    navigation.navigate("Complete", { course: { name: "출근준비과정명" } });
   };
 
   const dateToString = (str) => {
@@ -162,7 +163,6 @@ const HomeScreen = () => {
           onPress={handleLottieClick}
         />
       </View>
-
       <Animated.View
         style={[styles.plusButtonContainer, { transform: [{ translateY }] }]}
       >

@@ -14,6 +14,22 @@ export const useCourse = (db) => {
     return _.filter(todos, (t) => todoIds.includes(t.id));
   };
 
+  const mergeOrderArrays = (todos, orders) => {
+    const todosMap = todos.reduce((acc, todo) => {
+      acc[todo.id] = todo;
+      return acc;
+    }, {});
+    const result = [];
+    orders.forEach(({ todoId, listOrder }) => {
+      const todo = todosMap[todoId];
+      if (todo) {
+        result.push({ ...todo, order: listOrder });
+      }
+    });
+
+    return result;
+  };
+
   const executeTransaction = (callback) => {
     db.transaction(callback);
   };
@@ -26,6 +42,32 @@ export const useCourse = (db) => {
           setData(rows._array);
         }
       });
+    });
+  };
+
+  const fetchCourseTodo = (id, setData) => {
+    executeTransaction((tx) => {
+      tx.executeSql(
+        `select * from courseTodo where courseId = ? order by listOrder;`,
+        [id],
+        (x, { rows: { _array: courseTodo } }) => {
+          tx.executeSql(
+            `select * from todos;`,
+            [],
+            (y, { rows: { _array: todoList } }) => {
+              const courseTodoList = getCourseTodos(
+                todoList,
+                _.map(courseTodo, "todoId")
+              );
+              const todoWithOrder = mergeOrderArrays(
+                courseTodoList,
+                courseTodo
+              );
+              setData(_.sortBy(todoWithOrder, "order"));
+            }
+          );
+        }
+      );
     });
   };
 
@@ -70,7 +112,7 @@ export const useCourse = (db) => {
                   [result.insertId, t, index]
                 );
             });
-            console.log(result);
+            console.log("create course:", result);
           },
           (_, error) => {
             console.log(error);
@@ -165,6 +207,7 @@ export const useCourse = (db) => {
 
   return {
     fetchData,
+    fetchCourseTodo,
     createCourse,
     copyCourse,
     deleteCourse,
