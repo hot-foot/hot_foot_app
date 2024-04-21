@@ -93,19 +93,16 @@ const ProcessScreen = () => {
     navigation.navigate("Home");
   };
   const handleSaveForm = () => {
-    // totalMinute 계산
     const totalMinutes = selectedTasks.reduce(
       (acc, task) => acc + Number(task.time),
       0
     );
 
-    // 폼 상태 업데이트
     setForm((prevForm) => ({
       ...prevForm,
       totalMinute: totalMinutes,
     }));
 
-    // 데이터베이스에 코스 정보 저장
     db.transaction((tx) => {
       if (form.id) {
         // 기존 코스 업데이트
@@ -134,8 +131,16 @@ const ProcessScreen = () => {
             form.arrivalTime,
           ],
           (_, resultSet) => {
-            console.log("코스 추가 성공, 새 ID:", resultSet.insertId);
-            setForm((prevForm) => ({ ...prevForm, id: resultSet.insertId }));
+            const newCourseId = resultSet.insertId;
+            console.log("코스 추가 성공, 새 ID:", newCourseId);
+            // 코스에 할 일 연결 정보 저장
+            selectedTasks.forEach((task, index) => {
+              tx.executeSql(
+                "INSERT INTO courseTodo (courseId, todoId, listOrder) VALUES (?, ?, ?);",
+                [newCourseId, task.id, index]
+              );
+            });
+            setForm((prevForm) => ({ ...prevForm, id: newCourseId }));
           },
           (_, error) => console.log("코스 추가 실패", error)
         );
@@ -162,6 +167,7 @@ const ProcessScreen = () => {
       showMessage();
     } else {
       setSelectedTasks([...selectedTasks, task]);
+      setForm({ ...form, todoIds: [...selectedTasks] });
       setActionSheetVisible(false);
     }
   };
