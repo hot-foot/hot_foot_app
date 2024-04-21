@@ -126,7 +126,13 @@ const ProcessScreen = () => {
             form.arrivalTime,
             form.id,
           ],
-          () => console.log("코스 업데이트 성공"),
+          () => {
+            console.log("코스 업데이트 성공");
+            navigation.navigate("Home", {
+              processName: inputValue,
+              startTime: form.startTime,
+            });
+          },
           (_, error) => console.log("코스 업데이트 실패", error)
         );
       } else {
@@ -150,6 +156,10 @@ const ProcessScreen = () => {
                 [newCourseId, task.id, index]
               );
             });
+            navigation.navigate("Home", {
+              processName: inputValue,
+              startTime: form.startTime,
+            });
             setForm((prevForm) => ({ ...prevForm, id: newCourseId }));
           },
           (_, error) => console.log("코스 추가 실패", error)
@@ -157,7 +167,6 @@ const ProcessScreen = () => {
       }
     });
     console.log(form);
-    navigation.navigate("Home");
   };
 
   const handleInputChange = (text) => {
