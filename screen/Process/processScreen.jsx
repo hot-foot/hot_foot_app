@@ -93,7 +93,41 @@ const ProcessScreen = () => {
     navigation.navigate("Home");
   };
   const handleSaveForm = () => {
-    createCourse(form);
+    // totalMinute 계산
+    const totalMinutes = selectedTasks.reduce(
+      (acc, task) => acc + Number(task.time),
+      0
+    );
+
+    // 폼 상태 업데이트
+    setForm((prevForm) => ({
+      ...prevForm,
+      totalMinute: totalMinutes,
+    }));
+
+    // 데이터베이스에 코스 정보 저장
+    db.transaction((tx) => {
+      if (form.id) {
+        // 기존 코스 업데이트
+        tx.executeSql(
+          "UPDATE courses SET name = ?, totalMinute = ?, startTime = ?, arrivalTime = ? WHERE id = ?;",
+          [form.name, totalMinutes, form.startTime, form.arrivalTime, form.id],
+          () => console.log("코스 업데이트 성공"),
+          (_, error) => console.log("코스 업데이트 실패", error)
+        );
+      } else {
+        // 새 코스 추가
+        tx.executeSql(
+          "INSERT INTO courses (name, totalMinute, startTime, arrivalTime) VALUES (?, ?, ?, ?);",
+          [form.name, totalMinutes, form.startTime, form.arrivalTime],
+          (_, resultSet) => {
+            console.log("코스 추가 성공, 새 ID:", resultSet.insertId);
+            setForm((prevForm) => ({ ...prevForm, id: resultSet.insertId }));
+          },
+          (_, error) => console.log("코스 추가 실패", error)
+        );
+      }
+    });
     console.log(form);
     navigation.navigate("Home");
   };
