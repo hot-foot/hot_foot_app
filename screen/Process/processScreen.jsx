@@ -110,16 +110,29 @@ const ProcessScreen = () => {
       if (form.id) {
         // 기존 코스 업데이트
         tx.executeSql(
-          "UPDATE courses SET name = ?, totalMinute = ?, startTime = ?, arrivalTime = ? WHERE id = ?;",
-          [form.name, totalMinutes, form.startTime, form.arrivalTime, form.id],
+          "UPDATE courses SET name = ?, totalMinute = ?, travelMinute =?, startTime = ?, arrivalTime = ? WHERE id = ?;",
+          [
+            form.name,
+            totalMinutes,
+            form.travelMinute,
+            form.startTime,
+            form.arrivalTime,
+            form.id,
+          ],
           () => console.log("코스 업데이트 성공"),
           (_, error) => console.log("코스 업데이트 실패", error)
         );
       } else {
         // 새 코스 추가
         tx.executeSql(
-          "INSERT INTO courses (name, totalMinute, startTime, arrivalTime) VALUES (?, ?, ?, ?);",
-          [form.name, totalMinutes, form.startTime, form.arrivalTime],
+          "INSERT INTO courses (name, totalMinute, travelMinute, startTime, arrivalTime) VALUES (?, ?, ?, ?, ?);",
+          [
+            form.name,
+            totalMinutes,
+            form.travelMinute,
+            form.startTime,
+            form.arrivalTime,
+          ],
           (_, resultSet) => {
             console.log("코스 추가 성공, 새 ID:", resultSet.insertId);
             setForm((prevForm) => ({ ...prevForm, id: resultSet.insertId }));
