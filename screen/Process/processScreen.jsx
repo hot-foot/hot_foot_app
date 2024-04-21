@@ -92,9 +92,9 @@ const ProcessScreen = () => {
     setMsgModal(false);
     navigation.navigate("Home");
   };
-
   const handleSaveForm = () => {
     createCourse(form);
+    console.log(form);
     navigation.navigate("Home");
   };
 
@@ -140,6 +140,11 @@ const ProcessScreen = () => {
   const [isArrivalTimePickerVisible, setArrivalTimePickerVisibility] =
     useState(false);
   const [selectedArrivalTime, setSelectedArrivalTime] = useState(new Date());
+
+  // 시작 시간 상태
+  const [isStartTimePickerVisible, setStartTimePickerVisibility] =
+    useState(false);
+  const [selectedStartTime, setSelectedStartTime] = useState(new Date());
 
   // 이동 시간 피커 보여주기
   const showDepartureTimePicker = () => {
@@ -187,6 +192,31 @@ const ProcessScreen = () => {
     });
     setSelectedArrivalTime(time);
     hideArrivalTimePicker();
+  };
+
+  // 시작 시간 피커 보이기
+  const showStartTimePicker = () => {
+    setStartTimePickerVisibility(true);
+  };
+
+  // 시작 시간 피커 숨기기
+  const hideStartTimePicker = () => {
+    setStartTimePickerVisibility(false);
+  };
+
+  // 시작 시간 선택 시
+  const handleStartTimeConfirm = (time) => {
+    const localeTime = koreanLocaleTime(time);
+    const startTime = new Date();
+    startTime.setHours(localeTime.hour);
+    startTime.setMinutes(localeTime.minute);
+    console.log(form);
+    setForm({
+      ...form,
+      startTime,
+    });
+    setSelectedStartTime(time);
+    hideStartTimePicker();
   };
 
   // 시간을 두 자리 문자열로 변환
@@ -379,16 +409,28 @@ const ProcessScreen = () => {
             </View>
             <View style={styles.bottomBox}>
               <Text style={styles.bottomText}>시작 시간:</Text>
-              <Text
-                style={[
-                  styles.bottomSubText,
-                  { color: "#B9B9B9", fontFamily: "Pretendard_SemiBold" },
-                ]}
-              >
-                -- : 00 AM
-              </Text>
+              <TouchableOpacity onPress={showStartTimePicker} style={{}}>
+                <Text
+                  style={[
+                    styles.bottomSubText,
+                    { color: "#B9B9B9", fontFamily: "Pretendard_SemiBold" },
+                  ]}
+                >
+                  {/* -- : 00 AM */}
+                  {formatAMPM2(selectedStartTime)} {/* 시작 시간 표시 */}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
+          {/* 시작 시간 선택 모달 */}
+          <DateTimePickerModal
+            isVisible={isStartTimePickerVisible}
+            mode="time"
+            onConfirm={handleStartTimeConfirm}
+            onCancel={hideStartTimePicker}
+            date={selectedStartTime}
+            is24Hour={true}
+          />
           <LargeBtn
             text={"저장하기"}
             onClick={handleSaveForm}
