@@ -16,8 +16,11 @@ import { useCourse } from "../../hooks/useCourse";
 import { useTodo } from "../../hooks/useTodo";
 import PreparationCard from "../../components/Card/preparationCard";
 import moment from "moment-timezone";
+import ToastMsg from "../../components/Modal/toastMsg";
 
-const HomeScreen = () => {
+const HomeScreen = ({ route }) => {
+  const processName = route.params?.processName;
+  const startTime = route.params?.startTime;
   const { openDatabase, createTables } = useDatabase();
   const db = openDatabase();
   const { fetchData } = useCourse(db);
@@ -25,11 +28,31 @@ const HomeScreen = () => {
   const [dataKey, setDataKey] = useState(0);
   const [courses, setCourses] = useState([]);
   const [activeModalId, setActiveModalId] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  console.log("courses :::", courses);
 
   const windowHeight = Dimensions.get("window").height;
   const navigation = useNavigation();
 
   const translateY = new Animated.Value(0);
+
+  const showMessage = () => {
+    setIsVisible(true);
+  };
+
+  const handleClose = () => {
+    setIsVisible(false);
+  };
+
+  useEffect(() => {
+    if (route.params?.startTime) {
+      showMessage();
+    }
+    setTimeout(() => {
+      fetchData(setCourses);
+    }, 200);
+  }, [dataKey, route.params?.statusMessage]);
 
   const handleBtnClick = () => {
     navigation.replace("Process");
@@ -160,6 +183,15 @@ const HomeScreen = () => {
           onPress={handleBtnClick}
         />
       </Animated.View>
+      {isVisible && (
+        <ToastMsg
+          isVisible={isVisible}
+          message={`${processName} 과정이 ${dateToString(
+            startTime
+          )}에 시작됩니다.`}
+          onClose={handleClose}
+        />
+      )}
     </View>
   );
 };
