@@ -15,6 +15,7 @@ import { useDatabase } from "../../hooks/useDatabase";
 import { useCourse } from "../../hooks/useCourse";
 import { useTodo } from "../../hooks/useTodo";
 import PreparationCard from "../../components/Card/preparationCard";
+import moment from "moment-timezone";
 
 const HomeScreen = () => {
   const { openDatabase, createTables } = useDatabase();
@@ -89,22 +90,33 @@ const HomeScreen = () => {
     navigation.navigate("Complete", { course: { name: "출근준비과정명" } });
   };
 
-  const dateToString = (str) => {
-    const date = new Date(str);
-    let hour = date.getHours();
-    let noon = "AM";
-    if (hour >= 12) {
-      noon = "PM";
-    }
-    if (hour >= 13) {
-      hour = hour - 12;
-    }
-    return `${hour}:${date.getMinutes()} ${noon}`;
+  const dateToString = (dateStr) => {
+    const date = moment(dateStr).tz("Asia/Seoul");
+    let hour = date.hour();
+    let minutes = date.minutes();
+    let noon = hour >= 12 ? "PM" : "AM";
+    hour = hour % 12 || 12;
+
+    minutes = minutes < 10 ? `0${minutes}` : minutes;
+    hour = hour < 10 ? `0${hour}` : hour;
+
+    return `${hour}:${minutes} ${noon}`;
   };
-  const minuteToString = (minutes) => {
-    const hh = Math.floor(minutes / 60);
-    const mm = minutes % 60;
-    return `${hh}시간 ${mm}분`;
+
+  const minuteToString = (totalMinutes) => {
+    // 시간과 분으로 변환
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    // 포맷에 맞게 설정
+    const formattedTime =
+      hours > 0
+        ? `${hours}시간 ${formatTime(minutes)}분`
+        : `${formatTime(minutes)}분`;
+    return formattedTime;
+  };
+  // 시간을 두 자리 문자열로 변환
+  const formatTime = (time) => {
+    return time < 10 ? `0${time}` : `${time}`;
   };
 
   return (
