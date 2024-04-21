@@ -24,6 +24,7 @@ import { useCourse } from "../../hooks/useCourse";
 
 const ProcessScreen = () => {
   const navigation = useNavigation();
+  const [toastMsg, setToastMsg] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [msgModal, setMsgModal] = useState(false);
   const [isIconSheetVisible, setIconSheetVisible] = useState(false);
@@ -93,6 +94,15 @@ const ProcessScreen = () => {
     navigation.navigate("Home");
   };
   const handleSaveForm = () => {
+    if (!inputValue.trim()) {
+      setToastMsg("과정 이름을 입력해주세요.");
+      showMessage();
+      return;
+    } else if (selectedTasks.length === 0) {
+      setToastMsg("하나 이상의 할 일을 추가해야 합니다.");
+      showMessage();
+      return;
+    }
     const totalMinutes = selectedTasks.reduce(
       (acc, task) => acc + Number(task.time),
       0
@@ -164,6 +174,7 @@ const ProcessScreen = () => {
 
   const handleAddProcess = (task) => {
     if (selectedTasks.length >= 30) {
+      setToastMsg("할 일은 최대 30개까지 추가할 수 있어요.");
       showMessage();
     } else {
       setSelectedTasks([...selectedTasks, task]);
@@ -466,7 +477,7 @@ const ProcessScreen = () => {
                   styles.bottomSubText,
                   {
                     color: totalTime === "00시간 00분" ? "#B9B9B9" : "#1B1B1B",
-                    fontFamily: "Pretendard_SemiBold",
+                    // // fontFamily: "Pretendard_SemiBold",
                   },
                 ]}
               >
@@ -479,7 +490,10 @@ const ProcessScreen = () => {
                 <Text
                   style={[
                     styles.bottomSubText,
-                    { color: "#B9B9B9", fontFamily: "Pretendard_SemiBold" },
+                    {
+                      color: "#B9B9B9",
+                      // // fontFamily: "Pretendard_SemiBold"
+                    },
                   ]}
                 >
                   {/* -- : 00 AM */}
@@ -537,7 +551,7 @@ const ProcessScreen = () => {
       {isVisible && (
         <ToastMsg
           isVisible={isVisible}
-          message="할 일은 최대 30개까지 추가할 수 있어요."
+          message={toastMsg}
           onClose={handleClose}
         />
       )}
