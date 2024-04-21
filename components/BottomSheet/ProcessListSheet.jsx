@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   sheetTitle: {
     color: "#000",
     fontSize: 14,
-    fontFamily: "Pretendard_SemiBold",
+    // fontFamily: "Pretendard_SemiBold",
     flex: 1,
     textAlign: "center",
     left: 8,

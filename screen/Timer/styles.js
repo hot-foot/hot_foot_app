@@ -30,7 +30,7 @@ export default StyleSheet.create({
     right: scale(10),
     color: "#1B1B1B",
     fontSize: moderateScale(16),
-    fontFamily: "Pretendard_SemiBold",
+    // fontFamily: "Pretendard_SemiBold",
   },
   totalSection: {
     flexDirection: "column",
@@ -41,18 +41,18 @@ export default StyleSheet.create({
   },
   totalTitleText: {
     fontSize: moderateScale(22),
-    fontFamily: "Pretendard_Bold",
+    // fontFamily: "Pretendard_Bold",
     marginBottom: verticalScale(10),
     color: "#1B1B1B",
   },
   totalSubTitleText: {
     fontSize: moderateScale(20),
-    fontFamily: "Pretendard_Regular",
+    // fontFamily: "Pretendard_Regular",
     color: "#1B1B1B",
   },
   totalTimerText: {
     fontSize: moderateScale(20),
-    fontFamily: "Pretendard_Bold",
+    // fontFamily: "Pretendard_Bold",
     color: "#1B1B1B",
   },
   todoImageBackgound: {
@@ -85,12 +85,12 @@ export default StyleSheet.create({
   todoTitleText: {
     marginTop: verticalScale(20),
     fontSize: moderateScale(22),
-    fontFamily: "Pretendard_Regular",
+    // fontFamily: "Pretendard_Regular",
     color: "#1B1B1B",
   },
   todoTimerText: {
     fontSize: moderateScale(22),
-    fontFamily: "Pretendard_Bold",
+    // fontFamily: "Pretendard_Bold",
     color: "#1B1B1B",
   },
   todoButton: {
@@ -127,7 +127,7 @@ export default StyleSheet.create({
   },
   skipTooltipText: {
     fontSize: moderateScale(11),
-    fontFamily: "Pretendard_Regular",
+    // fontFamily: "Pretendard_Regular",
     textAlign: "left",
     color: "#FFFFFF",
     left: scale(17),
@@ -165,7 +165,7 @@ export default StyleSheet.create({
   },
   todoListTitleText: {
     fontSize: moderateScale(16),
-    fontFamily: "Pretendard_SemiBold",
+    // fontFamily: "Pretendard_SemiBold",
     textAlign: "center",
     right: scale(20),
     marginTop: verticalScale(10),
@@ -174,7 +174,7 @@ export default StyleSheet.create({
   },
   todoListTimeText: {
     fontSize: moderateScale(14),
-    fontFamily: "Pretendard_Regular",
+    // fontFamily: "Pretendard_Regular",
     textAlign: "center",
     right: scale(20),
     marginTop: verticalScale(35),
