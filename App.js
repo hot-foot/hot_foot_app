@@ -11,6 +11,7 @@ import { Platform, ActivityIndicator } from "react-native";
 import TimerScreen from "./screen/Timer/timerScreen";
 import CompleteScreen from "./screen/Complete/completeScreen";
 import { FontProvider } from "./context/fontContext";
+import Navigation from "./Navigation";
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,34 @@ async function schedulePushNotification(data) {
 function App() {
   const [pushToken, setPushToken] = useState("");
   const [notification, setNotification] = useState(false);
+  // const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  // const customFonts = {
+  //   // Pretendard
+  //   Pretendard_Thin: require("./assets/fonts/Pretendard-Thin.otf"),
+  //   Pretendard_ExtraLight: require("./assets/fonts/Pretendard-ExtraLight.otf"),
+  //   Pretendard_Light: require("./assets/fonts/Pretendard-Light.otf"),
+  //   Pretendard_Regular: require("./assets/fonts/Pretendard-Regular.otf"),
+  //   Pretendard_Medium: require("./assets/fonts/Pretendard-Medium.otf"),
+  //   Pretendard_SemiBold: require("./assets/fonts/Pretendard-SemiBold.otf"),
+  //   Pretendard_Bold: require("./assets/fonts/Pretendard-Bold.otf"),
+  //   Pretendard_ExtraBold: require("./assets/fonts/Pretendard-ExtraBold.otf"),
+  //   Pretendard_Black: require("./assets/fonts/Pretendard-Black.otf"),
+  // };
+
+  // async function loadFonts() {
+  //   try {
+  //     await Font.loadAsync(customFonts);
+  //     console.log("Fonts loaded successfully!");
+  //     setFontsLoaded(true);
+  //   } catch (error) {
+  //     console.error("Error loading fonts", error);
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   loadFonts();
+  // }, []);
   const notificationListener = useRef();
   const responseListener = useRef();
 
@@ -119,22 +148,14 @@ function App() {
   };
 
   return (
-    <FontProvider>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-          }}
-          initialRouteName="Home"
-        >
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Setting" component={SettingScreen} />
-          <Stack.Screen name="Process" component={ProcessScreen} />
-          <Stack.Screen name="Timer" component={TimerScreen} />
-          <Stack.Screen name="Complete" component={CompleteScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </FontProvider>
+    <>
+      <Navigation />
+      {/* {fontsLoaded ? (
+        <Navigation />
+      ) : (
+        <ActivityIndicator size="large" color="#000" />
+      )} */}
+    </>
   );
 }
 
