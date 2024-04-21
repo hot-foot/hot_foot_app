@@ -145,7 +145,7 @@ const ProcessScreen = () => {
   };
 
   const handleAddProcess = (task) => {
-    if (selectedTasks.length >= 29) {
+    if (selectedTasks.length >= 30) {
       showMessage();
     } else {
       setSelectedTasks([...selectedTasks, task]);
