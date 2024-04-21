@@ -242,14 +242,22 @@ const ProcessScreen = () => {
   const handleStartTimeConfirm = (time) => {
     const localeTime = koreanLocaleTime(time);
     const startTime = new Date();
-    startTime.setHours(localeTime.hour);
-    startTime.setMinutes(localeTime.minute);
-    console.log(form);
+    startTime.setHours(localeTime.hour, localeTime.minute, 0, 0);
     setForm({
       ...form,
-      startTime,
+      startTime: startTime.toISOString(),
     });
-    setSelectedStartTime(time);
+
+    // 데이터베이스에 시작 시간 저장
+    db.transaction((tx) => {
+      tx.executeSql(
+        "UPDATE courses SET startTime = ? WHERE id = ?;",
+        [startTime.toISOString(), form.id],
+        () => console.log("시작 시간 업데이트 성공"),
+        (_, error) => console.log("시작 시간 업데이트 실패", error)
+      );
+    });
+    setSelectedStartTime(startTime);
     hideStartTimePicker();
   };
 
@@ -290,6 +298,11 @@ const ProcessScreen = () => {
       (acc, task) => acc + Number(task.time),
       0
     );
+    console.log(totalMinutes);
+    setForm({
+      ...form,
+      totalMinute: totalMinutes.hour * 60 + totalMinutes.minute,
+    });
     // 시간과 분으로 변환
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
