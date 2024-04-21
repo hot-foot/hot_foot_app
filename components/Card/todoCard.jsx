@@ -16,7 +16,7 @@ const TodoCard = ({ id, title, time, imagePath, onDelete }) => {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Swipeable
         renderRightActions={renderRightActions}
-        onSwipeableOpen={() => onDelete(id)}
+        // onSwipeableOpen={() => onDelete(id)}
       >
         <View style={styles.containter}>
           <View style={styles.section}>
