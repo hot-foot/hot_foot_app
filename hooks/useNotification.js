@@ -25,7 +25,7 @@ export const useNotification = () => {
       content: {
         title,
         body,
-        data: { url: data.url },
+        data,
       },
       trigger,
     });

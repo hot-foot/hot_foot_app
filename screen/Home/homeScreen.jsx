@@ -180,6 +180,16 @@ const HomeScreen = ({ route }) => {
           height={64}
           onPress={handleBtnClick}
         />
+        <PlusBtn
+          color={"#FFFFFF"}
+          width={64}
+          height={64}
+          onPress={() => {
+            navigation.navigate("Timer", {
+              course: courses[0],
+            });
+          }}
+        />
       </Animated.View>
       {isVisible && (
         <ToastMsg
