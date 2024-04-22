@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import _ from "lodash";
 import styles from "./styels";
 import {
   View,
@@ -37,7 +38,7 @@ const ProcessScreen = () => {
   const [todoList, setTodoList] = useState(TODO_LIST);
   const [isVisible, setIsVisible] = useState(false);
   const [totalTime, setTotalTime] = useState("00시간 00분");
-  const [form, setForm] = useState({ todoIds: [2, 4, 7] });
+  const [form, setForm] = useState({});
   const { openDatabase } = useDatabase();
   const db = openDatabase();
   const { createCourse } = useCourse(db);
@@ -70,6 +71,7 @@ const ProcessScreen = () => {
     console.log("삭제", id, index);
 
     // 데이터베이스에서 작업 삭제
+    // feedback: todos 데이터 삭제는 ProcessListSheet에서 처리되어야 할 작업같습니다.
     db.transaction((tx) => {
       tx.executeSql(
         `DELETE FROM todos WHERE id = ?;`,
@@ -116,6 +118,7 @@ const ProcessScreen = () => {
     db.transaction((tx) => {
       if (form.id) {
         // 기존 코스 업데이트
+        // feedback: createCourse처럼 useCourse에 작성해서 호출하면 좋을거같아요!
         tx.executeSql(
           "UPDATE courses SET name = ?, totalMinute = ?, travelMinute =?, startTime = ?, arrivalTime = ? WHERE id = ?;",
           [
@@ -137,32 +140,21 @@ const ProcessScreen = () => {
         );
       } else {
         // 새 코스 추가
-        tx.executeSql(
-          "INSERT INTO courses (name, totalMinute, travelMinute, startTime, arrivalTime) VALUES (?, ?, ?, ?, ?);",
-          [
-            form.name,
-            totalMinutes,
-            form.travelMinute,
-            form.startTime,
-            form.arrivalTime,
-          ],
-          (_, resultSet) => {
-            const newCourseId = resultSet.insertId;
-            console.log("코스 추가 성공, 새 ID:", newCourseId);
-            // 코스에 할 일 연결 정보 저장
-            selectedTasks.forEach((task, index) => {
-              tx.executeSql(
-                "INSERT INTO courseTodo (courseId, todoId, listOrder) VALUES (?, ?, ?);",
-                [newCourseId, task.id, index]
-              );
-            });
-            navigation.navigate("Home", {
-              processName: inputValue,
-              startTime: form.startTime,
-            });
-            setForm((prevForm) => ({ ...prevForm, id: newCourseId }));
-          },
-          (_, error) => console.log("코스 추가 실패", error)
+        // feedback: 기존에 custom hook으로 작성된 코드로 추가할 수 있습니다. 성공/실패에 따른 동작을 추가했습니다.
+        createCourse(
+          { ...form, todoIds: _.map(selectedTasks, "id") },
+          {
+            onSuccess: () => {
+              navigation.navigate("Home", {
+                processName: inputValue,
+                startTime: form.startTime,
+              });
+            },
+            onError: () => {
+              setToastMsg("에러가 발생했습니다.");
+              showMessage();
+            },
+          }
         );
       }
     });
