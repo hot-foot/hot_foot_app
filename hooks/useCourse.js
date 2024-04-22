@@ -98,7 +98,7 @@ export const useCourse = (db) => {
     fetchData();
   }, []);
 
-  const createCourse = (course) => {
+  const createCourse = (course, { onSuccess, onError }) => {
     executeTransaction((tx) => {
       tx.executeSql(`select * from todos;`, [], (x, { rows: { _array } }) => {
         const todos = _array;
@@ -135,10 +135,10 @@ export const useCourse = (db) => {
                   [result.insertId, t, index]
                 );
             });
-            console.log("create course:", result);
+            onSuccess();
           },
           (_, error) => {
-            console.log(error);
+            onError();
             return false;
           }
         );

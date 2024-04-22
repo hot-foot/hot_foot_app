@@ -15,7 +15,6 @@ import { useDatabase } from "../../hooks/useDatabase";
 import { useCourse } from "../../hooks/useCourse";
 import { useTodo } from "../../hooks/useTodo";
 import PreparationCard from "../../components/Card/preparationCard";
-import moment from "moment-timezone";
 import ToastMsg from "../../components/Modal/toastMsg";
 
 const HomeScreen = ({ route }) => {
@@ -104,13 +103,12 @@ const HomeScreen = ({ route }) => {
   }, []);
 
   const dateToString = (dateStr) => {
-    const date = moment(dateStr).tz("Asia/Seoul");
-    let hour = date.hour();
-    let minutes = date.minutes();
-    let noon = hour >= 12 ? "PM" : "AM";
+    let hour = dateStr.slice(0, 2);
+    let minutes = dateStr.slice(3, 5);
+    let noon = hour >= "12" ? "PM" : "AM";
     hour = hour % 12 || 12;
 
-    minutes = minutes < 10 ? `0${minutes}` : minutes;
+    minutes = minutes.length == 1 ? `0${minutes}` : minutes;
     hour = hour < 10 ? `0${hour}` : hour;
 
     return `${hour}:${minutes} ${noon}`;
