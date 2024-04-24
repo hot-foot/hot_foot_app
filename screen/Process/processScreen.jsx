@@ -69,18 +69,6 @@ const ProcessScreen = () => {
 
   const handleDeleteTask = (id, index) => {
     console.log("삭제", id, index);
-
-    // 데이터베이스에서 작업 삭제
-    // feedback: todos 데이터 삭제는 ProcessListSheet에서 처리되어야 할 작업같습니다.
-    db.transaction((tx) => {
-      tx.executeSql(
-        `DELETE FROM todos WHERE id = ?;`,
-        [id],
-        (_, result) => console.log("작업이 데이터베이스에서 삭제되었습니다."),
-        (_, error) => console.log("작업 삭제 중 오류 발생:", error)
-      );
-    });
-
     // 앱 상태에서 작업 삭제 (인덱스 기반)
     setSelectedTasks((currentTasks) =>
       currentTasks.filter((task, taskIndex) => taskIndex !== index)
