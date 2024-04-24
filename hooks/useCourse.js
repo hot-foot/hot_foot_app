@@ -198,6 +198,33 @@ export const useCourse = (db) => {
     });
   };
 
+  const updateCourse = (course, { onSuccess, onError }) => {
+    executeTransaction((tx) => {
+      tx.executeSql(
+        "UPDATE courses SET name = ?, totalMinute = ?, travelMinute = ?, startTime = ?, arrivalTime = ? WHERE id = ?;",
+        [
+          course.name,
+          course.totalMinute,
+          course.travelMinute,
+          course.startTime.toTimeString(),
+          course.arrivalTime.toTimeString(),
+          course.id,
+        ],
+        (_, result) => {
+          if (result.rowsAffected > 0) {
+            onSuccess();
+          } else {
+            onError("No rows updated");
+          }
+        },
+        (_, error) => {
+          onError(error.message);
+          return false;
+        }
+      );
+    });
+  };
+
   const deleteCourse = (id) => {
     executeTransaction((tx) => {
       tx.executeSql(`delete from courseTodo where courseId = ?`, [id]);
@@ -233,6 +260,7 @@ export const useCourse = (db) => {
     fetchCourseTodo,
     createCourse,
     copyCourse,
+    updateCourse,
     deleteCourse,
   };
 };
