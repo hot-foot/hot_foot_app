@@ -14,27 +14,20 @@ import { useNavigation } from "@react-navigation/native";
 import TodoCard from "../../components/Card/todoCard";
 import PlusBtn from "../../components/Btn/plusBtn";
 import LargeBtn from "../../components/Btn/largeBtn";
-import TodoIconSheet from "../../components/BottomSheet/todoIconSheet";
-import AddProcessSheet from "../../components/BottomSheet/addProcessSheet";
-import ProcessListSheet from "../../components/BottomSheet/ProcessListSheet";
-import { TODO_ICON, TODO_LIST } from "../../data/processData";
+import { TODO_LIST } from "../../data/processData";
 import ToastMsg from "../../components/Modal/toastMsg";
 import MsgModal from "../../components/Modal/msgModal";
 import { useDatabase } from "../../hooks/useDatabase";
 import { useCourse } from "../../hooks/useCourse";
+import AddProcessComponent from "../../components/BottomSheet/addProcessComponent";
 
 const ProcessScreen = () => {
   const navigation = useNavigation();
   const [toastMsg, setToastMsg] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [msgModal, setMsgModal] = useState(false);
-  const [isIconSheetVisible, setIconSheetVisible] = useState(false);
-  const [isAddSheetVisible, setAddSheetVisible] = useState(false);
   const [isActionSheetVisible, setActionSheetVisible] = useState(false);
   const [selectedTasks, setSelectedTasks] = useState([]);
-  const [selectedIconPath, setSelectedIconPath] = useState(
-    TODO_ICON[0].imagePath
-  );
   const [todoList, setTodoList] = useState(TODO_LIST);
   const [isVisible, setIsVisible] = useState(false);
   const [totalTime, setTotalTime] = useState("00시간 00분");
@@ -61,10 +54,6 @@ const ProcessScreen = () => {
 
   const handleClose = () => {
     setIsVisible(false);
-  };
-
-  const handleAddTodo = (newTodo) => {
-    setTodoList([...todoList, newTodo]);
   };
 
   const handleDeleteTask = (id, index) => {
@@ -158,6 +147,9 @@ const ProcessScreen = () => {
   const handlePluBtn = () => {
     setActionSheetVisible(true);
   };
+  const closeActionSheet = () => {
+    setActionSheetVisible(false);
+  };
 
   const handleAddProcess = (task) => {
     if (selectedTasks.length >= 30) {
@@ -168,16 +160,6 @@ const ProcessScreen = () => {
       setForm({ ...form, todoIds: [...selectedTasks] });
       setActionSheetVisible(false);
     }
-  };
-
-  const handleSheetPlusBtn = () => {
-    setActionSheetVisible(false);
-    setAddSheetVisible(true);
-  };
-
-  const handleChangeIcon = () => {
-    setAddSheetVisible(false);
-    setIconSheetVisible(true);
   };
 
   // 이동 시간 상태
@@ -331,16 +313,7 @@ const ProcessScreen = () => {
     setTotalTime(formattedTime);
   }, [selectedTasks]);
 
-  const handleTodoIconSheet = () => {
-    setIconSheetVisible(false);
-    setAddSheetVisible(true);
-  };
-
-  const handleAddProcessSheet = () => {
-    setAddSheetVisible(false);
-    setActionSheetVisible(true);
-    setSelectedIconPath(TODO_ICON[0].imagePath);
-  };
+  console.log("isActionSheetVisible::", isActionSheetVisible);
 
   return (
     <View style={styles.container}>
@@ -510,31 +483,13 @@ const ProcessScreen = () => {
           </Text>
         </View>
       </View>
-      <ProcessListSheet
-        isVisible={isActionSheetVisible}
-        onClose={() => setActionSheetVisible(false)}
-        onAdd={handleAddProcess}
-        onPlus={handleSheetPlusBtn}
-        todoList={todoList}
-      />
-      <TodoIconSheet
-        isVisible={isIconSheetVisible}
-        // onClose={() => setIconSheetVisible(false)}
-        onClose={handleTodoIconSheet}
-        onAdd={(iconPath) => {
-          setSelectedIconPath(iconPath);
-          setAddSheetVisible(true);
-          setIconSheetVisible(false);
-        }}
-      />
-      <AddProcessSheet
-        isVisible={isAddSheetVisible}
-        // onClose={() => setAddSheetVisible(false)}
-        onClose={handleAddProcessSheet}
-        onChange={handleChangeIcon}
-        selectedIconPath={selectedIconPath}
-        onAddTodo={handleAddTodo}
-      />
+      {isActionSheetVisible && (
+        <AddProcessComponent
+          onAdd={handleAddProcess}
+          isSheetVisible={isActionSheetVisible}
+          closeSheet={closeActionSheet}
+        />
+      )}
       {isVisible && (
         <ToastMsg
           isVisible={isVisible}
