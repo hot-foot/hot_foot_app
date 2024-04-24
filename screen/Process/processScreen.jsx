@@ -119,24 +119,22 @@ const ProcessScreen = () => {
       if (form.id) {
         // 기존 코스 업데이트
         // feedback: createCourse처럼 useCourse에 작성해서 호출하면 좋을거같아요!
-        tx.executeSql(
-          "UPDATE courses SET name = ?, totalMinute = ?, travelMinute =?, startTime = ?, arrivalTime = ? WHERE id = ?;",
-          [
-            form.name,
-            totalMinutes,
-            form.travelMinute,
-            form.startTime,
-            form.arrivalTime,
-            form.id,
-          ],
-          () => {
-            console.log("코스 업데이트 성공");
-            navigation.navigate("Home", {
-              processName: inputValue,
-              startTime: form.startTime,
-            });
-          },
-          (_, error) => console.log("코스 업데이트 실패", error)
+        updateCourse(
+          { ...form, totalMinute: calculateTotalMinutes(form) },
+          {
+            onSuccess: () => {
+              console.log("코스 업데이트 성공");
+              navigation.navigate("Home", {
+                processName: inputValue,
+                startTime: form.startTime,
+              });
+            },
+            onError: (error) => {
+              console.log("코스 업데이트 실패", error);
+              setToastMsg("에러가 발생했습니다.");
+              showMessage();
+            },
+          }
         );
       } else {
         // 새 코스 추가
