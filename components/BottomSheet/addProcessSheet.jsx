@@ -148,8 +148,8 @@ const AddProcessSheet = ({
                 onClick={() => {
                   const newTodo = {
                     id: Date.now(),
-                    title: inputValue,
-                    time: timeValue,
+                    name: inputValue,
+                    minutes: timeValue,
                     imagePath: selectedIconPath,
                   };
                   onAddTodo(newTodo);
