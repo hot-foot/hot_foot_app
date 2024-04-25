@@ -11,7 +11,7 @@ import { useDatabase } from "../../hooks/useDatabase";
 const AddProcessComponent = ({ onAdd, isSheetVisible, closeSheet }) => {
   const { openDatabase, createTables } = useDatabase();
   const db = openDatabase();
-  const { initDefaultTodo } = useTodo(db);
+  const { initDefaultTodo, createTodo } = useTodo(db);
   const [isIconSheetVisible, setIconSheetVisible] = useState(false);
   const [isAddSheetVisible, setAddSheetVisible] = useState(false);
   const [isActionSheetVisible, setActionSheetVisible] =
@@ -52,27 +52,14 @@ const AddProcessComponent = ({ onAdd, isSheetVisible, closeSheet }) => {
     setActionSheetVisible(true);
     setSelectedIconPath(TODO_ICON[0].imagePath);
   };
-  const handleAddTodo = (title, time, iconPath) => {
-    const newTodo = {
-      id: todoList.length + 1,
-      title: title,
-      time: time,
-      imagePath: iconPath,
-    };
 
-    setTodoList([...todoList, newTodo]);
-
-    console.log(newTodo);
-
-    // db.transaction((tx) => {
-    //   tx.executeSql(
-    //     "INSERT INTO todos (id, title, time, imagePath) VALUES (?, ?, ?, ?);",
-    //     [newTodo.id, newTodo.title, newTodo.time, newTodo.imagePath],
-    //     (_, result) => console.log("Todo added to database"),
-    //     (_, error) => console.log("Failed to add todo to database:", error)
-    //   );
-    // });
-
+  const handleAddTodo = (newTodo) => {
+    setTodoList((prevTodos) => {
+      const updatedTodos = [...prevTodos, newTodo];
+      createTodo(newTodo);
+      return updatedTodos;
+    });
+    console.log("저장::: 성공적...", newTodo);
     setAddSheetVisible(false);
   };
 
