@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { TODO_ICON, TODO_LIST } from "../../data/processData";
 import ProcessListSheet from "./ProcessListSheet";
@@ -11,7 +11,7 @@ import { useDatabase } from "../../hooks/useDatabase";
 const AddProcessComponent = ({ onAdd, isSheetVisible, closeSheet }) => {
   const { openDatabase, createTables } = useDatabase();
   const db = openDatabase();
-  const { initDefaultTodo, createTodo } = useTodo(db);
+  const { todos, initDefaultTodo, createTodo } = useTodo(db);
   const [isIconSheetVisible, setIconSheetVisible] = useState(false);
   const [isAddSheetVisible, setAddSheetVisible] = useState(false);
   const [isActionSheetVisible, setActionSheetVisible] =
@@ -20,6 +20,11 @@ const AddProcessComponent = ({ onAdd, isSheetVisible, closeSheet }) => {
     TODO_ICON[0].imagePath
   );
   const [todoList, setTodoList] = useState(TODO_LIST);
+
+  useEffect(() => {
+    createTables(db);
+    initDefaultTodo();
+  }, []);
 
   const initData = () => {
     createTables(db);
@@ -71,7 +76,8 @@ const AddProcessComponent = ({ onAdd, isSheetVisible, closeSheet }) => {
         // onAdd={handleAddProcess}
         onAdd={onAdd}
         onPlus={handleSheetPlusBtn}
-        todoList={todoList}
+        // todoList={todoList}
+        todoList={todos}
       />
       <TodoIconSheet
         isVisible={isIconSheetVisible}
