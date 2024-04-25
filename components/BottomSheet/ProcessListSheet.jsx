@@ -67,8 +67,9 @@ const ProcessListSheet = ({ isVisible, onClose, onAdd, onPlus, todoList }) => {
                       id={item.id}
                       title={item.name}
                       time={item.minutes}
-                      imagePath={item.imagePath}
-                      onDelete={() => handleDeleteTask(task.id, index)}
+                      // imagePath={item.imagePath}
+                      imagePath={item.iconId}
+                      onDelete={() => handleDeleteTask(item.id, index)}
                     />
                   </TouchableOpacity>
                 ))}
