@@ -150,7 +150,8 @@ const AddProcessSheet = ({
                     id: Date.now(),
                     name: inputValue,
                     minutes: timeValue,
-                    imagePath: selectedIconPath,
+                    iconId: selectedIconPath,
+                    // imagePath: selectedIconPath,
                   };
                   onAddTodo(newTodo);
                   onClose();
