@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import TodoCard from "../Card/todoCard";
 import PlusBtn from "../Btn/plusBtn";
-import { TODO_LIST } from "../../data/processData";
 
 const ProcessListSheet = ({ isVisible, onClose, onAdd, onPlus, todoList }) => {
   const screenHeight = Dimensions.get("window").height;
