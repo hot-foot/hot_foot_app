@@ -15,6 +15,7 @@ import PlusBtn from "../Btn/plusBtn";
 const ProcessListSheet = ({ isVisible, onClose, onAdd, onPlus, todoList }) => {
   const screenHeight = Dimensions.get("window").height;
   const halfScreenHeight = screenHeight * 0.4;
+  console.log("할일목록:::", todoList);
 
   const handleDeleteTask = (id, index) => {
     console.log("삭제", id, index);
@@ -64,8 +65,8 @@ const ProcessListSheet = ({ isVisible, onClose, onAdd, onPlus, todoList }) => {
                   >
                     <TodoCard
                       id={item.id}
-                      title={item.title}
-                      time={item.time}
+                      title={item.name}
+                      time={item.minutes}
                       imagePath={item.imagePath}
                       onDelete={() => handleDeleteTask(task.id, index)}
                     />
