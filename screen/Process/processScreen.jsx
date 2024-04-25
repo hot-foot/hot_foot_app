@@ -403,9 +403,9 @@ const ProcessScreen = () => {
               <TodoCard
                 key={task.id}
                 id={task.id}
-                title={task.title}
-                time={task.time}
-                imagePath={task.imagePath}
+                title={task.name}
+                time={task.minutes}
+                imagePath={task.iconId}
                 onDelete={() => handleDeleteTask(task.id, index)}
               />
             </>
