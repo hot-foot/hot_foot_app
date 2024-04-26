@@ -14,7 +14,6 @@ import { useNavigation } from "@react-navigation/native";
 import TodoCard from "../../components/Card/todoCard";
 import PlusBtn from "../../components/Btn/plusBtn";
 import LargeBtn from "../../components/Btn/largeBtn";
-import { TODO_LIST } from "../../data/processData";
 import ToastMsg from "../../components/Modal/toastMsg";
 import MsgModal from "../../components/Modal/msgModal";
 import { useDatabase } from "../../hooks/useDatabase";
@@ -28,7 +27,6 @@ const ProcessScreen = () => {
   const [msgModal, setMsgModal] = useState(false);
   const [isActionSheetVisible, setActionSheetVisible] = useState(false);
   const [selectedTasks, setSelectedTasks] = useState([]);
-  const [todoList, setTodoList] = useState(TODO_LIST);
   const [isVisible, setIsVisible] = useState(false);
   const [totalTime, setTotalTime] = useState("00시간 00분");
   const [form, setForm] = useState({});
@@ -294,7 +292,7 @@ const ProcessScreen = () => {
   // 총 소요시간 계산
   useEffect(() => {
     const totalMinutes = selectedTasks.reduce(
-      (acc, task) => acc + Number(task.time),
+      (acc, task) => acc + Number(task.minutes),
       0
     );
     console.log(totalMinutes);
