@@ -70,13 +70,27 @@ const ProcessScreen = () => {
     setMsgModal(false);
     navigation.navigate("Home");
   };
+
+  const defaultDate = new Date();
   const handleSaveForm = () => {
     if (!inputValue.trim()) {
       setToastMsg("과정 이름을 입력해주세요.");
       showMessage();
       return;
     } else if (selectedTasks.length === 0) {
-      setToastMsg("하나 이상의 할 일을 추가해야 합니다.");
+      setToastMsg("하나 이상의 할 일을 추가해야 해주세요.");
+      showMessage();
+      return;
+    } else if (!selectedDepartureTime) {
+      setToastMsg("이동 시간을 설정해주세요.");
+      showMessage();
+      return;
+    } else if (!selectedArrivalTime) {
+      setToastMsg("도착 시간을 설정해주세요.");
+      showMessage();
+      return;
+    } else if (!selectedStartTime) {
+      setToastMsg("시작 시간을 설정해주세요.");
       showMessage();
       return;
     }
