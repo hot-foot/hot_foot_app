@@ -30,6 +30,7 @@ const HomeScreen = ({ route }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   console.log("courses :::", courses);
+  console.log("startTime :::", startTime);
 
   const windowHeight = Dimensions.get("window").height;
   const navigation = useNavigation();
@@ -194,9 +195,7 @@ const HomeScreen = ({ route }) => {
       {isVisible && (
         <ToastMsg
           isVisible={isVisible}
-          message={`${processName} 과정이 ${dateToString(
-            startTime
-          )}에 시작됩니다.`}
+          message={`${processName} 과정이 ${startTime}에 시작됩니다.`}
           onClose={handleClose}
         />
       )}

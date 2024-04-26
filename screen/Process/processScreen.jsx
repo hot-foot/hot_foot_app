@@ -135,7 +135,7 @@ const ProcessScreen = () => {
             onSuccess: () => {
               navigation.navigate("Home", {
                 processName: inputValue,
-                startTime: form.startTime,
+                startTime: formatAMPM3(selectedStartTime),
               });
             },
             onError: () => {
@@ -265,7 +265,7 @@ const ProcessScreen = () => {
       ...form,
       startTime: startTime.toISOString(),
     });
-
+    console.log(startTime.toISOString());
     // 데이터베이스에 시작 시간 저장
     db.transaction((tx) => {
       tx.executeSql(
@@ -309,7 +309,7 @@ const ProcessScreen = () => {
       const ampm = hours >= 12 ? "PM" : "AM";
       const formattedTime = `${formatTo12HourClock(hours)} : ${formatTime(
         minutes
-      )}  ${ampm}`;
+      )} ${ampm}`;
       return formattedTime;
     }
   };
@@ -321,7 +321,7 @@ const ProcessScreen = () => {
       const ampm = hours >= 12 ? "PM" : "AM";
       const formattedTime = `${formatTo12HourClock(hours)} : ${formatTime(
         minutes
-      )}  ${ampm}`;
+      )} ${ampm}`;
       return formattedTime;
     }
   };
