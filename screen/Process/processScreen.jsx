@@ -178,22 +178,22 @@ const ProcessScreen = () => {
   // 이동 시간 상태
   const [isDepartureTimePickerVisible, setDepartureTimePickerVisibility] =
     useState(false);
-  const [selectedDepartureTime, setSelectedDepartureTime] = useState(
-    new Date()
-  );
-
+  const [selectedDepartureTime, setSelectedDepartureTime] = useState(null);
   // 도착 시간 상태
   const [isArrivalTimePickerVisible, setArrivalTimePickerVisibility] =
     useState(false);
-  const [selectedArrivalTime, setSelectedArrivalTime] = useState(new Date());
+  const [selectedArrivalTime, setSelectedArrivalTime] = useState(null);
 
   // 시작 시간 상태
   const [isStartTimePickerVisible, setStartTimePickerVisibility] =
     useState(false);
-  const [selectedStartTime, setSelectedStartTime] = useState(new Date());
+  const [selectedStartTime, setSelectedStartTime] = useState(null);
 
   // 이동 시간 피커 보여주기
   const showDepartureTimePicker = () => {
+    if (!selectedDepartureTime) {
+      setSelectedDepartureTime(new Date());
+    }
     setDepartureTimePickerVisibility(true);
   };
 
@@ -217,6 +217,9 @@ const ProcessScreen = () => {
 
   // 도착 시간 피커 보여주기
   const showArrivalTimePicker = () => {
+    if (!selectedArrivalTime) {
+      setSelectedArrivalTime(new Date());
+    }
     setArrivalTimePickerVisibility(true);
   };
 
@@ -242,6 +245,9 @@ const ProcessScreen = () => {
 
   // 시작 시간 피커 보이기
   const showStartTimePicker = () => {
+    if (!selectedStartTime) {
+      setSelectedStartTime(new Date());
+    }
     setStartTimePickerVisibility(true);
   };
 
@@ -286,22 +292,38 @@ const ProcessScreen = () => {
 
   // 시간과 분을 AM/PM 형식으로 변환
   const formatAMPM = (date) => {
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const formattedTime = `${formatTo12HourClock(hours)} 시간  ${formatTime(
-      minutes
-    )} 분 `;
-    return formattedTime;
+    if (selectedDepartureTime) {
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const formattedTime = `${formatTo12HourClock(hours)} 시간  ${formatTime(
+        minutes
+      )} 분 `;
+      return formattedTime;
+    }
   };
 
   const formatAMPM2 = (date) => {
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? "PM" : "AM";
-    const formattedTime = `${formatTo12HourClock(hours)} : ${formatTime(
-      minutes
-    )}  ${ampm}`;
-    return formattedTime;
+    if (selectedArrivalTime) {
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const ampm = hours >= 12 ? "PM" : "AM";
+      const formattedTime = `${formatTo12HourClock(hours)} : ${formatTime(
+        minutes
+      )}  ${ampm}`;
+      return formattedTime;
+    }
+  };
+
+  const formatAMPM3 = (date) => {
+    if (selectedStartTime) {
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const ampm = hours >= 12 ? "PM" : "AM";
+      const formattedTime = `${formatTo12HourClock(hours)} : ${formatTime(
+        minutes
+      )}  ${ampm}`;
+      return formattedTime;
+    }
   };
 
   // 총 소요시간 계산
@@ -354,11 +376,16 @@ const ProcessScreen = () => {
           <View style={styles.timeSection}>
             <View style={{ flexDirection: "row", gap: 8 }}>
               <Text style={styles.topText}>이동 시간:</Text>
-              <Text style={[styles.topSubText, { color: "#1B1B1B" }]}>
-                {formatAMPM(selectedDepartureTime)} {/* 이동 시간 표시 */}
-              </Text>
-              <Text style={[styles.topSubText, { color: "#B9B9B9" }]}>
-                00 시간 00 분
+              <Text
+                style={[
+                  styles.topSubText,
+                  { color: selectedDepartureTime ? "#1B1B1B" : "#B9B9B9" },
+                ]}
+              >
+                {selectedDepartureTime
+                  ? formatAMPM(selectedDepartureTime)
+                  : "00시 00분"}
+                {/* 이동 시간 표시 */}
               </Text>
             </View>
             <TouchableOpacity onPress={showDepartureTimePicker} style={{}}>
@@ -380,11 +407,16 @@ const ProcessScreen = () => {
           <View style={styles.timeSection}>
             <View style={{ flexDirection: "row", gap: 8 }}>
               <Text style={styles.topText}>도착 시간:</Text>
-              <Text style={[styles.topSubText, { color: "#1B1B1B" }]}>
-                {formatAMPM2(selectedArrivalTime)} {/* 도착 시간 표시 */}
-              </Text>
-              <Text style={[styles.topSubText, { color: "#B9B9B9" }]}>
-                00 : 00 PM
+              <Text
+                style={[
+                  styles.topSubText,
+                  { color: selectedArrivalTime ? "#1B1B1B" : "#B9B9B9" },
+                ]}
+              >
+                {selectedArrivalTime
+                  ? formatAMPM2(selectedArrivalTime)
+                  : "00 : 00 PM"}
+                {/* 도착 시간 표시 */}
               </Text>
             </View>
             <TouchableOpacity onPress={showArrivalTimePicker} style={{}}>
@@ -461,14 +493,14 @@ const ProcessScreen = () => {
                 <Text
                   style={[
                     styles.bottomSubText,
-                    {
-                      color: "#B9B9B9",
-                      // // fontFamily: "Pretendard_SemiBold"
-                    },
+                    { color: selectedStartTime ? "#1B1B1B" : "#B9B9B9" },
                   ]}
                 >
                   {/* -- : 00 AM */}
-                  {formatAMPM2(selectedStartTime)} {/* 시작 시간 표시 */}
+                  {selectedStartTime
+                    ? formatAMPM3(selectedStartTime)
+                    : "-- : 00 AM"}
+                  {/* 시작 시간 표시 */}
                 </Text>
               </TouchableOpacity>
             </View>
