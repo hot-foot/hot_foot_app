@@ -80,6 +80,7 @@ const ProcessScreen = () => {
       showMessage();
       return;
     }
+
     const totalMinutes = selectedTasks.reduce(
       (acc, task) => acc + Number(task.time),
       0
@@ -310,8 +311,6 @@ const ProcessScreen = () => {
         : `${formatTime(minutes)}분`;
     setTotalTime(formattedTime);
   }, [selectedTasks]);
-
-  console.log("isActionSheetVisible::", isActionSheetVisible);
 
   return (
     <View style={styles.container}>
