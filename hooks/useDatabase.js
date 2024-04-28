@@ -73,6 +73,23 @@ export const useDatabase = () => {
             (
               setting INTEGER
             )`,
+      `create table if not exists pushSetting
+            (
+              start20 INTEGER DEFAULT 0,
+              start10 INTEGER DEFAULT 0,
+              out10 INTEGER DEFAULT 0,
+              out5 INTEGER DEFAULT 0,
+              push INTEGER DEFAULT 0,
+              time TEXT,
+              style TEXT
+            )`,
+      `create table if not exists notifications
+            (
+              id INTEGER PRIMARY KEY AUTOINCREMENT, 
+              notificationKey TEXT,
+              courseId INTEGER,
+              FOREIGN KEY(courseId) REFERENCES courses(id)
+            )`,
     ];
     return await new Promise((resolve, reject) => {
       dbInstance.transaction(

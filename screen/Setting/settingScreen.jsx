@@ -17,11 +17,39 @@ import { useNavigation } from "@react-navigation/native";
 import SlimToggleSwitch from "../../components/ToggleSwitch/slimToggleSwitch";
 import RadioBtn2 from "../../components/Btn/RadioBtn2";
 import { SETTING_ALARM } from "../../data/settingData";
+import { useDatabase } from "../../hooks/useDatabase";
+import { usePushSetting } from "../../hooks/usePushSetting";
 
 const SettingScreen = () => {
   const windowHeight = Dimensions.get("window").height;
   const navigation = useNavigation();
-  const [selectedValue, setSelectedValue] = useState("단호하게");
+  const [settingValue, setSettingValue] = useState({});
+  const [dataKey, setDataKey] = useState(0);
+
+  const { openDatabase, createTables } = useDatabase();
+  const db = openDatabase();
+  const { updatePushSetting, fetchPushData } = usePushSetting(db);
+
+  useEffect(() => {
+    setTimeout(() => {
+      fetchPushData((r) => {
+        let hour = r.time.slice(0, 2);
+        let minutes = r.time.slice(3, 5);
+
+        const toDate = new Date("2024-04-28T00:00:00+09:00");
+        toDate.setHours(hour);
+        toDate.setMinutes(minutes);
+
+        console.log("date", r.time, toDate);
+
+        setSelectedTime(toDate);
+        setSettingValue(r);
+        setDataKey((a) => {
+          a + 1;
+        });
+      });
+    }, 200);
+  }, []);
 
   const openSettings = () => {
     if (Platform.OS === "ios") {
@@ -34,7 +62,11 @@ const SettingScreen = () => {
   };
 
   const handleRadioChange = (value) => {
-    setSelectedValue(value);
+    updatePushSetting("style", value);
+    setSettingValue({
+      ...settingValue,
+      style: value,
+    });
   };
 
   // 시간을 두 자리 문자열로 변환
@@ -60,8 +92,27 @@ const SettingScreen = () => {
   };
 
   const handleTimeConfirm = (time) => {
+    const localeTime = koreanLocaleTime(time);
+    const pushTime = new Date();
+    pushTime.setHours(localeTime.hour);
+    pushTime.setMinutes(localeTime.minute);
+    updatePushSetting("time", pushTime.toTimeString());
+    setSettingValue({
+      ...settingValue,
+      time,
+    });
     setSelectedTime(time);
     hideTimePicker();
+  };
+
+  const koreanLocaleTime = (date) => {
+    const time = new Intl.DateTimeFormat("ko-KR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).format(date);
+    const splitTime = time.split(":");
+    return { hour: Number(splitTime[0]), minute: Number(splitTime[1]) };
   };
 
   const formatAMPM = (date) => {
@@ -101,9 +152,19 @@ const SettingScreen = () => {
                 </View>
                 <View>
                   <SlimToggleSwitch
+                    key={`${item.id}_${dataKey}`}
                     id={item.id}
-                    isEnable={false}
-                    onClick={() => {}}
+                    isEnable={settingValue[item.column] === 1}
+                    onClick={() => {
+                      updatePushSetting(
+                        item.column,
+                        !settingValue[item.column]
+                      );
+                      setSettingValue({
+                        ...settingValue,
+                        [item.column]: !settingValue[item.column],
+                      });
+                    }}
                   />
                 </View>
               </View>
@@ -124,7 +185,18 @@ const SettingScreen = () => {
                 </TouchableOpacity>
               </View>
               <View>
-                <SlimToggleSwitch id={0} isEnable={false} onClick={() => {}} />
+                <SlimToggleSwitch
+                  key={`0_${dataKey}`}
+                  id={0}
+                  isEnable={settingValue["push"] === 1}
+                  onClick={() => {
+                    updatePushSetting("push", !settingValue["push"]);
+                    setSettingValue({
+                      ...settingValue,
+                      push: !settingValue["push"],
+                    });
+                  }}
+                />
               </View>
             </View>
           </View>
@@ -136,13 +208,13 @@ const SettingScreen = () => {
               <RadioBtn2
                 label="단호하게"
                 value="단호하게"
-                checked={selectedValue === "단호하게"}
+                checked={settingValue.style === "단호하게"}
                 onCheck={handleRadioChange}
               />
               <RadioBtn2
                 label="부드럽게"
                 value="부드럽게"
-                checked={selectedValue === "부드럽게"}
+                checked={settingValue.style === "부드럽게"}
                 onCheck={handleRadioChange}
               />
             </View>

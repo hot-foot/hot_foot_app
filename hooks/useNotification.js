@@ -25,7 +25,7 @@ export const useNotification = () => {
       content: {
         title,
         body,
-        data: { url: data.url },
+        data,
       },
       trigger,
     });
@@ -33,7 +33,7 @@ export const useNotification = () => {
   };
 
   const cancelNotification = async ({ id }) => {
-    Notifications.cancelScheduledNotificationAsync(id);
+    await Notifications.cancelScheduledNotificationAsync(id);
   };
 
   return { sendNotification, cancelNotification };
