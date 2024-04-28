@@ -144,11 +144,11 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    fontFamily: "Pretendard_SemiBold",
+    // fontFamily: "Pretendard_SemiBold",
   },
   subText: {
     fontSize: 14,
-    fontFamily: "Pretendard_Regular",
+    // fontFamily: "Pretendard_Regular",
   },
   icon: {
     width: 24,

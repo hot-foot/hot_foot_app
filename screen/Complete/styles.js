@@ -26,7 +26,7 @@ export default StyleSheet.create({
     alignSelf: "center",
     color: "#1B1B1B",
     fontSize: moderateScale(16),
-    fontFamily: "Pretendard_SemiBold",
+    // fontFamily: "Pretendard_SemiBold",
   },
   completeSection: {
     flexDirection: "column",
@@ -38,13 +38,13 @@ export default StyleSheet.create({
   },
   completeTitle: {
     fontSize: moderateScale(22),
-    fontFamily: "Pretendard_Bold",
+    // fontFamily: "Pretendard_Bold",
     marginBottom: verticalScale(30),
     color: "#1B1B1B",
   },
   completeText: {
     fontSize: moderateScale(28),
-    fontFamily: "Pretendard_SemiBold",
+    // fontFamily: "Pretendard_SemiBold",
     color: "#1B1B1B",
   },
   animationSection: {
@@ -55,7 +55,7 @@ export default StyleSheet.create({
   },
   questionText: {
     fontSize: moderateScale(22),
-    fontFamily: "Pretendard_Regular",
+    // fontFamily: "Pretendard_Regular",
     color: "#1B1B1B",
   },
   bottomSection: {
@@ -78,7 +78,7 @@ export default StyleSheet.create({
   },
   buttonText: {
     fontSize: moderateScale(20),
-    fontFamily: "Pretendard_Bold",
+    // fontFamily: "Pretendard_Bold",
     color: "#1B1B1B",
   },
 });

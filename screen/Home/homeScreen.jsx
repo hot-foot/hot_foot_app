@@ -16,8 +16,11 @@ import { useCourse } from "../../hooks/useCourse";
 import { useTodo } from "../../hooks/useTodo";
 import { usePushSetting } from "../../hooks/usePushSetting";
 import PreparationCard from "../../components/Card/preparationCard";
+import ToastMsg from "../../components/Modal/toastMsg";
 
-const HomeScreen = () => {
+const HomeScreen = ({ route }) => {
+  const processName = route.params?.processName;
+  const startTime = route.params?.startTime;
   const { openDatabase, createTables } = useDatabase();
   const db = openDatabase();
   const { fetchData } = useCourse(db);
@@ -27,11 +30,32 @@ const HomeScreen = () => {
   const [dataKey, setDataKey] = useState(0);
   const [courses, setCourses] = useState([]);
   const [activeModalId, setActiveModalId] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  console.log("courses :::", courses);
+  console.log("startTime :::", startTime);
 
   const windowHeight = Dimensions.get("window").height;
   const navigation = useNavigation();
 
   const translateY = new Animated.Value(0);
+
+  const showMessage = () => {
+    setIsVisible(true);
+  };
+
+  const handleClose = () => {
+    setIsVisible(false);
+  };
+
+  useEffect(() => {
+    if (route.params?.startTime) {
+      showMessage();
+    }
+    setTimeout(() => {
+      fetchData(setCourses);
+    }, 200);
+  }, [dataKey, route.params?.statusMessage]);
 
   const handleBtnClick = () => {
     navigation.replace("Process");
@@ -83,32 +107,32 @@ const HomeScreen = () => {
     };
   }, []);
 
-  const handleTimerClick = () => {
-    navigation.navigate("Timer", {
-      course: courses[0],
-    });
+  const dateToString = (dateStr) => {
+    let hour = dateStr.slice(0, 2);
+    let minutes = dateStr.slice(3, 5);
+    let noon = hour >= "12" ? "PM" : "AM";
+    hour = hour % 12 || 12;
+
+    minutes = minutes.length == 1 ? `0${minutes}` : minutes;
+    hour = hour < 10 ? `0${hour}` : hour;
+
+    return `${hour}:${minutes} ${noon}`;
   };
 
-  const handleLottieClick = () => {
-    navigation.navigate("Complete", { course: { name: "출근준비과정명" } });
+  const minuteToString = (totalMinutes) => {
+    // 시간과 분으로 변환
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    // 포맷에 맞게 설정
+    const formattedTime =
+      hours > 0
+        ? `${hours}시간 ${formatTime(minutes)}분`
+        : `${formatTime(minutes)}분`;
+    return formattedTime;
   };
-
-  const dateToString = (str) => {
-    const date = new Date(str);
-    let hour = date.getHours();
-    let noon = "AM";
-    if (hour >= 12) {
-      noon = "PM";
-    }
-    if (hour >= 13) {
-      hour = hour - 12;
-    }
-    return `${hour}:${date.getMinutes()} ${noon}`;
-  };
-  const minuteToString = (minutes) => {
-    const hh = Math.floor(minutes / 60);
-    const mm = minutes % 60;
-    return `${hh}시간 ${mm}분`;
+  // 시간을 두 자리 문자열로 변환
+  const formatTime = (time) => {
+    return time < 10 ? `0${time}` : `${time}`;
   };
 
   return (
@@ -152,21 +176,6 @@ const HomeScreen = () => {
           ))}
         </View>
       </ScrollView>
-      <View style={{ padding: 30 }}>
-        <Text style={{ fontFamily: "Pretendard_Bold" }}>화면 확인용</Text>
-        <PlusBtn
-          color={"#FF8989"}
-          width={64}
-          height={64}
-          onPress={handleTimerClick}
-        />
-        <PlusBtn
-          color={"#FEAB53"}
-          width={64}
-          height={64}
-          onPress={handleLottieClick}
-        />
-      </View>
       <Animated.View
         style={[styles.plusButtonContainer, { transform: [{ translateY }] }]}
       >
@@ -176,7 +185,24 @@ const HomeScreen = () => {
           height={64}
           onPress={handleBtnClick}
         />
+        <PlusBtn
+          color={"#FFFFFF"}
+          width={64}
+          height={64}
+          onPress={() => {
+            navigation.navigate("Timer", {
+              course: courses[0],
+            });
+          }}
+        />
       </Animated.View>
+      {isVisible && (
+        <ToastMsg
+          isVisible={isVisible}
+          message={`${processName} 과정이 ${startTime}에 시작됩니다.`}
+          onClose={handleClose}
+        />
+      )}
     </View>
   );
 };

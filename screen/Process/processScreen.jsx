@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import _ from "lodash";
 import styles from "./styels";
 import {
   View,
@@ -13,30 +14,22 @@ import { useNavigation } from "@react-navigation/native";
 import TodoCard from "../../components/Card/todoCard";
 import PlusBtn from "../../components/Btn/plusBtn";
 import LargeBtn from "../../components/Btn/largeBtn";
-import TodoIconSheet from "../../components/BottomSheet/todoIconSheet";
-import AddProcessSheet from "../../components/BottomSheet/addProcessSheet";
-import ProcessListSheet from "../../components/BottomSheet/ProcessListSheet";
-import { TODO_ICON, TODO_LIST } from "../../data/processData";
 import ToastMsg from "../../components/Modal/toastMsg";
 import MsgModal from "../../components/Modal/msgModal";
 import { useDatabase } from "../../hooks/useDatabase";
 import { useCourse } from "../../hooks/useCourse";
+import AddProcessComponent from "../../components/BottomSheet/addProcessComponent";
 
 const ProcessScreen = () => {
   const navigation = useNavigation();
+  const [toastMsg, setToastMsg] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [msgModal, setMsgModal] = useState(false);
-  const [isIconSheetVisible, setIconSheetVisible] = useState(false);
-  const [isAddSheetVisible, setAddSheetVisible] = useState(false);
   const [isActionSheetVisible, setActionSheetVisible] = useState(false);
   const [selectedTasks, setSelectedTasks] = useState([]);
-  const [selectedIconPath, setSelectedIconPath] = useState(
-    TODO_ICON[0].imagePath
-  );
-  const [todoList, setTodoList] = useState(TODO_LIST);
   const [isVisible, setIsVisible] = useState(false);
   const [totalTime, setTotalTime] = useState("00시간 00분");
-  const [form, setForm] = useState({ todoIds: [2, 4, 7] });
+  const [form, setForm] = useState({});
   const { openDatabase } = useDatabase();
   const db = openDatabase();
   const { createCourse } = useCourse(db);
@@ -61,12 +54,12 @@ const ProcessScreen = () => {
     setIsVisible(false);
   };
 
-  const handleAddTodo = (newTodo) => {
-    setTodoList([...todoList, newTodo]);
-  };
-
-  const handleDeleteTask = (id) => {
-    console.log("삭제", id);
+  const handleDeleteTask = (id, index) => {
+    console.log("삭제", id, index);
+    // 앱 상태에서 작업 삭제 (인덱스 기반)
+    setSelectedTasks((currentTasks) =>
+      currentTasks.filter((task, taskIndex) => taskIndex !== index)
+    );
   };
 
   const handleCloseBtnClick = () => {
@@ -78,9 +71,82 @@ const ProcessScreen = () => {
     navigation.navigate("Home");
   };
 
+  const defaultDate = new Date();
   const handleSaveForm = () => {
-    createCourse(form);
-    navigation.navigate("Home");
+    if (!inputValue.trim()) {
+      setToastMsg("과정 이름을 입력해주세요.");
+      showMessage();
+      return;
+    } else if (selectedTasks.length === 0) {
+      setToastMsg("하나 이상의 할 일을 추가해야 해주세요.");
+      showMessage();
+      return;
+    } else if (!selectedDepartureTime) {
+      setToastMsg("이동 시간을 설정해주세요.");
+      showMessage();
+      return;
+    } else if (!selectedArrivalTime) {
+      setToastMsg("도착 시간을 설정해주세요.");
+      showMessage();
+      return;
+    } else if (!selectedStartTime) {
+      setToastMsg("시작 시간을 설정해주세요.");
+      showMessage();
+      return;
+    }
+
+    const totalMinutes = selectedTasks.reduce(
+      (acc, task) => acc + Number(task.time),
+      0
+    );
+
+    setForm((prevForm) => ({
+      ...prevForm,
+      totalMinute: totalMinutes,
+    }));
+
+    db.transaction((tx) => {
+      if (form.id) {
+        // 기존 코스 업데이트
+        // feedback: createCourse처럼 useCourse에 작성해서 호출하면 좋을거같아요!
+        updateCourse(
+          { ...form, totalMinute: calculateTotalMinutes(form) },
+          {
+            onSuccess: () => {
+              console.log("코스 업데이트 성공");
+              navigation.navigate("Home", {
+                processName: inputValue,
+                startTime: form.startTime,
+              });
+            },
+            onError: (error) => {
+              console.log("코스 업데이트 실패", error);
+              setToastMsg("에러가 발생했습니다.");
+              showMessage();
+            },
+          }
+        );
+      } else {
+        // 새 코스 추가
+        // feedback: 기존에 custom hook으로 작성된 코드로 추가할 수 있습니다. 성공/실패에 따른 동작을 추가했습니다.
+        createCourse(
+          { ...form, todoIds: _.map(selectedTasks, "id") },
+          {
+            onSuccess: () => {
+              navigation.navigate("Home", {
+                processName: inputValue,
+                startTime: formatAMPM3(selectedStartTime),
+              });
+            },
+            onError: () => {
+              setToastMsg("에러가 발생했습니다.");
+              showMessage();
+            },
+          }
+        );
+      }
+    });
+    console.log(form);
   };
 
   const handleInputChange = (text) => {
@@ -94,40 +160,40 @@ const ProcessScreen = () => {
   const handlePluBtn = () => {
     setActionSheetVisible(true);
   };
+  const closeActionSheet = () => {
+    setActionSheetVisible(false);
+  };
 
   const handleAddProcess = (task) => {
-    if (selectedTasks.length >= 29) {
+    if (selectedTasks.length >= 30) {
+      setToastMsg("할 일은 최대 30개까지 추가할 수 있어요.");
       showMessage();
     } else {
       setSelectedTasks([...selectedTasks, task]);
+      setForm({ ...form, todoIds: [...selectedTasks] });
       setActionSheetVisible(false);
     }
-  };
-
-  const handleSheetPlusBtn = () => {
-    setActionSheetVisible(false);
-    setAddSheetVisible(true);
-  };
-
-  const handleChangeIcon = () => {
-    setAddSheetVisible(false);
-    setIconSheetVisible(true);
   };
 
   // 이동 시간 상태
   const [isDepartureTimePickerVisible, setDepartureTimePickerVisibility] =
     useState(false);
-  const [selectedDepartureTime, setSelectedDepartureTime] = useState(
-    new Date()
-  );
-
+  const [selectedDepartureTime, setSelectedDepartureTime] = useState(null);
   // 도착 시간 상태
   const [isArrivalTimePickerVisible, setArrivalTimePickerVisibility] =
     useState(false);
-  const [selectedArrivalTime, setSelectedArrivalTime] = useState(new Date());
+  const [selectedArrivalTime, setSelectedArrivalTime] = useState(null);
+
+  // 시작 시간 상태
+  const [isStartTimePickerVisible, setStartTimePickerVisibility] =
+    useState(false);
+  const [selectedStartTime, setSelectedStartTime] = useState(null);
 
   // 이동 시간 피커 보여주기
   const showDepartureTimePicker = () => {
+    if (!selectedDepartureTime) {
+      setSelectedDepartureTime(new Date());
+    }
     setDepartureTimePickerVisibility(true);
   };
 
@@ -151,6 +217,9 @@ const ProcessScreen = () => {
 
   // 도착 시간 피커 보여주기
   const showArrivalTimePicker = () => {
+    if (!selectedArrivalTime) {
+      setSelectedArrivalTime(new Date());
+    }
     setArrivalTimePickerVisibility(true);
   };
 
@@ -174,6 +243,42 @@ const ProcessScreen = () => {
     hideArrivalTimePicker();
   };
 
+  // 시작 시간 피커 보이기
+  const showStartTimePicker = () => {
+    if (!selectedStartTime) {
+      setSelectedStartTime(new Date());
+    }
+    setStartTimePickerVisibility(true);
+  };
+
+  // 시작 시간 피커 숨기기
+  const hideStartTimePicker = () => {
+    setStartTimePickerVisibility(false);
+  };
+
+  // 시작 시간 선택 시
+  const handleStartTimeConfirm = (time) => {
+    const localeTime = koreanLocaleTime(time);
+    const startTime = new Date();
+    startTime.setHours(localeTime.hour, localeTime.minute, 0, 0);
+    setForm({
+      ...form,
+      startTime: startTime.toISOString(),
+    });
+    console.log(startTime.toISOString());
+    // 데이터베이스에 시작 시간 저장
+    db.transaction((tx) => {
+      tx.executeSql(
+        "UPDATE courses SET startTime = ? WHERE id = ?;",
+        [startTime.toISOString(), form.id],
+        () => console.log("시작 시간 업데이트 성공"),
+        (_, error) => console.log("시작 시간 업데이트 실패", error)
+      );
+    });
+    setSelectedStartTime(startTime);
+    hideStartTimePicker();
+  };
+
   // 시간을 두 자리 문자열로 변환
   const formatTime = (time) => {
     return time < 10 ? `0${time}` : `${time}`;
@@ -187,30 +292,51 @@ const ProcessScreen = () => {
 
   // 시간과 분을 AM/PM 형식으로 변환
   const formatAMPM = (date) => {
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const formattedTime = `${formatTo12HourClock(hours)} 시간  ${formatTime(
-      minutes
-    )} 분 `;
-    return formattedTime;
+    if (selectedDepartureTime) {
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const formattedTime = `${formatTo12HourClock(hours)} 시간  ${formatTime(
+        minutes
+      )} 분 `;
+      return formattedTime;
+    }
   };
 
   const formatAMPM2 = (date) => {
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? "PM" : "AM";
-    const formattedTime = `${formatTo12HourClock(hours)} : ${formatTime(
-      minutes
-    )}  ${ampm}`;
-    return formattedTime;
+    if (selectedArrivalTime) {
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const ampm = hours >= 12 ? "PM" : "AM";
+      const formattedTime = `${formatTo12HourClock(hours)} : ${formatTime(
+        minutes
+      )} ${ampm}`;
+      return formattedTime;
+    }
+  };
+
+  const formatAMPM3 = (date) => {
+    if (selectedStartTime) {
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const ampm = hours >= 12 ? "PM" : "AM";
+      const formattedTime = `${formatTo12HourClock(hours)} : ${formatTime(
+        minutes
+      )} ${ampm}`;
+      return formattedTime;
+    }
   };
 
   // 총 소요시간 계산
   useEffect(() => {
     const totalMinutes = selectedTasks.reduce(
-      (acc, task) => acc + Number(task.time),
+      (acc, task) => acc + Number(task.minutes),
       0
     );
+    console.log(totalMinutes);
+    setForm({
+      ...form,
+      totalMinute: totalMinutes.hour * 60 + totalMinutes.minute,
+    });
     // 시간과 분으로 변환
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
@@ -221,17 +347,6 @@ const ProcessScreen = () => {
         : `${formatTime(minutes)}분`;
     setTotalTime(formattedTime);
   }, [selectedTasks]);
-
-  const handleTodoIconSheet = () => {
-    setIconSheetVisible(false);
-    setAddSheetVisible(true);
-  };
-
-  const handleAddProcessSheet = () => {
-    setAddSheetVisible(false);
-    setActionSheetVisible(true);
-    setSelectedIconPath(TODO_ICON[0].imagePath);
-  };
 
   return (
     <View style={styles.container}>
@@ -261,11 +376,16 @@ const ProcessScreen = () => {
           <View style={styles.timeSection}>
             <View style={{ flexDirection: "row", gap: 8 }}>
               <Text style={styles.topText}>이동 시간:</Text>
-              <Text style={[styles.topSubText, { color: "#1B1B1B" }]}>
-                {formatAMPM(selectedDepartureTime)} {/* 이동 시간 표시 */}
-              </Text>
-              <Text style={[styles.topSubText, { color: "#B9B9B9" }]}>
-                00 시간 00 분
+              <Text
+                style={[
+                  styles.topSubText,
+                  { color: selectedDepartureTime ? "#1B1B1B" : "#B9B9B9" },
+                ]}
+              >
+                {selectedDepartureTime
+                  ? formatAMPM(selectedDepartureTime)
+                  : "00시 00분"}
+                {/* 이동 시간 표시 */}
               </Text>
             </View>
             <TouchableOpacity onPress={showDepartureTimePicker} style={{}}>
@@ -287,11 +407,16 @@ const ProcessScreen = () => {
           <View style={styles.timeSection}>
             <View style={{ flexDirection: "row", gap: 8 }}>
               <Text style={styles.topText}>도착 시간:</Text>
-              <Text style={[styles.topSubText, { color: "#1B1B1B" }]}>
-                {formatAMPM2(selectedArrivalTime)} {/* 도착 시간 표시 */}
-              </Text>
-              <Text style={[styles.topSubText, { color: "#B9B9B9" }]}>
-                00 : 00 PM
+              <Text
+                style={[
+                  styles.topSubText,
+                  { color: selectedArrivalTime ? "#1B1B1B" : "#B9B9B9" },
+                ]}
+              >
+                {selectedArrivalTime
+                  ? formatAMPM2(selectedArrivalTime)
+                  : "00 : 00 PM"}
+                {/* 도착 시간 표시 */}
               </Text>
             </View>
             <TouchableOpacity onPress={showArrivalTimePicker} style={{}}>
@@ -321,10 +446,10 @@ const ProcessScreen = () => {
               <TodoCard
                 key={task.id}
                 id={task.id}
-                title={task.title}
-                time={task.time}
-                imagePath={task.imagePath}
-                onDelete={() => handleDeleteTask(task.id)}
+                title={task.name}
+                time={task.minutes}
+                imagePath={task.iconId}
+                onDelete={() => handleDeleteTask(task.id, index)}
               />
             </>
           ))}
@@ -355,7 +480,7 @@ const ProcessScreen = () => {
                   styles.bottomSubText,
                   {
                     color: totalTime === "00시간 00분" ? "#B9B9B9" : "#1B1B1B",
-                    fontFamily: "Pretendard_SemiBold",
+                    // // fontFamily: "Pretendard_SemiBold",
                   },
                 ]}
               >
@@ -364,16 +489,31 @@ const ProcessScreen = () => {
             </View>
             <View style={styles.bottomBox}>
               <Text style={styles.bottomText}>시작 시간:</Text>
-              <Text
-                style={[
-                  styles.bottomSubText,
-                  { color: "#B9B9B9", fontFamily: "Pretendard_SemiBold" },
-                ]}
-              >
-                -- : 00 AM
-              </Text>
+              <TouchableOpacity onPress={showStartTimePicker} style={{}}>
+                <Text
+                  style={[
+                    styles.bottomSubText,
+                    { color: selectedStartTime ? "#1B1B1B" : "#B9B9B9" },
+                  ]}
+                >
+                  {/* -- : 00 AM */}
+                  {selectedStartTime
+                    ? formatAMPM3(selectedStartTime)
+                    : "-- : 00 AM"}
+                  {/* 시작 시간 표시 */}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
+          {/* 시작 시간 선택 모달 */}
+          <DateTimePickerModal
+            isVisible={isStartTimePickerVisible}
+            mode="time"
+            onConfirm={handleStartTimeConfirm}
+            onCancel={hideStartTimePicker}
+            date={selectedStartTime}
+            is24Hour={true}
+          />
           <LargeBtn
             text={"저장하기"}
             onClick={handleSaveForm}
@@ -386,35 +526,17 @@ const ProcessScreen = () => {
           </Text>
         </View>
       </View>
-      <ProcessListSheet
-        isVisible={isActionSheetVisible}
-        onClose={() => setActionSheetVisible(false)}
-        onAdd={handleAddProcess}
-        onPlus={handleSheetPlusBtn}
-        todoList={todoList}
-      />
-      <TodoIconSheet
-        isVisible={isIconSheetVisible}
-        // onClose={() => setIconSheetVisible(false)}
-        onClose={handleTodoIconSheet}
-        onAdd={(iconPath) => {
-          setSelectedIconPath(iconPath);
-          setAddSheetVisible(true);
-          setIconSheetVisible(false);
-        }}
-      />
-      <AddProcessSheet
-        isVisible={isAddSheetVisible}
-        // onClose={() => setAddSheetVisible(false)}
-        onClose={handleAddProcessSheet}
-        onChange={handleChangeIcon}
-        selectedIconPath={selectedIconPath}
-        onAddTodo={handleAddTodo}
-      />
+      {isActionSheetVisible && (
+        <AddProcessComponent
+          onAdd={handleAddProcess}
+          isSheetVisible={isActionSheetVisible}
+          closeSheet={closeActionSheet}
+        />
+      )}
       {isVisible && (
         <ToastMsg
           isVisible={isVisible}
-          message="할 일은 최대 30개까지 추가할 수 있어요."
+          message={toastMsg}
           onClose={handleClose}
         />
       )}

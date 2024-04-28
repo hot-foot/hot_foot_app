@@ -80,14 +80,37 @@ export const useCourse = (db) => {
     db.transaction(callback);
   };
 
+  // const fetchData = (setData) => {
+  //   executeTransaction((tx) => {
+  //     tx.executeSql("SELECT * FROM courses", [], (_, { rows }) => {
+  //       setCourses(rows._array);
+  //       if (setData) {
+  //         setData(rows._array);
+  //       }
+  //     });
+  //   });
+  // };
   const fetchData = (setData) => {
     executeTransaction((tx) => {
-      tx.executeSql("SELECT * FROM courses", [], (_, { rows }) => {
-        setCourses(rows._array);
-        if (setData) {
-          setData(rows._array);
+      tx.executeSql(
+        `SELECT c.id, c.name, c.travelMinute, c.arrivalTime, c.totalMinute, c.startTime, c.active, GROUP_CONCAT(ct.todoId) AS todoIds
+         FROM courses c
+         LEFT JOIN courseTodo ct ON c.id = ct.courseId
+         GROUP BY c.id`,
+        [],
+        (_, { rows }) => {
+          const coursesWithTodos = rows._array.map((course) => ({
+            ...course,
+            todoIds: course.todoIds
+              ? course.todoIds.split(",").map(Number)
+              : [],
+          }));
+          setCourses(coursesWithTodos);
+          if (setData) {
+            setData(coursesWithTodos);
+          }
         }
-      });
+      );
     });
   };
 
@@ -121,7 +144,7 @@ export const useCourse = (db) => {
     fetchData();
   }, []);
 
-  const createCourse = (course) => {
+  const createCourse = (course, { onSuccess, onError }) => {
     executeTransaction((tx) => {
       tx.executeSql(`select * from todos;`, [], (x, { rows: { _array } }) => {
         const todos = _array;
@@ -158,10 +181,10 @@ export const useCourse = (db) => {
                   [result.insertId, t, index]
                 );
             });
-            console.log("create course:", result);
+            onSuccess();
           },
           (_, error) => {
-            console.log(error);
+            onError();
             return false;
           }
         );
@@ -216,6 +239,33 @@ export const useCourse = (db) => {
               }
             }
           );
+        }
+      );
+    });
+  };
+
+  const updateCourse = (course, { onSuccess, onError }) => {
+    executeTransaction((tx) => {
+      tx.executeSql(
+        "UPDATE courses SET name = ?, totalMinute = ?, travelMinute = ?, startTime = ?, arrivalTime = ? WHERE id = ?;",
+        [
+          course.name,
+          course.totalMinute,
+          course.travelMinute,
+          course.startTime.toTimeString(),
+          course.arrivalTime.toTimeString(),
+          course.id,
+        ],
+        (_, result) => {
+          if (result.rowsAffected > 0) {
+            onSuccess();
+          } else {
+            onError("No rows updated");
+          }
+        },
+        (_, error) => {
+          onError(error.message);
+          return false;
         }
       );
     });
@@ -296,6 +346,7 @@ export const useCourse = (db) => {
     fetchCourseTodo,
     createCourse,
     copyCourse,
+    updateCourse,
     deleteCourse,
     updateActive,
   };

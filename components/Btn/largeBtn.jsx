@@ -24,7 +24,7 @@ const LargeBtn = ({ text, onClick, backgroundColor, isDisable }) => {
   const textStyle = {
     color: isDisable ? "#636363" : "#000",
     fontSize: 20,
-    fontFamily: "Pretendard_Bold",
+    // fontFamily: "Pretendard_Bold",
   };
 
   return (

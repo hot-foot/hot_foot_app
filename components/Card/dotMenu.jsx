@@ -38,7 +38,11 @@ const DotMenu = ({ onCopy, onDelete, onPress }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity ref={buttonRef} onPress={openModal}>
+      <TouchableOpacity
+        ref={buttonRef}
+        onPress={openModal}
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      >
         <Image
           source={require("../../assets/img/Icon/dotMenuIcon.png")}
           style={[styles.icon, { alignSelf: "center" }]}

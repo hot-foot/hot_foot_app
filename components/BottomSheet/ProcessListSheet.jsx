@@ -11,11 +11,21 @@ import {
 } from "react-native";
 import TodoCard from "../Card/todoCard";
 import PlusBtn from "../Btn/plusBtn";
-import { TODO_LIST } from "../../data/processData";
+import { useTodo } from "../../hooks/useTodo";
+import { useDatabase } from "../../hooks/useDatabase";
 
 const ProcessListSheet = ({ isVisible, onClose, onAdd, onPlus, todoList }) => {
   const screenHeight = Dimensions.get("window").height;
   const halfScreenHeight = screenHeight * 0.4;
+  console.log("할일목록:::", todoList);
+  const { openDatabase, createTables } = useDatabase();
+  const db = openDatabase();
+  const { deleteTodo } = useTodo(db);
+
+  const handleDeleteTask = (id) => {
+    console.log("삭제", id);
+    deleteTodo(id);
+  };
 
   return (
     <Modal
@@ -51,10 +61,11 @@ const ProcessListSheet = ({ isVisible, onClose, onAdd, onPlus, todoList }) => {
                   >
                     <TodoCard
                       id={item.id}
-                      title={item.title}
-                      time={item.time}
-                      imagePath={item.imagePath}
-                      onDelete={() => {}}
+                      title={item.name}
+                      time={item.minutes}
+                      // imagePath={item.imagePath}
+                      imagePath={item.iconId}
+                      onDelete={() => handleDeleteTask(item.id)}
                     />
                   </TouchableOpacity>
                 ))}
@@ -97,7 +108,7 @@ const styles = StyleSheet.create({
   sheetTitle: {
     color: "#000",
     fontSize: 14,
-    fontFamily: "Pretendard_SemiBold",
+    // fontFamily: "Pretendard_SemiBold",
     flex: 1,
     textAlign: "center",
     left: 8,
