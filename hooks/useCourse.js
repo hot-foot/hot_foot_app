@@ -1,8 +1,54 @@
 import { useEffect, useState } from "react";
 import _ from "lodash";
+import { useNotification } from "./useNotification";
 
 export const useCourse = (db) => {
   const [courses, setCourses] = useState([]);
+  const { sendNotification, cancelNotification } = useNotification();
+
+  const deleteNotification = (key, notification) => {
+    cancelNotification(key);
+    db.transaction((tx) => {
+      tx.executeSql(`delete from notifications where id = ?;`, [
+        notification.id,
+      ]);
+    });
+  };
+
+  const createNotification = async (course) => {
+    let hour = Number(course.startTime.slice(0, 2));
+    let minutes = Number(course.startTime.slice(3, 5));
+
+    const key = await sendNotification({
+      content: {
+        title: "준비 과정 시작 알림",
+        body: `${course.name} 시작 알림 입니다.`,
+        sound: "BB-06_finish.mp3",
+      },
+      trigger: {
+        hour: hour,
+        minute: minutes,
+        repeats: true,
+      },
+    });
+
+    db.transaction((tx) => {
+      tx.executeSql(
+        `insert into notifications
+      (notificationKey, courseId)
+      values
+      (?, ?)`,
+        [key, course.id],
+        (_, result) => {
+          console.log("notification:", result);
+        },
+        (_, error) => {
+          console.log(error);
+          console.log("notification");
+        }
+      );
+    });
+  };
 
   const getStartTime = (arrivalTime, totalMinute, travelMinute) => {
     let date = new Date(arrivalTime);
@@ -205,11 +251,52 @@ export const useCourse = (db) => {
     });
   };
 
+  const updateActive = (id, value) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE courses
+            SET active = ?
+            WHERE id = ?;`,
+        [value, id],
+        (_, result) => {
+          tx.executeSql(
+            `select * from courses where id = ?;`,
+            [id],
+            async (x, { rows: { _array: courses } }) => {
+              console.log("courses::", courses);
+              if (courses.length > 0) {
+                if (courses[0].active) {
+                  console.log("create notification ", courses[0].name);
+                  const key = await createNotification(courses[0]);
+                }
+                if (!courses[0].active) {
+                  tx.executeSql(
+                    `select * from notifications where courseId = ?;`,
+                    [id],
+                    (x, { rows: { _array: notifications } }) => {
+                      console.log("notifies :: ", notifications);
+                      notifications.forEach((n) => {
+                        console.log("delete notification ", n.key);
+                        deleteNotification(tx, n);
+                      });
+                    }
+                  );
+                }
+              }
+            }
+          );
+        },
+        (_, error) => {}
+      );
+    });
+  };
+
   return {
     fetchData,
     fetchCourseTodo,
     createCourse,
     copyCourse,
     deleteCourse,
+    updateActive,
   };
 };

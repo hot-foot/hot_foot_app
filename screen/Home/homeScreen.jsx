@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useDatabase } from "../../hooks/useDatabase";
 import { useCourse } from "../../hooks/useCourse";
 import { useTodo } from "../../hooks/useTodo";
+import { usePushSetting } from "../../hooks/usePushSetting";
 import PreparationCard from "../../components/Card/preparationCard";
 
 const HomeScreen = () => {
@@ -21,6 +22,8 @@ const HomeScreen = () => {
   const db = openDatabase();
   const { fetchData } = useCourse(db);
   const { initDefaultTodo } = useTodo(db);
+  const { initDefaultPush } = usePushSetting(db);
+
   const [dataKey, setDataKey] = useState(0);
   const [courses, setCourses] = useState([]);
   const [activeModalId, setActiveModalId] = useState(null);
@@ -41,6 +44,7 @@ const HomeScreen = () => {
   const initData = () => {
     createTables(db);
     initDefaultTodo();
+    initDefaultPush();
   };
 
   useEffect(() => {

@@ -6,7 +6,7 @@ import {
   Image,
   TouchableWithoutFeedback,
 } from "react-native";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import SlimToggleSwitch from "../ToggleSwitch/slimToggleSwitch";
 import DotMenu from "./dotMenu";
 import { useDatabase } from "../../hooks/useDatabase";
@@ -26,7 +26,8 @@ const PreparationCard = ({
 }) => {
   const { openDatabase } = useDatabase();
   const db = openDatabase();
-  const { deleteCourse, copyCourse } = useCourse(db);
+  const { deleteCourse, copyCourse, updateActive } = useCourse(db);
+  const [active, setActive] = useState(!isDisabled);
 
   const getTextColorStyle = () => ({
     color: isDisabled ? "#969696" : "#1B1B1B",
@@ -91,9 +92,12 @@ const PreparationCard = ({
             <View style={styles.rightColumn}>
               <View>
                 <SlimToggleSwitch
-                  isEnable={isDisabled}
-                  onClick={() => {}}
-                  id={1}
+                  isEnable={active}
+                  onClick={() => {
+                    updateActive(id, !active);
+                    setActive(!active);
+                  }}
+                  id={id}
                 />
               </View>
               <DotMenu
