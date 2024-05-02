@@ -53,22 +53,23 @@ const ProcessListSheet = ({ isVisible, onClose, onAdd, onPlus, todoList }) => {
             <ScrollView style={{ maxHeight: halfScreenHeight }}>
               <View style={{ gap: 8 }}>
                 {/* {TODO_LIST.map((item) => ( */}
-                {todoList.map((item) => (
-                  <TouchableOpacity
-                    key={item.id}
-                    activeOpacity={0.8}
-                    onPress={() => onAdd(item)}
-                  >
-                    <TodoCard
-                      id={item.id}
-                      title={item.name}
-                      time={item.minutes}
-                      // imagePath={item.imagePath}
-                      imagePath={item.iconId}
-                      onDelete={() => handleDeleteTask(item.id)}
-                    />
-                  </TouchableOpacity>
-                ))}
+                {todoList &&
+                  todoList.map((item) => (
+                    <TouchableOpacity
+                      key={item.id}
+                      activeOpacity={0.8}
+                      onPress={() => onAdd(item)}
+                    >
+                      <TodoCard
+                        id={item.id}
+                        title={item.name}
+                        time={item.minutes}
+                        // imagePath={item.imagePath}
+                        imagePath={item.iconId}
+                        onDelete={() => handleDeleteTask(item.id)}
+                      />
+                    </TouchableOpacity>
+                  ))}
               </View>
             </ScrollView>
             <View style={styles.actionItem}>
