@@ -171,5 +171,6 @@ export const useTodo = (db) => {
     updateTodo,
     deleteTodo,
     fetchData,
+    todos,
   };
 };
