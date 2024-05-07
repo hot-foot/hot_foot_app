@@ -28,6 +28,9 @@ const TimerScreen = ({ route }) => {
     moment.duration(totalSeconds, "seconds")
   );
   const [todoTime, setTodoTime] = useState(moment.duration(0, "seconds"));
+  const [totalCourseMinute, setTotalCourseMinute] = useState(
+    course.totalMinute
+  );
 
   const [modalVisible, setModalVisible] = useState(false);
   const handleOpenModal = () => {
@@ -37,6 +40,10 @@ const TimerScreen = ({ route }) => {
     setModalVisible(false);
   };
 
+  const handleExitTimer = () => {
+    navigation.navigate("Home");
+    setModalVisible(false);
+  };
   const completeProcess = () => {
     navigation.navigate("Complete", { course });
     setModalVisible(false);
@@ -48,10 +55,9 @@ const TimerScreen = ({ route }) => {
     }
     if (todoIndex >= todos.length - 1) {
       if (isFinishedEarly) {
-        handleOpenModal();
-      } else {
-        completeProcess();
+        // 조기 종료 로직
       }
+      completeProcess();
       return;
     }
     setTodoIndex((todoIndex) => {
@@ -72,6 +78,15 @@ const TimerScreen = ({ route }) => {
     }
     setTodo(todos[todoIndex]);
     setTodoTime(moment.duration(todos[todoIndex].minutes * 60, "seconds"));
+    if (todoIndex >= 1) {
+      setTotalTime(
+        moment.duration(
+          (totalCourseMinute - todos[todoIndex - 1].minutes) * 60,
+          "seconds"
+        )
+      );
+      setTotalCourseMinute(totalCourseMinute - todos[todoIndex - 1].minutes);
+    }
   }, [todos, todoIndex]);
 
   useEffect(() => {
@@ -99,14 +114,10 @@ const TimerScreen = ({ route }) => {
     delay: 1000,
   });
 
-  const handleCloseBtnClick = () => {
-    navigation.navigate("Home");
-  };
-
   return todos.length > 0 && todo ? (
     <View style={styles.container}>
       <View style={styles.section}>
-        <TouchableOpacity onPress={handleCloseBtnClick}>
+        <TouchableOpacity onPress={handleOpenModal}>
           <Image
             source={require("../../assets/img/Icon/close.png")}
             style={styles.icon}
@@ -167,7 +178,7 @@ const TimerScreen = ({ route }) => {
         onClose={handleCloseModal}
         leftBtnText={"취소"}
         rightBtnText={"나가기"}
-        onConfirm={completeProcess}
+        onConfirm={handleExitTimer}
       />
     </View>
   ) : undefined;
