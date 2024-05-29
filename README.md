@@ -1,7 +1,6 @@
 # 발등에 불
 <p>
-![Uploading Screenshot_01_6.5 inch.jpg…]()
-
+![Screenshot_01_6 5 inch](https://github.com/hot-foot/hot_foot_app/assets/100350818/2c44f83b-433d-434b-86e6-f070fc9a1237)
 </p>
 
 ## 프로모션 텍스트
