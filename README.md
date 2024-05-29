@@ -1,10 +1,14 @@
 # 발등에 불
 <p align="center">
+  <p>
   <img src="https://github.com/hot-foot/hot_foot_app/assets/100350818/6ccc4300-b78b-4ac9-a8ba-a493cedcd673" alt="Screenshot 01" width="200">
   <img src="https://github.com/hot-foot/hot_foot_app/assets/100350818/ee5962fb-bb55-489f-984f-64844f90f486" alt="Screenshot 02" width="200">
+  </p>
+  <p>
   <img src="https://github.com/hot-foot/hot_foot_app/assets/100350818/1faf3260-e5a2-4c39-8952-4a6ae5a577c3" alt="Screenshot 03" width="200">
   <img src="https://github.com/hot-foot/hot_foot_app/assets/100350818/e26e79d2-69f0-4e8b-9ad9-798e6b0579db" alt="Screenshot 04" width="200">
   <img src="https://github.com/hot-foot/hot_foot_app/assets/100350818/bd4d4bb9-cfab-4f0f-b762-75ff4a76cbff" alt="Screenshot 05" width="200">
+  </p>
 </p>
 
 <br/>
