@@ -1,10 +1,7 @@
 # 발등에 불
 <p>
-![Screenshot_01_6 5 inch](https://github.com/hot-foot/hot_foot_app/assets/100350818/297c714a-6a03-4cde-81d6-cf3ff5a29ab5)
-![Screenshot_02_6 5 inch](https://github.com/hot-foot/hot_foot_app/assets/100350818/98ebeadd-0d67-4f25-b171-b03c2bb50308)
-![Screenshot_03_6 5 inch](https://github.com/hot-foot/hot_foot_app/assets/100350818/78471803-e2f5-46f1-a89d-3d95cd64e251)
-![Screenshot_04_6 5 inch](https://github.com/hot-foot/hot_foot_app/assets/100350818/3df86b48-5646-4055-8bc7-de15c2840f55)
-![Screenshot_05_6 5 inch](https://github.com/hot-foot/hot_foot_app/assets/100350818/36acfc17-822a-4c95-b049-e1e34029bc30)
+![Uploading Screenshot_01_6.5 inch.jpg…]()
+
 </p>
 
 ## 프로모션 텍스트
