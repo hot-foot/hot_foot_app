@@ -11,7 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.suyoooi.hotfoot",
@@ -32,6 +34,10 @@
         "projectId": "92cf28cf-62ad-4456-aacd-d33c6d64b0dd"
       }
     },
-    "owner": "suyoooi"
+    "owner": "suyoooi",
+    "plugins": [
+      "expo-asset",
+      "expo-font"
+    ]
   }
 }
