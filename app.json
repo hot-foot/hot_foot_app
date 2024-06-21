@@ -11,17 +11,15 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.suyoooi.hotfoot",
       "buildNumber": "1.0.2"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/img/info/app_icon.png",
         "backgroundColor": "#ffffff"
       }
     },
@@ -35,9 +33,6 @@
       }
     },
     "owner": "suyoooi",
-    "plugins": [
-      "expo-asset",
-      "expo-font"
-    ]
+    "plugins": ["expo-asset", "expo-font"]
   }
 }
