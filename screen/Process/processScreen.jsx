@@ -30,6 +30,7 @@ const ProcessScreen = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [totalTime, setTotalTime] = useState("00시간 00분");
   const [form, setForm] = useState({});
+  const [isSaveDisabled, setIsSaveDisabled] = useState(true);
   const { openDatabase } = useDatabase();
   const db = openDatabase();
   const { createCourse } = useCourse(db);
@@ -71,29 +72,8 @@ const ProcessScreen = () => {
     navigation.navigate("Home");
   };
 
-  const defaultDate = new Date();
   const handleSaveForm = () => {
-    if (!inputValue.trim()) {
-      setToastMsg("과정 이름을 입력해주세요.");
-      showMessage();
-      return;
-    } else if (selectedTasks.length === 0) {
-      setToastMsg("하나 이상의 할 일을 추가해야 해주세요.");
-      showMessage();
-      return;
-    } else if (!selectedDepartureTime) {
-      setToastMsg("이동 시간을 설정해주세요.");
-      showMessage();
-      return;
-    } else if (!selectedArrivalTime) {
-      setToastMsg("도착 시간을 설정해주세요.");
-      showMessage();
-      return;
-    } else if (!selectedStartTime) {
-      setToastMsg("시작 시간을 설정해주세요.");
-      showMessage();
-      return;
-    }
+    if (isSaveDisabled) return;
 
     const totalMinutes = selectedTasks.reduce(
       (acc, task) => acc + Number(task.time),
@@ -517,8 +497,8 @@ const ProcessScreen = () => {
           <LargeBtn
             text={"저장하기"}
             onClick={handleSaveForm}
-            backgroundColor={""}
-            isDisable={false}
+            backgroundColor={isSaveDisabled ? "#B9B9B9" : ""}
+            isDisable={isSaveDisabled}
           />
           <Text style={styles.noticeText}>
             과정 이름, 이동 시간, 도착 시간, 할 일 카드(1개 이상)를 모두 입력해
