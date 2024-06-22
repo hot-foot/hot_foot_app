@@ -6,12 +6,22 @@ import SettingScreen from "./screen/Setting/settingScreen";
 import ProcessScreen from "./screen/Process/processScreen";
 import * as Font from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { Platform, ActivityIndicator } from "react-native";
 import TimerScreen from "./screen/Timer/timerScreen";
 import CompleteScreen from "./screen/Complete/completeScreen";
 import { FontProvider } from "./context/fontContext";
 import Navigation from "./Navigation";
+import * as SplashScreen from "expo-splash-screen";
+import * as Sentry from "@sentry/react-native";
+
+Sentry.init({
+  dsn: "https://c95d443b0c9028d7f8de457dd4c374db@o4507425556463616.ingest.us.sentry.io/4507425560461312",
+});
+
+const projectId = Constants.expoConfig.extra.eas.projectId;
+console.log("project Id 입니다 :::", projectId);
 
 const Stack = createNativeStackNavigator();
 
