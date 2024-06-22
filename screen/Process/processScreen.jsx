@@ -480,7 +480,7 @@ const ProcessScreen = () => {
                   styles.bottomSubText,
                   {
                     color: totalTime === "00시간 00분" ? "#B9B9B9" : "#1B1B1B",
-                    // // fontFamily: "Pretendard_SemiBold",
+                    fontFamily: "Pretendard_SemiBold",
                   },
                 ]}
               >
