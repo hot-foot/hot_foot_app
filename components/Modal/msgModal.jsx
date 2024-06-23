@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   message: {
     textAlign: "center",
     fontSize: 16,
-    // fontFamily: "Pretendard_Regular",
+    fontFamily: "Pretendard_Regular",
     color: "#1b1b1b",
   },
   buttonContainer: {
@@ -104,13 +104,13 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     textAlign: "center",
     fontSize: 16,
-    // fontFamily: "Pretendard_Bold",
+    fontFamily: "Pretendard_Bold",
   },
   leftBtnText: {
     color: "#1B1B1B",
     textAlign: "center",
     fontSize: 16,
-    // fontFamily: "Pretendard_Bold",
+    fontFamily: "Pretendard_Bold",
   },
 });
 

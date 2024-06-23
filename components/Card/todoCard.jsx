@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   text: {
     color: "#1B1B1B",
     fontSize: 16,
-    // fontFamily: "Pretendard_Regular",
+    fontFamily: "Pretendard_Regular",
     alignSelf: "center",
   },
   deleteButton: {

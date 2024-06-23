@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import _ from "lodash";
-import styles from "./styels";
+import styles from "./styles";
 import {
   View,
   Text,
@@ -30,11 +30,36 @@ const ProcessScreen = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [totalTime, setTotalTime] = useState("00시간 00분");
   const [form, setForm] = useState({});
+  const [isSaveDisabled, setIsSaveDisabled] = useState(true);
   const { openDatabase } = useDatabase();
   const db = openDatabase();
   const { createCourse } = useCourse(db);
 
-  console.log("선택함:::", selectedTasks);
+  useEffect(() => {
+    const totalMinutes = selectedTasks.reduce(
+      (acc, task) => acc + Number(task.minutes),
+      0
+    );
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    const formattedTime =
+      hours > 0
+        ? `${hours}시간 ${formatTime(minutes)}분`
+        : `${formatTime(minutes)}분`;
+    setTotalTime(formattedTime);
+
+    if (
+      inputValue.trim() &&
+      selectedTasks.length > 0 &&
+      selectedDepartureTime &&
+      selectedArrivalTime
+    ) {
+      setIsSaveDisabled(false);
+      calculateStartTime();
+    } else {
+      setIsSaveDisabled(true);
+    }
+  }, [inputValue, selectedTasks, selectedDepartureTime, selectedArrivalTime]);
 
   const koreanLocaleTime = (date) => {
     const time = new Intl.DateTimeFormat("ko-KR", {
@@ -46,6 +71,33 @@ const ProcessScreen = () => {
     return { hour: Number(splitTime[0]), minute: Number(splitTime[1]) };
   };
 
+  const calculateStartTime = () => {
+    if (selectedArrivalTime && selectedDepartureTime && selectedTasks.length) {
+      const totalTaskMinutes = selectedTasks.reduce(
+        (acc, task) => acc + Number(task.minutes),
+        0
+      );
+      const travelMinutes =
+        selectedDepartureTime.getHours() * 60 +
+        selectedDepartureTime.getMinutes();
+      const arrivalMinutes =
+        selectedArrivalTime.getHours() * 60 + selectedArrivalTime.getMinutes();
+      const startMinutes = arrivalMinutes - travelMinutes - totalTaskMinutes;
+      const startTime = new Date();
+      startTime.setHours(
+        Math.floor(startMinutes / 60),
+        startMinutes % 60,
+        0,
+        0
+      );
+      setSelectedStartTime(startTime);
+      setForm({
+        ...form,
+        startTime: startTime.toISOString(),
+      });
+    }
+  };
+
   const showMessage = () => {
     setIsVisible(true);
   };
@@ -55,8 +107,6 @@ const ProcessScreen = () => {
   };
 
   const handleDeleteTask = (id, index) => {
-    console.log("삭제", id, index);
-    // 앱 상태에서 작업 삭제 (인덱스 기반)
     setSelectedTasks((currentTasks) =>
       currentTasks.filter((task, taskIndex) => taskIndex !== index)
     );
@@ -71,29 +121,8 @@ const ProcessScreen = () => {
     navigation.navigate("Home");
   };
 
-  const defaultDate = new Date();
   const handleSaveForm = () => {
-    if (!inputValue.trim()) {
-      setToastMsg("과정 이름을 입력해주세요.");
-      showMessage();
-      return;
-    } else if (selectedTasks.length === 0) {
-      setToastMsg("하나 이상의 할 일을 추가해야 해주세요.");
-      showMessage();
-      return;
-    } else if (!selectedDepartureTime) {
-      setToastMsg("이동 시간을 설정해주세요.");
-      showMessage();
-      return;
-    } else if (!selectedArrivalTime) {
-      setToastMsg("도착 시간을 설정해주세요.");
-      showMessage();
-      return;
-    } else if (!selectedStartTime) {
-      setToastMsg("시작 시간을 설정해주세요.");
-      showMessage();
-      return;
-    }
+    if (isSaveDisabled) return;
 
     const totalMinutes = selectedTasks.reduce(
       (acc, task) => acc + Number(task.time),
@@ -107,28 +136,22 @@ const ProcessScreen = () => {
 
     db.transaction((tx) => {
       if (form.id) {
-        // 기존 코스 업데이트
-        // feedback: createCourse처럼 useCourse에 작성해서 호출하면 좋을거같아요!
         updateCourse(
           { ...form, totalMinute: calculateTotalMinutes(form) },
           {
             onSuccess: () => {
-              console.log("코스 업데이트 성공");
               navigation.navigate("Home", {
                 processName: inputValue,
                 startTime: form.startTime,
               });
             },
             onError: (error) => {
-              console.log("코스 업데이트 실패", error);
               setToastMsg("에러가 발생했습니다.");
               showMessage();
             },
           }
         );
       } else {
-        // 새 코스 추가
-        // feedback: 기존에 custom hook으로 작성된 코드로 추가할 수 있습니다. 성공/실패에 따른 동작을 추가했습니다.
         createCourse(
           { ...form, todoIds: _.map(selectedTasks, "id") },
           {
@@ -146,11 +169,9 @@ const ProcessScreen = () => {
         );
       }
     });
-    console.log(form);
   };
 
   const handleInputChange = (text) => {
-    // 9자 이하일 때만 상태를 업데이트
     if (text.length <= 9) {
       setInputValue(text);
       setForm({ ...form, name: text });
@@ -205,7 +226,6 @@ const ProcessScreen = () => {
   // 이동 시간 선택 시
   const handleDepartureTimeConfirm = (time) => {
     const localeTime = koreanLocaleTime(time);
-    console.log(form);
     setForm({
       ...form,
       travelMinute: localeTime.hour * 60 + localeTime.minute,
@@ -234,7 +254,6 @@ const ProcessScreen = () => {
     const arrivalTime = new Date();
     arrivalTime.setHours(localeTime.hour);
     arrivalTime.setMinutes(localeTime.minute);
-    console.log(form);
     setForm({
       ...form,
       arrivalTime,
@@ -267,6 +286,7 @@ const ProcessScreen = () => {
     });
     console.log(startTime.toISOString());
     // 데이터베이스에 시작 시간 저장
+
     db.transaction((tx) => {
       tx.executeSql(
         "UPDATE courses SET startTime = ? WHERE id = ?;",
@@ -325,28 +345,6 @@ const ProcessScreen = () => {
       return formattedTime;
     }
   };
-
-  // 총 소요시간 계산
-  useEffect(() => {
-    const totalMinutes = selectedTasks.reduce(
-      (acc, task) => acc + Number(task.minutes),
-      0
-    );
-    console.log(totalMinutes);
-    setForm({
-      ...form,
-      totalMinute: totalMinutes.hour * 60 + totalMinutes.minute,
-    });
-    // 시간과 분으로 변환
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-    // 포맷에 맞게 설정
-    const formattedTime =
-      hours > 0
-        ? `${hours}시간 ${formatTime(minutes)}분`
-        : `${formatTime(minutes)}분`;
-    setTotalTime(formattedTime);
-  }, [selectedTasks]);
 
   return (
     <View style={styles.container}>
@@ -442,16 +440,14 @@ const ProcessScreen = () => {
       <ScrollView style={styles.middleSection}>
         <View style={{ gap: 8, marginBottom: 16 }}>
           {selectedTasks.map((task, index) => (
-            <>
-              <TodoCard
-                key={task.id}
-                id={task.id}
-                title={task.name}
-                time={task.minutes}
-                imagePath={task.iconId}
-                onDelete={() => handleDeleteTask(task.id, index)}
-              />
-            </>
+            <TodoCard
+              key={task.id}
+              id={task.id}
+              title={task.name}
+              time={task.minutes}
+              imagePath={task.iconId}
+              onDelete={() => handleDeleteTask(task.id, index)}
+            />
           ))}
         </View>
         <Text style={styles.buttonTopText}>
@@ -466,10 +462,7 @@ const ProcessScreen = () => {
           />
         </View>
       </ScrollView>
-      <View
-        style={{ marginBottom: 34 }}
-        // style={{ position: "relative", bottom: 0, backgroundColor: "#D5F8D1" }}
-      >
+      <View style={{ marginBottom: 34 }}>
         <View style={styles.line} />
         <View style={[styles.middleSection, { paddingBottom: 11 }]}>
           <View style={styles.bottomSection}>
@@ -480,7 +473,7 @@ const ProcessScreen = () => {
                   styles.bottomSubText,
                   {
                     color: totalTime === "00시간 00분" ? "#B9B9B9" : "#1B1B1B",
-                    // // fontFamily: "Pretendard_SemiBold",
+                    fontFamily: "Pretendard_SemiBold",
                   },
                 ]}
               >
@@ -496,16 +489,13 @@ const ProcessScreen = () => {
                     { color: selectedStartTime ? "#1B1B1B" : "#B9B9B9" },
                   ]}
                 >
-                  {/* -- : 00 AM */}
                   {selectedStartTime
                     ? formatAMPM3(selectedStartTime)
                     : "-- : 00 AM"}
-                  {/* 시작 시간 표시 */}
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
-          {/* 시작 시간 선택 모달 */}
           <DateTimePickerModal
             isVisible={isStartTimePickerVisible}
             mode="time"
@@ -517,8 +507,8 @@ const ProcessScreen = () => {
           <LargeBtn
             text={"저장하기"}
             onClick={handleSaveForm}
-            backgroundColor={""}
-            isDisable={false}
+            backgroundColor={isSaveDisabled ? "#B9B9B9" : ""}
+            isDisable={isSaveDisabled}
           />
           <Text style={styles.noticeText}>
             과정 이름, 이동 시간, 도착 시간, 할 일 카드(1개 이상)를 모두 입력해

@@ -23,7 +23,7 @@ export default StyleSheet.create({
     paddingBottom: verticalScale(4),
     color: "#636363",
     fontSize: moderateScale(10),
-    // fontFamily: "Pretendard_Regular",
+    fontFamily: "Pretendard_Regular",
   },
   text: {
     flex: 1,
@@ -32,7 +32,7 @@ export default StyleSheet.create({
     right: scale(10),
     color: "#1B1B1B",
     fontSize: moderateScale(16),
-    // fontFamily: "Pretendard_SemiBold",
+    fontFamily: "Pretendard_SemiBold",
   },
   textInput: {
     backgroundColor: "#fff",
@@ -49,18 +49,18 @@ export default StyleSheet.create({
     textAlign: "right",
     color: "#636363",
     fontSize: moderateScale(12),
-    // fontFamily: "Pretendard_Regular",
+    fontFamily: "Pretendard_Regular",
     paddingRight: scale(8),
     paddingTop: verticalScale(2),
   },
   topText: {
     color: "#1B1B1B",
     fontSize: moderateScale(16),
-    // fontFamily: "Pretendard_Regular",
+    fontFamily: "Pretendard_Regular",
   },
   topSubText: {
     fontSize: moderateScale(16),
-    // fontFamily: "Pretendard_SemiBold",
+    fontFamily: "Pretendard_SemiBold",
   },
   icon: {
     height: moderateScale(24),
@@ -88,11 +88,11 @@ export default StyleSheet.create({
   bottomText: {
     color: "#1B1B1B",
     fontSize: moderateScale(20),
-    // fontFamily: "Pretendard_Regular",
+    fontFamily: "Pretendard_Regular",
   },
   bottomSubText: {
     fontSize: moderateScale(20),
-    // fontFamily: "Pretendard_Regular",
+    fontFamily: "Pretendard_Regular",
   },
   middleSection: {
     paddingRight: scale(24),
@@ -104,7 +104,7 @@ export default StyleSheet.create({
     padding: scale(8),
     color: "#636363",
     fontSize: moderateScale(10),
-    // fontFamily: "Pretendard_Medium",
+    fontFamily: "Pretendard_Medium",
     textAlign: "center",
   },
   bottomSection: {
@@ -120,7 +120,7 @@ export default StyleSheet.create({
   },
   buttonTopText: {
     fontSize: moderateScale(12),
-    // fontFamily: "Pretendard_Regular",
+    fontFamily: "Pretendard_Regular",
     color: "#B9B9B9",
     textAlign: "center",
   },

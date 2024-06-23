@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
   radioText: {
     fontSize: 16,
-    // fontFamily: "Pretendard_Regular",
+    fontFamily: "Pretendard_Regular",
   },
   checkedText: {
     color: "#1B1B1B",

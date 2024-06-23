@@ -134,7 +134,7 @@ const AddProcessSheet = ({
                         color: "#1B1B1B",
                         fontSize: 20,
                         alignSelf: "center",
-                        // fontFamily: "Pretendard_SemiBold",
+                        fontFamily: "Pretendard_SemiBold",
                       }}
                     >
                       분
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
   sheetTitle: {
     color: "#000",
     fontSize: 14,
-    // fontFamily: "Pretendard_SemiBold",
+    fontFamily: "Pretendard_SemiBold",
     flex: 1,
     textAlign: "center",
   },
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     paddingBottom: 4,
     color: "#636363",
     fontSize: 10,
-    // fontFamily: "Pretendard_Regular",
+    fontFamily: "Pretendard_Regular",
   },
   textInput: {
     backgroundColor: "#fff",
@@ -227,13 +227,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     height: 50,
     fontSize: 16,
-    // fontFamily: "Pretendard_Regular",
+    fontFamily: "Pretendard_Regular",
   },
   textCount: {
     textAlign: "right",
     color: "#636363",
     fontSize: 12,
-    // fontFamily: "Pretendard_Regular",
+    fontFamily: "Pretendard_Regular",
     paddingRight: 8,
     paddingTop: 2,
   },
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     padding: 8,
     color: "#636363",
     fontSize: 10,
-    // fontFamily: "Pretendard_Medium",
+    fontFamily: "Pretendard_Medium",
     textAlign: "center",
   },
   iconContainer: {
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
   subText: {
     color: "#636363",
     fontSize: 12,
-    // fontFamily: "Pretendard_Regular",
+    fontFamily: "Pretendard_Regular",
     paddingLeft: 7,
   },
 });
