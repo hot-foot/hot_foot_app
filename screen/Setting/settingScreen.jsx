@@ -7,8 +7,6 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
-  Button,
-  Animated,
   Platform,
 } from "react-native";
 import * as Linking from "expo-linking";
@@ -19,6 +17,7 @@ import RadioBtn2 from "../../components/Btn/RadioBtn2";
 import { SETTING_ALARM } from "../../data/settingData";
 import { useDatabase } from "../../hooks/useDatabase";
 import { usePushSetting } from "../../hooks/usePushSetting";
+import * as IntentLauncher from "expo-intent-launcher";
 
 const SettingScreen = () => {
   const windowHeight = Dimensions.get("window").height;
@@ -53,11 +52,13 @@ const SettingScreen = () => {
 
   const openSettings = () => {
     if (Platform.OS === "ios") {
-      // iOS : 앱 설정 화면으로 직접 이동
-      Linking.openURL("app-settings:");
+      // iOS: 사운드 및 햅틱 설정 화면으로 직접 이동
+      Linking.openURL("App-Prefs:root=SOUNDS");
     } else {
-      // Android : 시스템 설정 화면
-      Linking.openSettings();
+      // Android: 시스템 음량 설정 화면으로 이동
+      IntentLauncher.startActivityAsync(
+        IntentLauncher.ActivityAction.HOME_SETTINGS
+      );
     }
   };
 
