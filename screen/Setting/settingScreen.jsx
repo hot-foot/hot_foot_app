@@ -18,12 +18,14 @@ import { SETTING_ALARM } from "../../data/settingData";
 import { useDatabase } from "../../hooks/useDatabase";
 import { usePushSetting } from "../../hooks/usePushSetting";
 import * as IntentLauncher from "expo-intent-launcher";
+import { Audio } from "expo-av";
 
 const SettingScreen = () => {
   const windowHeight = Dimensions.get("window").height;
   const navigation = useNavigation();
   const [settingValue, setSettingValue] = useState({});
   const [dataKey, setDataKey] = useState(0);
+  const [sound, setSound] = useState(null);
 
   const { openDatabase, createTables } = useDatabase();
   const db = openDatabase();
@@ -50,25 +52,44 @@ const SettingScreen = () => {
     }, 200);
   }, []);
 
-  const openSettings = () => {
+  const openVolumeSettings = () => {
     if (Platform.OS === "ios") {
-      // iOS: 사운드 및 햅틱 설정 화면으로 직접 이동
-      Linking.openURL("App-Prefs:root=SOUNDS");
+      // iOS: 일반 설정 화면으로 직접 이동
+      Linking.openURL("App-Prefs:root=General");
     } else {
       // Android: 시스템 음량 설정 화면으로 이동
       IntentLauncher.startActivityAsync(
-        IntentLauncher.ActivityAction.HOME_SETTINGS
+        IntentLauncher.ActivityAction.VOLUME_SETTINGS
       );
     }
   };
 
-  const handleRadioChange = (value) => {
+  const handleRadioChange = async (value) => {
     updatePushSetting("style", value);
     setSettingValue({
       ...settingValue,
       style: value,
     });
+
+    let soundFile;
+    if (value === "단호하게") {
+      soundFile = require("../../assets/sound/BB-06_finish.mp3");
+    } else {
+      soundFile = require("../../assets/sound/BB-06_next.mp3");
+    }
+
+    const { sound } = await Audio.Sound.createAsync(soundFile);
+    setSound(sound);
+    await sound.playAsync();
   };
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
 
   // 시간을 두 자리 문자열로 변환
   const formatTime = (time) => {
@@ -179,10 +200,22 @@ const SettingScreen = () => {
                 <Text style={styles.contentDes}>
                   준비 과정 활성화를 위한 알림을 보내드려요
                 </Text>
-                <TouchableOpacity onPress={showTimePicker}>
-                  <View style={styles.timeSection}>
-                    <Text style={styles.time}>{formatAMPM(selectedTime)}</Text>
-                  </View>
+                <TouchableOpacity
+                  onPress={showTimePicker}
+                  disabled={!settingValue["push"]}
+                  style={[
+                    styles.timeSection,
+                    settingValue["push"] && styles.timeSectionActive,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.time,
+                      settingValue["push"] && styles.timeActive,
+                    ]}
+                  >
+                    {formatAMPM(selectedTime)}
+                  </Text>
                 </TouchableOpacity>
               </View>
               <View>
@@ -226,7 +259,7 @@ const SettingScreen = () => {
             <TouchableOpacity
               style={styles.contentContainer}
               activeOpacity={0.8}
-              onPress={openSettings}
+              onPress={openVolumeSettings}
             >
               <View style={{ gap: 6 }}>
                 <Text style={styles.contentText}>음량 설정</Text>
