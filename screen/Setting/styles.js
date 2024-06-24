@@ -80,4 +80,18 @@ export default StyleSheet.create({
     borderRadius: moderateScale(4),
     backgroundColor: "#E1E1E1",
   },
+  timeSection: {
+    borderColor: "#B9B9B9",
+    borderWidth: 2,
+    width: 100,
+    borderRadius: 4,
+    backgroundColor: "#E1E1E1",
+  },
+  timeSectionActive: {
+    borderColor: "#4CAF50",
+    backgroundColor: "#A5D6A7",
+  },
+  timeActive: {
+    color: "#1B5E20",
+  },
 });
