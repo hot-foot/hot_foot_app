@@ -1,17 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeScreen from "./screen/Home/homeScreen";
-import SettingScreen from "./screen/Setting/settingScreen";
-import ProcessScreen from "./screen/Process/processScreen";
 import * as Font from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
-import { Platform, ActivityIndicator } from "react-native";
-import TimerScreen from "./screen/Timer/timerScreen";
-import CompleteScreen from "./screen/Complete/completeScreen";
-import { FontProvider } from "./context/fontContext";
+import { ActivityIndicator } from "react-native";
 import Navigation from "./Navigation";
 import * as SplashScreen from "expo-splash-screen";
 import * as Sentry from "@sentry/react-native";
@@ -23,8 +16,6 @@ Sentry.init({
 const projectId = Constants.expoConfig.extra.eas.projectId;
 console.log("project Id 입니다 :::", projectId);
 
-const Stack = createNativeStackNavigator();
-
 // 앱이 포그라운드 상태일 때
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -35,15 +26,15 @@ Notifications.setNotificationHandler({
 });
 
 // 알림 울리기
-async function schedulePushNotification(data) {
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: "테스트 알림",
-      body: data,
-    },
-    trigger: null,
-  });
-}
+// async function schedulePushNotification(data) {
+//   await Notifications.scheduleNotificationAsync({
+//     content: {
+//       title: "테스트 알림",
+//       body: data,
+//     },
+//     trigger: null,
+//   });
+// }
 
 function App() {
   const notificationListener = useRef();
