@@ -13,17 +13,18 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.suyoooi.hotfoot",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.2"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/img/info/app_icon.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
+      "bundler": "metro",
       "favicon": "./assets/favicon.png"
     },
     "extra": {
@@ -31,6 +32,7 @@
         "projectId": "92cf28cf-62ad-4456-aacd-d33c6d64b0dd"
       }
     },
-    "owner": "suyoooi"
+    "owner": "suyoooi",
+    "plugins": ["expo-asset", "expo-font"]
   }
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,8 @@ import { TODO_ICON } from "../../data/processData";
 const TodoIconSheet = ({ isVisible, onClose, onAdd }) => {
   const screenHeight = Dimensions.get("window").height;
   const halfScreenHeight = screenHeight * 0.4;
+  const [isPressed, setIsPressed] = useState(null);
+  const [selectedIconId, setSelectedIconId] = useState(null);
 
   return (
     <Modal
@@ -50,12 +52,33 @@ const TodoIconSheet = ({ isVisible, onClose, onAdd }) => {
               {TODO_ICON.map((item) => (
                 <TouchableOpacity
                   key={item.id}
-                  activeOpacity={0.8}
-                  onPress={() => {}}
+                  activeOpacity={1}
+                  onPress={() => {
+                    setSelectedIconId(item.id);
+                    onAdd(item.imagePath);
+                    setIsPressed(null);
+                  }}
+                  onPressIn={() => setIsPressed(item.id)}
+                  onPressOut={() => setIsPressed(null)}
+                  style={[
+                    styles.iconContainer,
+                    {
+                      backgroundColor:
+                        selectedIconId === item.id
+                          ? "#777777"
+                          : isPressed === item.id
+                          ? "#969696"
+                          : "#E1E1E1",
+                      borderColor:
+                        selectedIconId === item.id
+                          ? "#777777"
+                          : isPressed === item.id
+                          ? "#969696"
+                          : "#E1E1E1",
+                    },
+                  ]}
                 >
-                  <View style={styles.iconContainer}>
-                    <Image source={item.imagePath} style={styles.todoIcon} />
-                  </View>
+                  <Image source={item.imagePath} style={styles.todoIcon} />
                 </TouchableOpacity>
               ))}
             </View>

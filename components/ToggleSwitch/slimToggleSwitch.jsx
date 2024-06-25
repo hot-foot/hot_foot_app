@@ -8,7 +8,7 @@ import {
 
 const SlimToggleSwitch = ({ isEnable, onClick }) => {
   const [isEnabled, setIsEnabled] = useState(isEnable);
-  const animatedValue = useRef(new Animated.Value(0)).current;
+  const animatedValue = useRef(new Animated.Value(isEnabled ? 1 : 0)).current;
 
   const padding = 2;
   const size = 20;

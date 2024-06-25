@@ -11,11 +11,21 @@ import {
 } from "react-native";
 import TodoCard from "../Card/todoCard";
 import PlusBtn from "../Btn/plusBtn";
-import { TODO_LIST } from "../../data/processData";
+import { useTodo } from "../../hooks/useTodo";
+import { useDatabase } from "../../hooks/useDatabase";
 
-const ProcessListSheet = ({ isVisible, onClose, onAdd, onPlus }) => {
+const ProcessListSheet = ({ isVisible, onClose, onAdd, onPlus, todoList }) => {
   const screenHeight = Dimensions.get("window").height;
   const halfScreenHeight = screenHeight * 0.4;
+  console.log("할일목록:::", todoList);
+  const { openDatabase, createTables } = useDatabase();
+  const db = openDatabase();
+  const { deleteTodo } = useTodo(db);
+
+  const handleDeleteTask = (id) => {
+    console.log("삭제", id);
+    deleteTodo(id);
+  };
 
   return (
     <Modal
@@ -42,21 +52,24 @@ const ProcessListSheet = ({ isVisible, onClose, onAdd, onPlus }) => {
             </View>
             <ScrollView style={{ maxHeight: halfScreenHeight }}>
               <View style={{ gap: 8 }}>
-                {TODO_LIST.map((item) => (
-                  <TouchableOpacity
-                    key={item.id}
-                    activeOpacity={0.8}
-                    onPress={() => onAdd(item)}
-                  >
-                    <TodoCard
-                      id={item.id}
-                      title={item.title}
-                      time={item.time}
-                      imagePath={item.imagePath}
-                      onDelete={() => {}}
-                    />
-                  </TouchableOpacity>
-                ))}
+                {/* {TODO_LIST.map((item) => ( */}
+                {todoList &&
+                  todoList.map((item) => (
+                    <TouchableOpacity
+                      key={item.id}
+                      activeOpacity={0.8}
+                      onPress={() => onAdd(item)}
+                    >
+                      <TodoCard
+                        id={item.id}
+                        title={item.name}
+                        time={item.minutes}
+                        // imagePath={item.imagePath}
+                        imagePath={item.iconId}
+                        onDelete={() => handleDeleteTask(item.id)}
+                      />
+                    </TouchableOpacity>
+                  ))}
               </View>
             </ScrollView>
             <View style={styles.actionItem}>
@@ -99,6 +112,7 @@ const styles = StyleSheet.create({
     fontFamily: "Pretendard_SemiBold",
     flex: 1,
     textAlign: "center",
+    left: 8,
   },
   actionItem: {
     // paddingVertical: 34,

@@ -6,10 +6,22 @@ import SettingScreen from "./screen/Setting/settingScreen";
 import ProcessScreen from "./screen/Process/processScreen";
 import * as Font from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { Platform, ActivityIndicator } from "react-native";
 import TimerScreen from "./screen/Timer/timerScreen";
 import CompleteScreen from "./screen/Complete/completeScreen";
+import { FontProvider } from "./context/fontContext";
+import Navigation from "./Navigation";
+import * as SplashScreen from "expo-splash-screen";
+import * as Sentry from "@sentry/react-native";
+
+Sentry.init({
+  dsn: "https://c95d443b0c9028d7f8de457dd4c374db@o4507425556463616.ingest.us.sentry.io/4507425560461312",
+});
+
+const projectId = Constants.expoConfig.extra.eas.projectId;
+console.log("project Id 입니다 :::", projectId);
 
 const Stack = createNativeStackNavigator();
 
@@ -34,13 +46,12 @@ async function schedulePushNotification(data) {
 }
 
 function App() {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
-  const [pushToken, setPushToken] = useState("");
-  const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
+  const [pushToken, setPushToken] = useState("");
+  const [notification, setNotification] = useState(false);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
-  // 폰트 적용
   const customFonts = {
     // Pretendard
     Pretendard_Thin: require("./assets/fonts/Pretendard-Thin.otf"),
@@ -53,112 +64,98 @@ function App() {
     Pretendard_ExtraBold: require("./assets/fonts/Pretendard-ExtraBold.otf"),
     Pretendard_Black: require("./assets/fonts/Pretendard-Black.otf"),
   };
+
   async function loadFonts() {
     await Font.loadAsync(customFonts);
     setFontsLoaded(true);
   }
-
   useEffect(() => {
-    loadFonts();
-  }, []);
+    const initializeApp = async () => {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+        await loadFonts();
+        await initPushNotifications();
 
-  useEffect(() => {
-    const registerForPushNotificationsAsync = async () => {
-      const { status: existingStatus } =
-        await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-
-      // 알림 허용 시
-      if (existingStatus !== "granted") {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
+        setTimeout(async () => {
+          await SplashScreen.hideAsync();
+        }, 3000);
+      } catch (error) {
+        console.error("Initialization error:", error);
+        await SplashScreen.hideAsync();
       }
-
-      // 알림 거부 시
-      if (finalStatus !== "granted") {
-        Alert.alert(
-          "",
-          "알림을 거부하였습니다. \n 앱에 대한 알림을 받을 수 없습니다."
-        );
-        return;
-      }
-
-      // 디바이스 토큰 출력 및 저장
-      const { data } = await Notifications.getExpoPushTokenAsync();
-      console.log("Expo Push Token:", data);
-      await AsyncStorage.setItem("device_token", data);
-      const device_token = await AsyncStorage.getItem("device_token");
-
-      return data;
     };
 
-    const initPushNotifications = async () => {
-      // 알림 채널 설정
-      if (Platform.OS === "android") {
-        await Notifications.setNotificationChannelAsync("default", {
-          name: "default",
-          importance: Notifications.AndroidImportance.MAX,
-          vibrationPattern: [0, 250, 250, 250],
-          lightColor: "#FF231F7C",
-        });
-      }
-
-      const pushToken = await registerForPushNotificationsAsync();
-      setPushToken(pushToken);
-      console.log(pushToken);
-
-      // 알림 수신
-      Notifications.addNotificationReceivedListener((notification) => {
-        console.log("NOTIFICATION:", notification);
-      });
-
-      notificationListener.current =
-        Notifications.addNotificationReceivedListener((notification) => {
-          setNotification(notification);
-        });
-
-      // 사용자가 알림을 탭했을 경우 실행
-      responseListener.current =
-        Notifications.addNotificationResponseReceivedListener((response) => {
-          console.log(response);
-        });
-    };
-
-    initPushNotifications();
+    initializeApp();
 
     return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current
-      );
-      Notifications.removeNotificationSubscription(responseListener.current);
+      if (notificationListener.current && responseListener.current) {
+        Notifications.removeNotificationSubscription(
+          notificationListener.current
+        );
+        Notifications.removeNotificationSubscription(responseListener.current);
+      }
     };
   }, []);
 
-  // 알림 예약 함수 호출
-  const handleScheduleNotification = async () => {
-    const notificationData = "알림 내용 입력";
-    await schedulePushNotification(notificationData);
+  const registerForPushNotificationsAsync = async () => {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+
+    if (finalStatus !== "granted") {
+      Alert.alert(
+        "",
+        "알림을 거부하였습니다. 앱에 대한 알림을 받을 수 없습니다."
+      );
+      return;
+    }
+
+    const { data } = await Notifications.getExpoPushTokenAsync({
+      projectId: Constants.expoConfig.extra.eas.projectId,
+    });
+
+    console.log("Expo Push Token:", data);
+    await AsyncStorage.setItem("device_token", data);
+    const device_token = await AsyncStorage.getItem("device_token");
+    console.log("이게 디바이스 토큰이지이이이", device_token);
+
+    return data;
+  };
+
+  const initPushNotifications = async () => {
+    const pushToken = await registerForPushNotificationsAsync();
+    setPushToken(pushToken);
+    console.log(pushToken);
+
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
   };
 
   return (
-    <NavigationContainer>
+    <>
       {fontsLoaded ? (
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-          }}
-          initialRouteName="Home"
-        >
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Setting" component={SettingScreen} />
-          <Stack.Screen name="Process" component={ProcessScreen} />
-          <Stack.Screen name="Timer" component={TimerScreen} />
-          <Stack.Screen name="Complete" component={CompleteScreen} />
-        </Stack.Navigator>
+        <Navigation />
       ) : (
         <ActivityIndicator size="large" color="#000" />
       )}
-    </NavigationContainer>
+      {/* {fontsLoaded ? (
+        <Navigation />
+      ) : (
+        <ActivityIndicator size="large" color="#000" />
+      )} */}
+    </>
   );
 }
 

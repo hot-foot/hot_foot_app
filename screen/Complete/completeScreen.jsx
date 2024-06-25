@@ -1,10 +1,23 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Text, TouchableOpacity, View } from "react-native";
 import styles from "./styles";
 import LottieView from "lottie-react-native";
+import { useNotification } from "../../hooks/useNotification";
 
-const CompleteScreen = () => {
+const CompleteScreen = ({ route }) => {
+  const { course } = route.params;
+  const { sendNotification } = useNotification();
+
+  useEffect(() => {
+    sendNotification({
+      title: "완료 알림 테스트",
+      body: `${course.name} 과정을 완료했어요!`,
+      // sound: "BB-06_finish.mp3",
+      trigger: null, // 즉시 알림
+    });
+  }, []);
+
   const navigation = useNavigation();
   const animation = useRef(null);
 
@@ -18,8 +31,8 @@ const CompleteScreen = () => {
         <Text style={styles.text}>타이머</Text>
       </View>
       <View style={styles.completeSection}>
-        <Text style={styles.completeTitle}>출근 준비 과정명</Text>
-        <Text style={styles.completeText}>출근 준비 과정명</Text>
+        <Text style={styles.completeTitle}>{course.name}</Text>
+        <Text style={styles.completeText}>{`\’${course.name}\’`}</Text>
         <Text style={styles.completeText}>과정을 완료했어요!</Text>
         <View style={styles.animationSection}>
           <LottieView
