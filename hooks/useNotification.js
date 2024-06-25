@@ -1,5 +1,6 @@
 import * as Notifications from "expo-notifications";
 import { useEffect } from "react";
+import * as FileSystem from "expo-file-system";
 
 export const useNotification = () => {
   Notifications.setNotificationHandler({
@@ -20,19 +21,26 @@ export const useNotification = () => {
     })();
   }, []);
 
-  const sendNotification = async ({ title, body, data, trigger = null }) => {
+  const sendNotification = async ({
+    title,
+    body,
+    data,
+    sound = null,
+    trigger = null,
+  }) => {
     const id = await Notifications.scheduleNotificationAsync({
       content: {
         title,
         body,
         data,
+        sound: sound ? { uri: sound } : undefined,
       },
       trigger,
     });
     return id;
   };
 
-  const cancelNotification = async ({ id }) => {
+  const cancelNotification = async (id) => {
     await Notifications.cancelScheduledNotificationAsync(id);
   };
 
