@@ -9,7 +9,7 @@ const ToastMsg = ({ isVisible, message, onClose }) => {
     if (isVisible) {
       timer = setTimeout(() => {
         onClose();
-      }, 3000);
+      }, 1500);
     }
     return () => {
       if (timer) {
