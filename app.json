@@ -15,7 +15,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.suyoooi.hotfoot",
-      "buildNumber": "1.0.3",
+      "buildNumber": "1.0.4",
       "sound": true,
       "permissions": ["NOTIFICATIONS"],
       "infoPlist": {
