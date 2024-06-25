@@ -4,24 +4,36 @@ import { Text, TouchableOpacity, View } from "react-native";
 import styles from "./styles";
 import LottieView from "lottie-react-native";
 import { useNotification } from "../../hooks/useNotification";
+import * as Notifications from "expo-notifications";
 
 const CompleteScreen = ({ route }) => {
   const { course } = route.params;
-  const { sendNotification } = useNotification();
+  const notificationIdRef = useRef(null);
 
   useEffect(() => {
-    sendNotification({
-      title: "완료 알림 테스트",
-      body: `${course.name} 과정을 완료했어요!`,
-      // sound: "BB-06_finish.mp3",
-      trigger: null, // 즉시 알림
-    });
+    const sendCompleteNotification = async () => {
+      const id = await Notifications.scheduleNotificationAsync({
+        content: {
+          title: "완료 알림 테스트",
+          body: `${course.name} 과정을 완료했어요!`,
+          sound: "BB-06_finish.mp3",
+        },
+        trigger: null, // 즉시 알림
+      });
+      notificationIdRef.current = id;
+    };
+
+    sendCompleteNotification();
   }, []);
 
   const navigation = useNavigation();
   const animation = useRef(null);
 
   const handleComplete = () => {
+    // 알림 취소
+    if (notificationIdRef.current) {
+      Notifications.dismissNotificationAsync(notificationIdRef.current);
+    }
     navigation.navigate("Home");
   };
 
