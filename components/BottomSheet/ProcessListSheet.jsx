@@ -11,20 +11,20 @@ import {
 } from "react-native";
 import TodoCard from "../Card/todoCard";
 import PlusBtn from "../Btn/plusBtn";
-import { useTodo } from "../../hooks/useTodo";
-import { useDatabase } from "../../hooks/useDatabase";
 
-const ProcessListSheet = ({ isVisible, onClose, onAdd, onPlus, todoList }) => {
+const ProcessListSheet = ({
+  isVisible,
+  onClose,
+  onAdd,
+  onPlus,
+  todoList,
+  onDeleteTask,
+}) => {
   const screenHeight = Dimensions.get("window").height;
   const halfScreenHeight = screenHeight * 0.4;
-  console.log("할일목록:::", todoList);
-  const { openDatabase, createTables } = useDatabase();
-  const db = openDatabase();
-  const { deleteTodo } = useTodo(db);
 
   const handleDeleteTask = (id) => {
-    console.log("삭제", id);
-    deleteTodo(id);
+    onDeleteTask(id);
   };
 
   return (
@@ -52,7 +52,6 @@ const ProcessListSheet = ({ isVisible, onClose, onAdd, onPlus, todoList }) => {
             </View>
             <ScrollView style={{ maxHeight: halfScreenHeight }}>
               <View style={{ gap: 8 }}>
-                {/* {TODO_LIST.map((item) => ( */}
                 {todoList &&
                   todoList.map((item) => (
                     <TouchableOpacity
@@ -64,7 +63,6 @@ const ProcessListSheet = ({ isVisible, onClose, onAdd, onPlus, todoList }) => {
                         id={item.id}
                         title={item.name}
                         time={item.minutes}
-                        // imagePath={item.imagePath}
                         imagePath={item.iconId}
                         onDelete={() => handleDeleteTask(item.id)}
                       />
@@ -95,7 +93,6 @@ const styles = StyleSheet.create({
   },
   actionSheet: {
     backgroundColor: "white",
-    // alignItems: "center",
     paddingLeft: 24,
     paddingRight: 24,
   },
@@ -115,18 +112,10 @@ const styles = StyleSheet.create({
     left: 8,
   },
   actionItem: {
-    // paddingVertical: 34,
     paddingBottom: 34,
     paddingTop: 16,
     width: "100%",
     alignItems: "center",
-  },
-  actionText: {
-    fontSize: 20,
-    fontWeight: 500,
-    color: "#1F1F1F",
-    paddingTop: 10,
-    paddingBottom: 10,
   },
   icon: {
     width: 18,
