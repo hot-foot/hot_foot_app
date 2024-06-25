@@ -1,7 +1,18 @@
 import { useEffect, useState } from "react";
 
-export const useTodo = (db) => {
+export const useTodo = (db, onDeleteDefaultTodo) => {
   const [todos, setTodos] = useState([]);
+  const defaultTodos = [
+    { name: "식사하기", iconId: 6, minutes: 20 },
+    { name: "세수하기", iconId: 7, minutes: 10 },
+    { name: "양치하기", iconId: 8, minutes: 3 },
+    { name: "샤워하기", iconId: 9, minutes: 20 },
+    { name: "머리 말리기 및 손질", iconId: 10, minutes: 10 },
+    { name: "옷 입기", iconId: 11, minutes: 10 },
+    { name: "화장하기", iconId: 12, minutes: 15 },
+    { name: "짐 챙기기", iconId: 13, minutes: 5 },
+    { name: "여유 부리기", iconId: 14, minutes: 10 },
+  ];
 
   const fetchData = (setData) => {
     db.transaction((tx) => {
@@ -27,32 +38,24 @@ export const useTodo = (db) => {
           console.log("dbsetting", _array);
           const isSet = _array.length > 0;
           if (!isSet) {
-            tx.executeSql(
-              `insert into todos
-                (name, iconId, minutes)
-                values
-                ('식사', 6, 20),
-                ('세수', 7, 10),
-                ('양치', 8, 3),
-                ('샤워', 9, 20),
-                ('머리 말리기 및 손질', 10, 10),
-                ('옷 입기', 11, 10),
-                ('화장하기', 12, 15),
-                ('짐 챙기기', 13, 5),
-                ('여유 부리기', 14, 10)`,
-              [],
-              (_, result) => {
-                tx.executeSql(`INSERT INTO dbSetting (setting) VALUES (1);`);
-                console.log(result);
-              },
-              (_, error) => {
-                console.log(error);
-              }
-            );
+            defaultTodos.forEach((todo) => {
+              tx.executeSql(
+                `insert into todos
+                  (name, iconId, minutes)
+                  values
+                  (?, ?, ?)`,
+                [todo.name, todo.iconId, todo.minutes]
+              );
+            });
+            tx.executeSql(`INSERT INTO dbSetting (setting) VALUES (1);`);
           }
         }
       );
     });
+  };
+
+  const isDefaultTodo = (name) => {
+    return defaultTodos.some((todo) => todo.name === name);
   };
 
   const createTodo = (todo) => {
@@ -68,6 +71,7 @@ export const useTodo = (db) => {
         [todo.name, todo.iconId, todo.minutes],
         (_, result) => {
           console.log(result);
+          fetchData();
         },
         (_, error) => {
           console.log(error);
@@ -83,7 +87,7 @@ export const useTodo = (db) => {
         [todo.id],
         (x, { rows: { _array: todos } }) => {
           const t = todos[0];
-          const diffMinutes = todo.minutes - t[0].minutes;
+          const diffMinutes = todo.minutes - t.minutes;
           // 10분 -> 5분 = -5분
 
           tx.executeSql(
@@ -107,6 +111,7 @@ export const useTodo = (db) => {
                   });
                 }
               );
+              fetchData();
             },
             (_, error) => {
               console.log(error);
@@ -124,9 +129,16 @@ export const useTodo = (db) => {
         [id],
         (x, { rows: { _array: todos } }) => {
           const t = todos[0];
+          if (isDefaultTodo(t.name)) {
+            console.log("디폴트 할 일은 삭제할 수 없습니다.");
+            if (onDeleteDefaultTodo) {
+              onDeleteDefaultTodo();
+            }
+            return;
+          }
           tx.executeSql(
             `select * from courseTodo where todoId = ?;`,
-            [todo.id],
+            [id],
             (y, { rows: { _array: courseTodo } }) => {
               courseTodo.forEach((ct) => {
                 tx.executeSql(
@@ -147,6 +159,7 @@ export const useTodo = (db) => {
                       [id],
                       (_, result) => {
                         console.log(result);
+                        fetchData();
                       },
                       (_, error) => {
                         console.log(error);

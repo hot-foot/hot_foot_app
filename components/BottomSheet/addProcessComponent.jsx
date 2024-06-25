@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from "react";
-
-import { TODO_ICON, TODO_LIST } from "../../data/processData";
+import { TODO_ICON } from "../../data/processData";
 import ProcessListSheet from "./ProcessListSheet";
 import AddProcessSheet from "./addProcessSheet";
 import TodoIconSheet from "./todoIconSheet";
-import { openDatabase } from "expo-sqlite";
-import { useTodo } from "../../hooks/useTodo";
 import { useDatabase } from "../../hooks/useDatabase";
+import { useTodo } from "../../hooks/useTodo";
 
-const AddProcessComponent = ({ onAdd, isSheetVisible, closeSheet }) => {
+const AddProcessComponent = ({
+  onAdd,
+  isSheetVisible,
+  closeSheet,
+  onDeleteDefaultTodoAttempt,
+}) => {
   const { openDatabase, createTables } = useDatabase();
   const db = openDatabase();
-  const { todos, initDefaultTodo, createTodo } = useTodo(db);
+  const { todos, initDefaultTodo, createTodo, deleteTodo, fetchData } = useTodo(
+    db,
+    onDeleteDefaultTodoAttempt
+  );
   const [isIconSheetVisible, setIconSheetVisible] = useState(false);
   const [isAddSheetVisible, setAddSheetVisible] = useState(false);
   const [isActionSheetVisible, setActionSheetVisible] =
@@ -19,7 +25,6 @@ const AddProcessComponent = ({ onAdd, isSheetVisible, closeSheet }) => {
   const [selectedIconPath, setSelectedIconPath] = useState(
     TODO_ICON[0].imagePath
   );
-  const [todoList, setTodoList] = useState(TODO_LIST);
 
   useEffect(() => {
     createTables(db);
@@ -46,6 +51,7 @@ const AddProcessComponent = ({ onAdd, isSheetVisible, closeSheet }) => {
     setAddSheetVisible(false);
     setIconSheetVisible(true);
   };
+
   const handleTodoIconSheet = () => {
     setIconSheetVisible(false);
     setAddSheetVisible(true);
@@ -59,13 +65,14 @@ const AddProcessComponent = ({ onAdd, isSheetVisible, closeSheet }) => {
   };
 
   const handleAddTodo = (newTodo) => {
-    setTodoList((prevTodos) => {
-      const updatedTodos = [...prevTodos, newTodo];
-      createTodo(newTodo);
-      return updatedTodos;
-    });
-    console.log("저장::: 성공적...", newTodo);
+    createTodo(newTodo);
+    fetchData();
     setAddSheetVisible(false);
+  };
+
+  const handleDeleteTask = (id) => {
+    deleteTodo(id);
+    fetchData();
   };
 
   return (
@@ -73,11 +80,10 @@ const AddProcessComponent = ({ onAdd, isSheetVisible, closeSheet }) => {
       <ProcessListSheet
         isVisible={isActionSheetVisible}
         onClose={handleSheetClosure}
-        // onAdd={handleAddProcess}
         onAdd={onAdd}
         onPlus={handleSheetPlusBtn}
-        // todoList={todoList}
         todoList={todos}
+        onDeleteTask={handleDeleteTask}
       />
       <TodoIconSheet
         isVisible={isIconSheetVisible}

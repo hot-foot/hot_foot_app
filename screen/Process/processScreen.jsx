@@ -27,7 +27,7 @@ const ProcessScreen = () => {
   const [msgModal, setMsgModal] = useState(false);
   const [isActionSheetVisible, setActionSheetVisible] = useState(false);
   const [selectedTasks, setSelectedTasks] = useState([]);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isToastVisible, setIsToastVisible] = useState(false); // 상태 이름 변경
   const [totalTime, setTotalTime] = useState("00시간 00분");
   const [form, setForm] = useState({});
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
@@ -99,11 +99,11 @@ const ProcessScreen = () => {
   };
 
   const showMessage = () => {
-    setIsVisible(true);
+    setIsToastVisible(true); // 상태 이름 변경
   };
 
-  const handleClose = () => {
-    setIsVisible(false);
+  const handleCloseToast = () => {
+    setIsToastVisible(false); // 상태 이름 변경
   };
 
   const handleDeleteTask = (id, index) => {
@@ -346,6 +346,11 @@ const ProcessScreen = () => {
     }
   };
 
+  const handleDeleteDefaultTodoAttempt = () => {
+    setToastMsg("삭제할 수 없는 할 일입니다.");
+    showMessage();
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.section}>
@@ -516,18 +521,19 @@ const ProcessScreen = () => {
           </Text>
         </View>
       </View>
-      {isActionSheetVisible && (
+      {isActionSheetVisible && !isToastVisible && (
         <AddProcessComponent
           onAdd={handleAddProcess}
           isSheetVisible={isActionSheetVisible}
           closeSheet={closeActionSheet}
+          onDeleteDefaultTodoAttempt={handleDeleteDefaultTodoAttempt}
         />
       )}
-      {isVisible && (
+      {isToastVisible && (
         <ToastMsg
-          isVisible={isVisible}
+          isVisible={isToastVisible}
           message={toastMsg}
-          onClose={handleClose}
+          onClose={handleCloseToast}
         />
       )}
       <MsgModal
