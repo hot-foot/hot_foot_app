@@ -16,6 +16,13 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.suyoooi.hotfoot",
       "buildNumber": "1.0.2"
+      "infoPlist": {
+        "NSUserNotificationUsageDescription": "푸시 알림을 허용하면 새로운 알림을 받을 수 있습니다.",
+        "UIBackgroundModes": ["fetch", "remote-notification"],
+        "CFBundleAllowMixedLocalizations": true,
+        "CFBundleDevelopmentRegion": "ko",
+        "CFBundleLocalizations": ["ko"]
+      }
     },
     "android": {
       "adaptiveIcon": {
