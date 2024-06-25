@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const useTodo = (db) => {
+export const useTodo = (db, onDeleteDefaultTodo) => {
   const [todos, setTodos] = useState([]);
   const defaultTodos = [
     { name: "식사하기", iconId: 6, minutes: 20 },
@@ -131,6 +131,9 @@ export const useTodo = (db) => {
           const t = todos[0];
           if (isDefaultTodo(t.name)) {
             console.log("디폴트 할 일은 삭제할 수 없습니다.");
+            if (onDeleteDefaultTodo) {
+              onDeleteDefaultTodo();
+            }
             return;
           }
           tx.executeSql(

@@ -6,11 +6,18 @@ import TodoIconSheet from "./todoIconSheet";
 import { useDatabase } from "../../hooks/useDatabase";
 import { useTodo } from "../../hooks/useTodo";
 
-const AddProcessComponent = ({ onAdd, isSheetVisible, closeSheet }) => {
+const AddProcessComponent = ({
+  onAdd,
+  isSheetVisible,
+  closeSheet,
+  onDeleteDefaultTodoAttempt,
+}) => {
   const { openDatabase, createTables } = useDatabase();
   const db = openDatabase();
-  const { todos, initDefaultTodo, createTodo, deleteTodo, fetchData } =
-    useTodo(db);
+  const { todos, initDefaultTodo, createTodo, deleteTodo, fetchData } = useTodo(
+    db,
+    onDeleteDefaultTodoAttempt
+  );
   const [isIconSheetVisible, setIconSheetVisible] = useState(false);
   const [isAddSheetVisible, setAddSheetVisible] = useState(false);
   const [isActionSheetVisible, setActionSheetVisible] =
