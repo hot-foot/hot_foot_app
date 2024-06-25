@@ -23,7 +23,19 @@
         "UIBackgroundModes": ["fetch", "remote-notification"],
         "CFBundleAllowMixedLocalizations": true,
         "CFBundleDevelopmentRegion": "ko",
-        "CFBundleLocalizations": ["ko"]
+        "CFBundleLocalizations": ["ko"],
+        "UNNotificationCategory": [
+          {
+            "identifier": "DEFAULT",
+            "actions": [],
+            "sound": "BB-06_finish.mp3"
+          },
+          {
+            "identifier": "OTHER_SOUND",
+            "actions": [],
+            "sound": "BB-06_start.mp3"
+          }
+        ]
       }
     },
     "android": {
