@@ -17,6 +17,7 @@ import { useTodo } from "../../hooks/useTodo";
 import { usePushSetting } from "../../hooks/usePushSetting";
 import PreparationCard from "../../components/Card/preparationCard";
 import ToastMsg from "../../components/Modal/toastMsg";
+import * as Notifications from "expo-notifications";
 
 const HomeScreen = ({ route }) => {
   const processName = route.params?.processName;
@@ -135,6 +136,25 @@ const HomeScreen = ({ route }) => {
     return time < 10 ? `0${time}` : `${time}`;
   };
 
+  // 알림 울리기
+  async function schedulePushNotification(data) {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "발등에 불",
+        body: data,
+        sound: "BB-06_start.mp3",
+      },
+      trigger: {
+        seconds: 3,
+      },
+    });
+  }
+
+  const handleTestBtnClick = () => {
+    const data = "테스트 알림입니다.";
+    schedulePushNotification(data);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.section}>
@@ -194,6 +214,12 @@ const HomeScreen = ({ route }) => {
               course: courses[0],
             });
           }}
+        />
+        <PlusBtn
+          color={"#ffd8f6"}
+          width={64}
+          height={64}
+          onPress={handleTestBtnClick}
         />
       </Animated.View>
       {isVisible && (
