@@ -4,7 +4,6 @@ import { Text, TouchableOpacity, View } from "react-native";
 import styles from "./styles";
 import LottieView from "lottie-react-native";
 import { useNotification } from "../../hooks/useNotification";
-import * as FileSystem from "expo-file-system";
 
 const CompleteScreen = ({ route }) => {
   const { course } = route.params;
@@ -12,12 +11,10 @@ const CompleteScreen = ({ route }) => {
 
   useEffect(() => {
     const sendCompleteNotification = async () => {
-      const soundUri = FileSystem.documentDirectory + "sound/BB-06_finish.mp3";
-
       await sendNotification({
-        title: "완료 알림 테스트",
-        body: `${course.name} 과정을 완료했어요!`,
-        sound: soundUri, // 사운드 파일 URI 지정
+        title: "${course.name}",
+        body: `나가야 할 시간이에요! 빠르게 준비를 마무리하세요!`,
+        sound: "BB-06_finish.mp3", // 번들에 포함된 사운드 파일 이름
         trigger: null, // 즉시 알림
       });
     };
