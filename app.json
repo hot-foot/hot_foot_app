@@ -67,8 +67,8 @@
             "./assets/sound/BB-06_start_10.mp3",
             "./assets/sound/BB-06_start_20.mp3",
             "./assets/sound/BB-06_next.mp3",
-            "./assets/sound/BB-go_out5.mp3",
-            "./assets/sound/BB-go_out10.mp3"
+            "./assets/sound/BB-06_go_out5.mp3",
+            "./assets/sound/BB-06_go_out10.mp3"
           ]
         }
       ]
