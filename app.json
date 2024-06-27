@@ -64,11 +64,11 @@
           "sounds": [
             "./assets/sounds/BB-06_finish.mp3",
             "./assets/sounds/BB-06_start.mp3",
-            "./assets/sounds/BB-06_start10.mp3",
-            "./assets/sounds/BB-06_start20.mp3",
+            "./assets/sounds/BB-06_start_10.mp3",
+            "./assets/sounds/BB-06_start_20.mp3",
             "./assets/sounds/BB-06_next.mp3",
-            "./assets/sounds/BB-go_out5.mp3",
-            "./assets/sounds/BB-go_out10.mp3"
+            "./assets/sounds/BB-06-go_out5.mp3",
+            "./assets/sounds/BB-06-go_out10.mp3"
           ]
         }
       ]
