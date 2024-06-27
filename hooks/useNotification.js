@@ -33,7 +33,7 @@ export const useNotification = () => {
         title,
         body,
         data,
-        sound: sound ? { uri: sound } : undefined,
+        sound: sound ? sound : undefined,
       },
       trigger,
     });
