@@ -73,9 +73,9 @@ const SettingScreen = () => {
 
     let soundFile;
     if (value === "단호하게") {
-      soundFile = require("../../assets/sound/BB-06_finish.mp3");
+      soundFile = require("../../assets/sounds/BB-06_finish.mp3");
     } else {
-      soundFile = require("../../assets/sound/BB-06_next.mp3");
+      soundFile = require("../../assets/sounds/BB-06_next.mp3");
     }
 
     const { sound } = await Audio.Sound.createAsync(soundFile);
