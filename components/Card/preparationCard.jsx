@@ -1,11 +1,5 @@
 import React, { useRef } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
 import SlimToggleSwitch from "../ToggleSwitch/slimToggleSwitch";
 import DotMenu from "./dotMenu";
@@ -23,6 +17,7 @@ const PreparationCard = ({
   setActiveModalId,
   activeModalId,
   updateData,
+  onPress,
 }) => {
   const { openDatabase } = useDatabase();
   const db = openDatabase();
@@ -62,11 +57,19 @@ const PreparationCard = ({
     updateData();
   };
 
+  const handleCardPress = () => {
+    onPress(id);
+  };
+
   console.log("id", id);
   console.log("activeModalId", activeModalId);
 
   return (
-    <TouchableWithoutFeedback onPress={handlePressOutside}>
+    <TouchableOpacity
+      onPress={handleCardPress}
+      onPressOut={handlePressOutside}
+      activeOpacity={0.8}
+    >
       <View>
         <View style={[styles.card, getBackgoundColorStyle()]}>
           <View style={styles.row}>
@@ -109,7 +112,7 @@ const PreparationCard = ({
           </View>
         </View>
       </View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   );
 };
 
