@@ -5,6 +5,7 @@ import styles from "./styles";
 import TodoTimerList from "./todoTimerList";
 import { useNavigation } from "@react-navigation/native";
 import ToolTip from "../../assets/img/Icon/tooltip.svg";
+import Skip from "../../assets/img/Icon/skip.svg";
 import MsgModal from "../../components/Modal/msgModal";
 import { useDatabase } from "../../hooks/useDatabase";
 import { useCourse } from "../../hooks/useCourse";
@@ -148,10 +149,7 @@ const TimerScreen = ({ route }) => {
             }}
           >
             <View style={styles.todoButton}>
-              <Image
-                source={require("../../assets/img/Icon/skip.png")}
-                style={styles.skip}
-              />
+              <Skip />
             </View>
           </TouchableOpacity>
           <View style={styles.skipTooltip}>
