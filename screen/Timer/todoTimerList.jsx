@@ -1,7 +1,12 @@
 import moment from "moment";
-import { Text, View } from "react-native";
+import { Text, View, Platform } from "react-native";
 import styles from "./styles";
-import Svg, { Polygon } from "react-native-svg";
+import IosList1 from "../../assets/img/indicator/list_1_ios.svg";
+import IosList2 from "../../assets/img/indicator/list_2_ios.svg";
+import IosList3 from "../../assets/img/indicator/list_3_ios.svg";
+import AosList1 from "../../assets/img/indicator/list_1_aos.svg";
+import AosList2 from "../../assets/img/indicator/list_2_aos.svg";
+import AosList3 from "../../assets/img/indicator/list_3_aos.svg";
 
 const TodoTimerList = ({ lastes }) => {
   const minutesToString = (minutes) => {
@@ -9,65 +14,39 @@ const TodoTimerList = ({ lastes }) => {
     return moment.utc(duration.asMilliseconds()).format("HH : mm : ss");
   };
 
+  const truncate = (str) => {
+    if (str.length > 5) {
+      return str.slice(0, 5) + "...";
+    }
+    return str;
+  };
+
   return (
     <>
+      <BackgroundSVG length={lastes.length} />
       <View style={styles.todoNow}>
-        <Text style={styles.todoListTitleText}>{lastes[0].name}</Text>
+        <Text style={styles.todoListTitleText}>{truncate(lastes[0].name)}</Text>
         <Text style={styles.todoListTimeText}>
           {minutesToString(lastes[0].minutes)}
         </Text>
-        {lastes.length >= 2 ? (
-          <Svg style={{ zIndex: 0, position: "absolute" }}>
-            <Polygon
-              points="-1,-1, -1,101 110,101 135,51 110,-1"
-              fill="#B9B9B9"
-              stroke="#4B4B4B"
-              strokeWidth="2"
-            />
-          </Svg>
-        ) : (
-          <Svg style={{ zIndex: 0, position: "absolute" }}>
-            <Polygon
-              points="-1,-1 -1,110 110,110 110,-1"
-              fill="#B9B9B9"
-              stroke="#4B4B4B"
-              strokeWidth="2"
-            />
-          </Svg>
-        )}
       </View>
       {lastes.length >= 2 ? (
         <View style={styles.todoNext1}>
-          <Text style={styles.todoListTitleText}>{lastes[1].name}</Text>
+          <Text style={styles.todoListTitleText}>
+            {truncate(lastes[1].name)}
+          </Text>
           <Text style={styles.todoListTimeText}>
             {minutesToString(lastes[1].minutes)}
           </Text>
-          {lastes.length >= 3 ? (
-            <Svg style={{ zIndex: 0, position: "absolute" }}>
-              <Polygon
-                points="-1,-100 -1,101 100,101 125,51 100,-1"
-                fill="#F5F5F5"
-                stroke="#4B4B4B"
-                strokeWidth="2"
-              />
-            </Svg>
-          ) : (
-            <Svg style={{ zIndex: 0, position: "absolute" }}>
-              <Polygon
-                points="-1,-1 -1,100 110,100 110,-1"
-                fill="#F5F5F5"
-                stroke="#4B4B4B"
-                strokeWidth="2"
-              />
-            </Svg>
-          )}
         </View>
       ) : (
         <View style={styles.todoNext1}></View>
       )}
       {lastes.length >= 3 ? (
-        <View style={styles.todoNext2}>
-          <Text style={styles.todoListTitleText}>{lastes[2].name}</Text>
+        <View style={(styles.todoNext2, styles.lastText)}>
+          <Text style={styles.todoListTitleText}>
+            {truncate(lastes[2].name)}
+          </Text>
           <Text style={styles.todoListTimeText}>
             {minutesToString(lastes[2].minutes)}
           </Text>
@@ -78,5 +57,64 @@ const TodoTimerList = ({ lastes }) => {
     </>
   );
 };
+
+function BackgroundSVG({ length }) {
+  if (length === 0) {
+    return;
+  }
+  if (Platform.OS === "ios") {
+    if (length === 1) {
+      return (
+        <IosList1
+          style={{ zIndex: 0, position: "absolute" }}
+          width="100%"
+          height="100%"
+        />
+      );
+    } else if (length === 2) {
+      return (
+        <IosList2
+          style={{ zIndex: 0, position: "absolute" }}
+          width="100%"
+          height="100%"
+        />
+      );
+    } else {
+      return (
+        <IosList3
+          style={{ zIndex: 0, position: "absolute" }}
+          width="100%"
+          height="100%"
+        />
+      );
+    }
+  } else {
+    if (length === 1) {
+      return (
+        <AosList1
+          style={{ zIndex: 0, position: "absolute" }}
+          width="100%"
+          height="100%"
+        />
+      );
+    } else if (length === 2) {
+      return (
+        <AosList2
+          style={{ zIndex: 0, position: "absolute" }}
+          width="100%"
+          height="100%"
+        />
+      );
+    } else {
+      return (
+        <AosList3
+          style={{ zIndex: 0, position: "absolute" }}
+          width="100%"
+          height="100%"
+        />
+      );
+    }
+  }
+}
 
 export default TodoTimerList;

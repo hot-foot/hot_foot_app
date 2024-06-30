@@ -14,16 +14,18 @@
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/native-stack": "^6.9.13",
     "@react-navigation/stack": "^6.3.17",
-    "@use-expo/font": "^2.0.0",
     "@sentry/react-native": "~5.22.0",
+    "@use-expo/font": "^2.0.0",
     "axios": "^1.5.0",
-    "expo": "~51.0.14",
-    "expo-asset": "~10.0.7",
+    "expo": "~51.0.17",
+    "expo-asset": "~10.0.10",
+    "expo-av": "~14.0.6",
     "expo-file-system": "~17.0.1",
     "expo-font": "~12.0.6",
+    "expo-intent-launcher": "~11.0.1",
     "expo-linking": "~6.3.1",
-    "expo-splash-screen": "~0.27.5",
     "expo-notifications": "~0.28.7",
+    "expo-splash-screen": "~0.27.5",
     "expo-sqlite": "^13.4.0",
     "expo-status-bar": "~1.12.1",
     "lodash": "^4.17.21",
@@ -44,12 +46,11 @@
     "react-native-webview": "13.8.6",
     "react-navigation": "^4.4.4",
     "react-navigation-stack": "^2.10.4",
-    "uuid": "^9.0.1",
-    "expo-intent-launcher": "~11.0.1",
-    "expo-av": "~14.0.5"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.24.0"
+    "@babel/core": "^7.24.0",
+    "react-native-svg-transformer": "^1.4.0"
   },
   "private": true
 }
