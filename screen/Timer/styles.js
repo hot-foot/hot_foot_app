@@ -73,7 +73,7 @@ export default StyleSheet.create({
   todoSection: {
     width: "100%",
     height: "100%",
-    backgroundColor: "#F5F5F5",
+    backgroundColor: "#FFF",
     borderTopColor: "#4B4B4B",
     borderTopWidth: moderateScale(2),
     flexDirection: "column",
@@ -145,7 +145,7 @@ export default StyleSheet.create({
     bottom: verticalScale(20),
     width: verticalScale(315),
     height: verticalScale(90),
-    backgroundColor: "#F5F5F5",
+    backgroundColor: "#FFF",
     borderTopColor: "#4B4B4B",
     flexDirection: "row",
     zIndex: 3,
