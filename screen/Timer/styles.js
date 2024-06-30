@@ -100,6 +100,7 @@ export default StyleSheet.create({
     width: moderateScale(64),
     height: moderateScale(64),
     backgroundColor: "#FFC4CA",
+    marginTop: verticalScale(20),
     marginBottom: verticalScale(20),
     alignItems: "center",
     justifyContent: "center",
@@ -119,6 +120,7 @@ export default StyleSheet.create({
     justifyContent: "center",
   },
   skipTooltip: {
+    marginTop: verticalScale(20),
     height: moderateScale(44),
     width: scale(137),
     position: "absolute",
