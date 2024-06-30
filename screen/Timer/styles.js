@@ -49,6 +49,7 @@ export default StyleSheet.create({
     fontSize: moderateScale(20),
     fontFamily: "Pretendard_Regular",
     color: "#1B1B1B",
+    marginBottom: moderateScale(8),
   },
   totalTimerText: {
     fontSize: moderateScale(20),
@@ -87,6 +88,7 @@ export default StyleSheet.create({
     fontSize: moderateScale(22),
     fontFamily: "Pretendard_Regular",
     color: "#1B1B1B",
+    marginBottom: verticalScale(16),
   },
   todoTimerText: {
     fontSize: moderateScale(22),
@@ -124,7 +126,7 @@ export default StyleSheet.create({
     height: moderateScale(44),
     width: scale(137),
     position: "absolute",
-    left: scale(70),
+    left: scale(65),
     top: verticalScale(10),
   },
   skipTooltipText: {
