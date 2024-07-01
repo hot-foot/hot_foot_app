@@ -13,7 +13,6 @@ Sentry.init({
   dsn: "https://193e7aa06a402e0391f6215ea461771c@o4507425556463616.ingest.us.sentry.io/4507524035379200",
   enableAutoSessionTracking: true,
   debug: true,
-});https://c95d443b0c9028d7f8de457dd4c374db@o4507425556463616.ingest.us.sentry.io/4507425560461312",
 });
 
 const projectId = Constants.expoConfig.extra.eas.projectId;
