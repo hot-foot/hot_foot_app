@@ -4,7 +4,8 @@ import { Text, TouchableOpacity, View, Image } from "react-native";
 import styles from "./styles";
 import TodoTimerList from "./todoTimerList";
 import { useNavigation } from "@react-navigation/native";
-import Svg, { Polygon } from "react-native-svg";
+import ToolTip from "../../assets/img/Icon/tooltip.svg";
+import Skip from "../../assets/img/Icon/skip.svg";
 import MsgModal from "../../components/Modal/msgModal";
 import { useDatabase } from "../../hooks/useDatabase";
 import { useCourse } from "../../hooks/useCourse";
@@ -148,23 +149,11 @@ const TimerScreen = ({ route }) => {
             }}
           >
             <View style={styles.todoButton}>
-              <Image
-                source={require("../../assets/img/Icon/skip.png")}
-                style={styles.skip}
-              />
+              <Skip />
             </View>
           </TouchableOpacity>
           <View style={styles.skipTooltip}>
-            <Text style={styles.skipTooltipText}>
-              다음 할 일로 넘어가며 총 잔여 시간도 감소해요.
-            </Text>
-            <Svg style={{ zIndex: 0, position: "absolute" }}>
-              <Polygon
-                points="137,0 10,0, 10,16 0,22, 10,28 10,44 137,44"
-                fill="#4B4B4B"
-                strokeWidth="2"
-              />
-            </Svg>
+            <ToolTip />
           </View>
         </View>
       </View>

@@ -66,6 +66,10 @@ const HomeScreen = ({ route }) => {
     navigation.navigate("Setting");
   };
 
+  const handleCardPress = (id) => {
+    navigation.navigate("Process", { courseId: id });
+  };
+
   const initData = () => {
     createTables(db);
     initDefaultTodo();
@@ -192,6 +196,7 @@ const HomeScreen = ({ route }) => {
               updateData={() => {
                 setDataKey((x) => x + 1);
               }}
+              onPress={handleCardPress}
             />
           ))}
         </View>

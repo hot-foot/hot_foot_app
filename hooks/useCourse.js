@@ -140,9 +140,32 @@ export const useCourse = (db) => {
     });
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const fetchCourseById = (id, callback) => {
+    executeTransaction((tx) => {
+      tx.executeSql(
+        `SELECT c.*, GROUP_CONCAT(ct.todoId) AS todoIds
+         FROM courses c
+         LEFT JOIN courseTodo ct ON c.id = ct.courseId
+         WHERE c.id = ?
+         GROUP BY c.id`,
+        [id],
+        (_, { rows }) => {
+          const course = rows._array[0];
+          course.todoIds = course.todoIds
+            ? course.todoIds.split(",").map(Number)
+            : [];
+          tx.executeSql(
+            `SELECT * FROM todos WHERE id IN (${course.todoIds.join(",")})`,
+            [],
+            (_, { rows }) => {
+              course.todos = rows._array;
+              callback(course);
+            }
+          );
+        }
+      );
+    });
+  };
 
   const createCourse = (course, { onSuccess, onError }) => {
     executeTransaction((tx) => {
@@ -344,6 +367,7 @@ export const useCourse = (db) => {
   return {
     fetchData,
     fetchCourseTodo,
+    fetchCourseById,
     createCourse,
     copyCourse,
     updateCourse,

@@ -10,7 +10,9 @@ import * as SplashScreen from "expo-splash-screen";
 import * as Sentry from "@sentry/react-native";
 
 Sentry.init({
-  dsn: "https://c95d443b0c9028d7f8de457dd4c374db@o4507425556463616.ingest.us.sentry.io/4507425560461312",
+  dsn: "https://193e7aa06a402e0391f6215ea461771c@o4507425556463616.ingest.us.sentry.io/4507524035379200",
+  enableAutoSessionTracking: true,
+  debug: true,
 });
 
 const projectId = Constants.expoConfig.extra.eas.projectId;

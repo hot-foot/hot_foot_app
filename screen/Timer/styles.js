@@ -49,6 +49,7 @@ export default StyleSheet.create({
     fontSize: moderateScale(20),
     fontFamily: "Pretendard_Regular",
     color: "#1B1B1B",
+    marginBottom: moderateScale(8),
   },
   totalTimerText: {
     fontSize: moderateScale(20),
@@ -73,7 +74,7 @@ export default StyleSheet.create({
   todoSection: {
     width: "100%",
     height: "100%",
-    backgroundColor: "#F5F5F5",
+    backgroundColor: "#FFF",
     borderTopColor: "#4B4B4B",
     borderTopWidth: moderateScale(2),
     flexDirection: "column",
@@ -87,6 +88,7 @@ export default StyleSheet.create({
     fontSize: moderateScale(22),
     fontFamily: "Pretendard_Regular",
     color: "#1B1B1B",
+    marginBottom: verticalScale(16),
   },
   todoTimerText: {
     fontSize: moderateScale(22),
@@ -124,7 +126,7 @@ export default StyleSheet.create({
     height: moderateScale(44),
     width: scale(137),
     position: "absolute",
-    left: scale(70),
+    left: scale(65),
     top: verticalScale(10),
   },
   skipTooltipText: {
@@ -145,7 +147,7 @@ export default StyleSheet.create({
     bottom: verticalScale(20),
     width: verticalScale(315),
     height: verticalScale(90),
-    backgroundColor: "#F5F5F5",
+    backgroundColor: "#FFF",
     borderTopColor: "#4B4B4B",
     flexDirection: "row",
     zIndex: 3,
