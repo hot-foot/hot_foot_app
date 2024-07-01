@@ -181,9 +181,9 @@ export const useCourse = (db) => {
 
         tx.executeSql(
           `insert into courses
-              (name, travelMinute, arrivalTime, totalMinute, startTime, active, departureTime)
+              (name, travelMinute, arrivalTime, totalMinute, startTime, active)
               values
-              (?, ?, ?, ?, ?, ?, ?)`,
+              (?, ?, ?, ?, ?, ?)`,
           [
             course.name,
             course.travelMinute,
@@ -191,7 +191,6 @@ export const useCourse = (db) => {
             totalMinute,
             startTime.toTimeString(),
             0,
-            course.departureTime.toTimeString(),
           ],
           (_, result) => {
             fetchData();

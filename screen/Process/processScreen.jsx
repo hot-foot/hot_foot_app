@@ -10,7 +10,7 @@ import {
   Image,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import TodoCard from "../../components/Card/todoCard";
 import PlusBtn from "../../components/Btn/plusBtn";
 import LargeBtn from "../../components/Btn/largeBtn";
@@ -22,18 +22,48 @@ import AddProcessComponent from "../../components/BottomSheet/addProcessComponen
 
 const ProcessScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const courseId = route.params?.courseId;
+
   const [toastMsg, setToastMsg] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [msgModal, setMsgModal] = useState(false);
   const [isActionSheetVisible, setActionSheetVisible] = useState(false);
   const [selectedTasks, setSelectedTasks] = useState([]);
-  const [isToastVisible, setIsToastVisible] = useState(false); // 상태 이름 변경
+  const [isToastVisible, setIsToastVisible] = useState(false);
   const [totalTime, setTotalTime] = useState("00시간 00분");
   const [form, setForm] = useState({});
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
   const { openDatabase } = useDatabase();
   const db = openDatabase();
-  const { createCourse } = useCourse(db);
+  const { createCourse, updateCourse, fetchCourseById } = useCourse(db);
+
+  const [isDepartureTimePickerVisible, setDepartureTimePickerVisibility] =
+    useState(false);
+  const [selectedDepartureTime, setSelectedDepartureTime] = useState(
+    new Date()
+  );
+  const [isArrivalTimePickerVisible, setArrivalTimePickerVisibility] =
+    useState(false);
+  const [selectedArrivalTime, setSelectedArrivalTime] = useState(new Date());
+  const [isStartTimePickerVisible, setStartTimePickerVisibility] =
+    useState(false);
+  const [selectedStartTime, setSelectedStartTime] = useState(new Date());
+
+  useEffect(() => {
+    if (courseId) {
+      fetchCourseById(courseId, (course) => {
+        console.log("course :::", course);
+        console.log("selectedArrivalTime :::", selectedArrivalTime);
+        setInputValue(course.name);
+        setSelectedTasks(course.todos);
+        // setSelectedDepartureTime(new Date());
+        // setSelectedArrivalTime(new Date(course.arrivalTime));
+        // setSelectedStartTime(new Date(course.startTime));
+        setForm(course);
+      });
+    }
+  }, [courseId]);
 
   useEffect(() => {
     const totalMinutes = selectedTasks.reduce(
@@ -99,11 +129,11 @@ const ProcessScreen = () => {
   };
 
   const showMessage = () => {
-    setIsToastVisible(true); // 상태 이름 변경
+    setIsToastVisible(true);
   };
 
   const handleCloseToast = () => {
-    setIsToastVisible(false); // 상태 이름 변경
+    setIsToastVisible(false);
   };
 
   const handleDeleteTask = (id, index) => {
@@ -134,41 +164,42 @@ const ProcessScreen = () => {
       totalMinute: totalMinutes,
     }));
 
-    db.transaction((tx) => {
-      if (form.id) {
-        updateCourse(
-          { ...form, totalMinute: calculateTotalMinutes(form) },
-          {
-            onSuccess: () => {
-              navigation.navigate("Home", {
-                processName: inputValue,
-                startTime: form.startTime,
-              });
-            },
-            onError: (error) => {
-              setToastMsg("에러가 발생했습니다.");
-              showMessage();
-            },
-          }
-        );
-      } else {
-        createCourse(
-          { ...form, todoIds: _.map(selectedTasks, "id") },
-          {
-            onSuccess: () => {
-              navigation.navigate("Home", {
-                processName: inputValue,
-                startTime: formatAMPM3(selectedStartTime),
-              });
-            },
-            onError: () => {
-              setToastMsg("에러가 발생했습니다.");
-              showMessage();
-            },
-          }
-        );
-      }
-    });
+    const updatedForm = {
+      ...form,
+      totalMinute: totalMinutes,
+      todoIds: _.map(selectedTasks, "id"),
+      travelMinute: form.travelMinute,
+      arrivalTime: selectedArrivalTime,
+      departureTime: selectedDepartureTime,
+    };
+
+    if (form.id) {
+      updateCourse(updatedForm, {
+        onSuccess: () => {
+          navigation.navigate("Home", {
+            processName: inputValue,
+            startTime: form.startTime,
+          });
+        },
+        onError: (error) => {
+          setToastMsg("에러가 발생했습니다.");
+          showMessage();
+        },
+      });
+    } else {
+      createCourse(updatedForm, {
+        onSuccess: () => {
+          navigation.navigate("Home", {
+            processName: inputValue,
+            startTime: formatAMPM3(selectedStartTime),
+          });
+        },
+        onError: () => {
+          setToastMsg("에러가 발생했습니다.");
+          showMessage();
+        },
+      });
+    }
   };
 
   const handleInputChange = (text) => {
@@ -191,30 +222,13 @@ const ProcessScreen = () => {
       showMessage();
     } else {
       setSelectedTasks([...selectedTasks, task]);
-      setForm({ ...form, todoIds: [...selectedTasks] });
+      setForm({ ...form, todoIds: [...selectedTasks, task.id] });
       setActionSheetVisible(false);
     }
   };
 
-  // 이동 시간 상태
-  const [isDepartureTimePickerVisible, setDepartureTimePickerVisibility] =
-    useState(false);
-  const [selectedDepartureTime, setSelectedDepartureTime] = useState(null);
-  // 도착 시간 상태
-  const [isArrivalTimePickerVisible, setArrivalTimePickerVisibility] =
-    useState(false);
-  const [selectedArrivalTime, setSelectedArrivalTime] = useState(null);
-
-  // 시작 시간 상태
-  const [isStartTimePickerVisible, setStartTimePickerVisibility] =
-    useState(false);
-  const [selectedStartTime, setSelectedStartTime] = useState(null);
-
   // 이동 시간 피커 보여주기
   const showDepartureTimePicker = () => {
-    if (!selectedDepartureTime) {
-      setSelectedDepartureTime(new Date());
-    }
     setDepartureTimePickerVisibility(true);
   };
 
@@ -237,9 +251,6 @@ const ProcessScreen = () => {
 
   // 도착 시간 피커 보여주기
   const showArrivalTimePicker = () => {
-    if (!selectedArrivalTime) {
-      setSelectedArrivalTime(new Date());
-    }
     setArrivalTimePickerVisibility(true);
   };
 
@@ -264,9 +275,6 @@ const ProcessScreen = () => {
 
   // 시작 시간 피커 보이기
   const showStartTimePicker = () => {
-    if (!selectedStartTime) {
-      setSelectedStartTime(new Date());
-    }
     setStartTimePickerVisibility(true);
   };
 
@@ -283,17 +291,6 @@ const ProcessScreen = () => {
     setForm({
       ...form,
       startTime: startTime.toISOString(),
-    });
-    console.log(startTime.toISOString());
-    // 데이터베이스에 시작 시간 저장
-
-    db.transaction((tx) => {
-      tx.executeSql(
-        "UPDATE courses SET startTime = ? WHERE id = ?;",
-        [startTime.toISOString(), form.id],
-        () => console.log("시작 시간 업데이트 성공"),
-        (_, error) => console.log("시작 시간 업데이트 실패", error)
-      );
     });
     setSelectedStartTime(startTime);
     hideStartTimePicker();
@@ -360,7 +357,9 @@ const ProcessScreen = () => {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <Text style={styles.text}>준비 과정 추가</Text>
+        <Text style={styles.text}>
+          {courseId ? "준비 과정 수정" : "준비 과정 추가"}
+        </Text>
       </View>
       {/* 준비 과정 이름 입력 */}
       <View style={styles.middleSection}>
@@ -538,7 +537,7 @@ const ProcessScreen = () => {
       )}
       <MsgModal
         isVisible={msgModal}
-        message1={"설정 중이던 중비 과정은 저장되지 않아요."}
+        message1={"설정 중이던 준비 과정은 저장되지 않아요."}
         message2={"나가시겠어요?"}
         leftBtnText={"취소"}
         rightBtnText={"나가기"}
