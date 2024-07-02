@@ -4,13 +4,14 @@ import { Text, TouchableOpacity, View, Image } from "react-native";
 import styles from "./styles";
 import TodoTimerList from "./todoTimerList";
 import { useNavigation } from "@react-navigation/native";
-import ToolTip from "../../assets/img/Icon/tooltip.svg";
-import Skip from "../../assets/img/Icon/skip.svg";
 import MsgModal from "../../components/Modal/msgModal";
 import { useDatabase } from "../../hooks/useDatabase";
 import { useCourse } from "../../hooks/useCourse";
 import { useIconImage } from "../../hooks/useIconImage";
 import useTimer from "../../hooks/useTimer";
+import * as React from "react";
+import Skip from "./components/svg/skip";
+import ToolTip from "./components/svg/tooltip";
 
 const TimerScreen = ({ route }) => {
   const navigation = useNavigation();
