@@ -1,12 +1,12 @@
 import moment from "moment";
 import { Text, View, Platform } from "react-native";
 import styles from "./styles";
-import IosList1 from "../../assets/img/indicator/list_1_ios.svg";
-import IosList2 from "../../assets/img/indicator/list_2_ios.svg";
-import IosList3 from "../../assets/img/indicator/list_3_ios.svg";
-import AosList1 from "../../assets/img/indicator/list_1_aos.svg";
-import AosList2 from "../../assets/img/indicator/list_2_aos.svg";
-import AosList3 from "../../assets/img/indicator/list_3_aos.svg";
+import AosList1 from "./components/svg/aosList1";
+import AosList2 from "./components/svg/aosList2";
+import AosList3 from "./components/svg/aosList3";
+import IosList1 from "./components/svg/iosList1";
+import IosList2 from "./components/svg/iosList2";
+import IosList3 from "./components/svg/iosList3";
 
 const TodoTimerList = ({ lastes }) => {
   const minutesToString = (minutes) => {
@@ -74,7 +74,7 @@ const TodoTimerList = ({ lastes }) => {
 
 function BackgroundSVG({ length }) {
   if (length === 0) {
-    return;
+    return null;
   }
   if (Platform.OS === "ios") {
     if (length === 1) {
