@@ -14,9 +14,9 @@ const TodoTimerList = ({ lastes }) => {
     return moment.utc(duration.asMilliseconds()).format("HH : mm : ss");
   };
 
-  const truncate = (str) => {
-    if (str.length > 5) {
-      return str.slice(0, 5) + "...";
+  const ensureTwoLines = (str) => {
+    if (str.length > 9) {
+      return str.slice(0, 9) + "\n" + str.slice(9);
     }
     return str;
   };
@@ -25,15 +25,25 @@ const TodoTimerList = ({ lastes }) => {
     <>
       <BackgroundSVG length={lastes.length} />
       <View style={styles.todoNow}>
-        <Text style={styles.todoListTitleText}>{truncate(lastes[0].name)}</Text>
+        <Text
+          style={styles.todoListTitleText}
+          numberOfLines={2}
+          lineHeight={20}
+        >
+          {ensureTwoLines(lastes[0].name)}
+        </Text>
         <Text style={styles.todoListTimeText}>
           {minutesToString(lastes[0].minutes)}
         </Text>
       </View>
       {lastes.length >= 2 ? (
         <View style={styles.todoNext1}>
-          <Text style={styles.todoListTitleText}>
-            {truncate(lastes[1].name)}
+          <Text
+            style={styles.todoListTitleText}
+            numberOfLines={2}
+            lineHeight={20}
+          >
+            {ensureTwoLines(lastes[1].name)}
           </Text>
           <Text style={styles.todoListTimeText}>
             {minutesToString(lastes[1].minutes)}
@@ -44,8 +54,12 @@ const TodoTimerList = ({ lastes }) => {
       )}
       {lastes.length >= 3 ? (
         <View style={(styles.todoNext2, styles.lastText)}>
-          <Text style={styles.todoListTitleText}>
-            {truncate(lastes[2].name)}
+          <Text
+            style={styles.todoListTitleText}
+            numberOfLines={2}
+            lineHeight={20}
+          >
+            {ensureTwoLines(lastes[2].name)}
           </Text>
           <Text style={styles.todoListTimeText}>
             {minutesToString(lastes[2].minutes)}
