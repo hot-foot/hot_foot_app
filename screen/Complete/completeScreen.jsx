@@ -12,7 +12,7 @@ const CompleteScreen = ({ route }) => {
   useEffect(() => {
     const sendCompleteNotification = async () => {
       await sendNotification({
-        title: "${course.name}",
+        title: `${course.name}`,
         body: `나가야 할 시간이에요! 빠르게 준비를 마무리하세요!`,
         sound: "BB-06_finish.mp3", // 번들에 포함된 사운드 파일 이름
         trigger: null, // 즉시 알림
