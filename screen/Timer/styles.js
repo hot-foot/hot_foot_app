@@ -68,8 +68,8 @@ export default StyleSheet.create({
     borderColor: "#4B4B4B",
   },
   todoImage: {
-    width: moderateScale(64),
-    height: moderateScale(64),
+    width: moderateScale(76),
+    height: moderateScale(76),
   },
   todoSection: {
     width: "100%",
