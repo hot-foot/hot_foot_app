@@ -24,12 +24,8 @@ const TodoTimerList = ({ lastes }) => {
   return (
     <>
       <BackgroundSVG length={lastes.length} />
-      <View style={styles.todoNow}>
-        <Text
-          style={styles.todoListTitleText}
-          numberOfLines={2}
-          lineHeight={20}
-        >
+      <View style={styles.todo}>
+        <Text style={styles.todoListTitleText} numberOfLines={2}>
           {ensureTwoLines(lastes[0].name)}
         </Text>
         <Text style={styles.todoListTimeText}>
@@ -37,12 +33,8 @@ const TodoTimerList = ({ lastes }) => {
         </Text>
       </View>
       {lastes.length >= 2 ? (
-        <View style={styles.todoNext1}>
-          <Text
-            style={styles.todoListTitleText}
-            numberOfLines={2}
-            lineHeight={20}
-          >
+        <View style={styles.todo}>
+          <Text style={styles.todoListTitleText} numberOfLines={2}>
             {ensureTwoLines(lastes[1].name)}
           </Text>
           <Text style={styles.todoListTimeText}>
@@ -50,15 +42,11 @@ const TodoTimerList = ({ lastes }) => {
           </Text>
         </View>
       ) : (
-        <View style={styles.todoNext1}></View>
+        <View style={styles.todo} />
       )}
       {lastes.length >= 3 ? (
-        <View style={(styles.todoNext2, styles.lastText)}>
-          <Text
-            style={styles.todoListTitleText}
-            numberOfLines={2}
-            lineHeight={20}
-          >
+        <View style={styles.todo}>
+          <Text style={styles.todoListTitleText} numberOfLines={2}>
             {ensureTwoLines(lastes[2].name)}
           </Text>
           <Text style={styles.todoListTimeText}>
@@ -66,7 +54,7 @@ const TodoTimerList = ({ lastes }) => {
           </Text>
         </View>
       ) : (
-        <View style={styles.todoNext2}></View>
+        <View style={styles.todo} />
       )}
     </>
   );
@@ -76,59 +64,24 @@ function BackgroundSVG({ length }) {
   if (length === 0) {
     return null;
   }
-  if (Platform.OS === "ios") {
-    if (length === 1) {
-      return (
-        <IosList1
-          style={{ zIndex: 0, position: "absolute" }}
-          width="100%"
-          height="100%"
-        />
-      );
-    } else if (length === 2) {
-      return (
-        <IosList2
-          style={{ zIndex: 0, position: "absolute" }}
-          width="100%"
-          height="100%"
-        />
-      );
-    } else {
-      return (
-        <IosList3
-          style={{ zIndex: 0, position: "absolute" }}
-          width="100%"
-          height="100%"
-        />
-      );
-    }
-  } else {
-    if (length === 1) {
-      return (
-        <AosList1
-          style={{ zIndex: 0, position: "absolute" }}
-          width="100%"
-          height="100%"
-        />
-      );
-    } else if (length === 2) {
-      return (
-        <AosList2
-          style={{ zIndex: 0, position: "absolute" }}
-          width="100%"
-          height="100%"
-        />
-      );
-    } else {
-      return (
-        <AosList3
-          style={{ zIndex: 0, position: "absolute" }}
-          width="100%"
-          height="100%"
-        />
-      );
-    }
-  }
+  const SvgComponent =
+    Platform.OS === "ios"
+      ? length === 1
+        ? IosList1
+        : length === 2
+        ? IosList2
+        : IosList3
+      : length === 1
+      ? AosList1
+      : length === 2
+      ? AosList2
+      : AosList3;
+
+  return (
+    <View style={styles.svgContainer}>
+      <SvgComponent width="100%" height="100%" />
+    </View>
+  );
 }
 
 export default TodoTimerList;
