@@ -31,6 +31,36 @@ export const useTodo = (db, onDeleteDefaultTodo) => {
 
   const initDefaultTodo = () => {
     db.transaction((tx) => {
+      // 테스트용 데이터 추가
+
+      tx.executeSql(
+        `insert into courses
+            (id, name, travelMinute, arrivalTime, totalMinute, startTime, active)
+            values
+            (999, "test_data", 100, "01:46:33 GMT+0900", 43, "21:17:33 GMT+0900", 0)`,
+        []
+      );
+      tx.executeSql(
+        `insert into courseTodo
+            (courseId, todoId, listOrder)
+            values
+            (999, 1, 0)`,
+        []
+      );
+      tx.executeSql(
+        `insert into courseTodo
+            (courseId, todoId, listOrder)
+            values
+            (999, 3, 1)`,
+        []
+      );
+      tx.executeSql(
+        `insert into courseTodo
+            (courseId, todoId, listOrder)
+            values
+            (999, 4, 2)`,
+        []
+      );
       tx.executeSql(
         `select * from dbSetting where setting = 1;`,
         [],
