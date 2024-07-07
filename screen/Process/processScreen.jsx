@@ -64,9 +64,6 @@ const ProcessScreen = () => {
         console.log("selectedArrivalTime :::", selectedArrivalTime);
         setInputValue(course.name);
         setSelectedTasks(course.todos);
-        // setSelectedDepartureTime(new Date());
-        // setSelectedArrivalTime(new Date(course.arrivalTime));
-        // setSelectedStartTime(new Date(course.startTime));
         setForm(course);
       });
     }
@@ -167,11 +164,10 @@ const ProcessScreen = () => {
       todoIds: _.map(selectedTasks, "id"),
       travelMinute: form.travelMinute,
       arrivalTime: selectedArrivalTime,
-      // departureTime: selectedDepartureTime,
       departureTime: selectedStartTime,
     };
 
-    if (form.id) {
+    if (courseId) {
       updateCourse(updatedForm, {
         onSuccess: () => {
           navigation.navigate("Home", {
@@ -460,7 +456,7 @@ const ProcessScreen = () => {
             is24Hour={true}
           />
           <LargeBtn
-            text={"저장하기"}
+            text={courseId ? "수정하기" : "저장하기"}
             onClick={handleSaveForm}
             backgroundColor={isSaveDisabled ? "#B9B9B9" : ""}
             isDisable={isSaveDisabled}
