@@ -68,7 +68,6 @@ const TimerScreen = ({ route }) => {
   };
 
   useEffect(() => {
-    console.log("course ids:", course);
     setTimeout(() => {
       fetchCourseTodo(course.id, setTodos);
     }, 200);

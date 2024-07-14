@@ -41,8 +41,6 @@ const SettingScreen = () => {
         toDate.setHours(hour);
         toDate.setMinutes(minutes);
 
-        console.log("date", r.time, toDate);
-
         setSelectedTime(toDate);
         setSettingValue(r);
         setDataKey((a) => {

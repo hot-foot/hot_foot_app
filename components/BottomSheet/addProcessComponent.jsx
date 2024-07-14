@@ -28,7 +28,6 @@ const AddProcessComponent = ({
   useEffect(() => {
     createTables(db);
     initDefaultTodo();
-    console.log("todos: ", todos);
   }, []);
 
   const initData = () => {
@@ -65,7 +64,6 @@ const AddProcessComponent = ({
   };
 
   const handleAddTodo = (newTodo) => {
-    console.log("newTodo ", newTodo);
     createTodo(newTodo);
     fetchData();
     setAddSheetVisible(false);
@@ -90,7 +88,6 @@ const AddProcessComponent = ({
         isVisible={isIconSheetVisible}
         onClose={handleTodoIconSheet}
         onAdd={(iconId) => {
-          console.log("아이콘패스:", iconId);
           setIconId(iconId);
           setAddSheetVisible(true);
           setIconSheetVisible(false);
