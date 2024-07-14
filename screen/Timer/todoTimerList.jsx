@@ -24,7 +24,7 @@ const TodoTimerList = ({ lastes }) => {
   return (
     <>
       <BackgroundSVG length={lastes.length} />
-      <View style={styles.todo}>
+      <View style={{ ...styles.todo, ...styles.firstTodo }}>
         <Text style={styles.todoListTitleText} numberOfLines={2}>
           {ensureTwoLines(lastes[0].name)}
         </Text>
