@@ -63,7 +63,7 @@ const ProcessListSheet = ({
                         id={item.id}
                         title={item.name}
                         time={item.minutes}
-                        imagePath={item.iconId}
+                        iconId={item.iconId}
                         onDelete={() => handleDeleteTask(item.id)}
                       />
                     </TouchableOpacity>

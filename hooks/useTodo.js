@@ -3,15 +3,15 @@ import { useEffect, useState } from "react";
 export const useTodo = (db, onDeleteDefaultTodo) => {
   const [todos, setTodos] = useState([]);
   const defaultTodos = [
-    { name: "식사하기", iconId: 6, minutes: 20 },
-    { name: "세수하기", iconId: 7, minutes: 10 },
-    { name: "양치하기", iconId: 8, minutes: 3 },
-    { name: "샤워하기", iconId: 9, minutes: 20 },
-    { name: "머리 말리기 및 손질", iconId: 10, minutes: 10 },
-    { name: "옷 입기", iconId: 11, minutes: 10 },
-    { name: "화장하기", iconId: 12, minutes: 15 },
-    { name: "짐 챙기기", iconId: 13, minutes: 5 },
-    { name: "여유 부리기", iconId: 14, minutes: 10 },
+    { id: 1, name: "식사", iconId: 6, minutes: 20 },
+    { id: 2, name: "세수", iconId: 7, minutes: 10 },
+    { id: 3, name: "양치", iconId: 8, minutes: 3 },
+    { id: 4, name: "샤워", iconId: 9, minutes: 20 },
+    { id: 5, name: "머리 말리기 및 손질", iconId: 10, minutes: 10 },
+    { id: 6, name: "옷 입기", iconId: 11, minutes: 10 },
+    { id: 7, name: "화장하기", iconId: 12, minutes: 15 },
+    { id: 8, name: "짐 챙기기", iconId: 13, minutes: 5 },
+    { id: 9, name: "여유 부리기", iconId: 14, minutes: 10 },
   ];
 
   const fetchData = (setData) => {
@@ -19,6 +19,7 @@ export const useTodo = (db, onDeleteDefaultTodo) => {
       tx.executeSql("SELECT * FROM todos", [], (_, { rows }) => {
         setTodos(rows._array);
         if (setData) {
+          console.log(rows._array);
           setData(rows._array);
         }
       });
@@ -41,10 +42,10 @@ export const useTodo = (db, onDeleteDefaultTodo) => {
             defaultTodos.forEach((todo) => {
               tx.executeSql(
                 `insert into todos
-                  (name, iconId, minutes)
+                  (id, name, iconId, minutes)
                   values
-                  (?, ?, ?)`,
-                [todo.name, todo.iconId, todo.minutes]
+                  (?, ?, ?, ?)`,
+                [todo.id, todo.name, todo.iconId, todo.minutes]
               );
             });
             tx.executeSql(`INSERT INTO dbSetting (setting) VALUES (1);`);

@@ -12,18 +12,20 @@ import {
   Platform,
 } from "react-native";
 import LargeBtn from "../../components/Btn/largeBtn";
+import { useIconImage } from "../../hooks/useIconImage";
 
 const AddProcessSheet = ({
   isVisible,
   onClose,
   onChange,
-  selectedIconPath,
+  selectedIconId,
   onAddTodo,
 }) => {
   const screenHeight = Dimensions.get("window").height;
   const [isPressed, setIsPressed] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [timeValue, setTimeValue] = useState("");
+  const { images } = useIconImage();
 
   const isFormValid = inputValue.trim() !== "" && timeValue !== "";
 
@@ -110,7 +112,7 @@ const AddProcessSheet = ({
                       onPressOut={() => setIsPressed(false)}
                     >
                       <Image
-                        source={selectedIconPath}
+                        source={images[selectedIconId]}
                         style={styles.todoIcon}
                       />
                     </TouchableOpacity>
@@ -150,8 +152,7 @@ const AddProcessSheet = ({
                     id: Date.now(),
                     name: inputValue,
                     minutes: timeValue,
-                    iconId: selectedIconPath,
-                    // imagePath: selectedIconPath,
+                    iconId: selectedIconId,
                   };
                   onAddTodo(newTodo);
                   onClose();

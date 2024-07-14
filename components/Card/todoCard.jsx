@@ -4,8 +4,11 @@ import {
   Swipeable,
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
+import { useIconImage } from "../../hooks/useIconImage";
 
-const TodoCard = ({ id, title, time, imagePath, onDelete }) => {
+const TodoCard = ({ id, title, time, iconId, onDelete }) => {
+  const { images } = useIconImage();
+
   const renderRightActions = () => (
     <TouchableOpacity onPress={() => onDelete(id)} style={styles.deleteButton}>
       <Text style={styles.deleteButtonText}>삭제</Text>
@@ -28,7 +31,7 @@ const TodoCard = ({ id, title, time, imagePath, onDelete }) => {
                   padding: 4,
                 }}
               >
-                <Image source={imagePath} style={styles.icon} />
+                <Image source={images[iconId]} style={styles.icon} />
               </View>
               <Text style={styles.text}>{title}</Text>
             </View>

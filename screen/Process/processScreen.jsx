@@ -396,7 +396,7 @@ const ProcessScreen = () => {
               id={task.id}
               title={task.name}
               time={task.minutes}
-              imagePath={task.iconId}
+              iconId={task.iconId}
               onDelete={() => handleDeleteTask(task.id, index)}
             />
           ))}

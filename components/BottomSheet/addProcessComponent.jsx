@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { TODO_ICON } from "../../data/processData";
 import ProcessListSheet from "./ProcessListSheet";
 import AddProcessSheet from "./addProcessSheet";
 import TodoIconSheet from "./todoIconSheet";
 import { useDatabase } from "../../hooks/useDatabase";
 import { useTodo } from "../../hooks/useTodo";
+import { useIconImage } from "../../hooks/useIconImage";
 
 const AddProcessComponent = ({
   onAdd,
@@ -22,13 +22,13 @@ const AddProcessComponent = ({
   const [isAddSheetVisible, setAddSheetVisible] = useState(false);
   const [isActionSheetVisible, setActionSheetVisible] =
     useState(isSheetVisible);
-  const [selectedIconPath, setSelectedIconPath] = useState(
-    TODO_ICON[0].imagePath
-  );
+  const { images } = useIconImage();
+  const [iconId, setIconId] = useState(0);
 
   useEffect(() => {
     createTables(db);
     initDefaultTodo();
+    console.log("todos: ", todos);
   }, []);
 
   const initData = () => {
@@ -61,10 +61,11 @@ const AddProcessComponent = ({
   const handleAddProcessSheet = () => {
     setAddSheetVisible(false);
     setActionSheetVisible(true);
-    setSelectedIconPath(TODO_ICON[0].imagePath);
+    setIconId(0);
   };
 
   const handleAddTodo = (newTodo) => {
+    console.log("newTodo ", newTodo);
     createTodo(newTodo);
     fetchData();
     setAddSheetVisible(false);
@@ -88,8 +89,9 @@ const AddProcessComponent = ({
       <TodoIconSheet
         isVisible={isIconSheetVisible}
         onClose={handleTodoIconSheet}
-        onAdd={(iconPath) => {
-          setSelectedIconPath(iconPath);
+        onAdd={(iconId) => {
+          console.log("아이콘패스:", iconId);
+          setIconId(iconId);
           setAddSheetVisible(true);
           setIconSheetVisible(false);
         }}
@@ -98,7 +100,7 @@ const AddProcessComponent = ({
         isVisible={isAddSheetVisible}
         onClose={handleAddProcessSheet}
         onChange={handleChangeIcon}
-        selectedIconPath={selectedIconPath}
+        selectedIconId={iconId}
         onAddTodo={handleAddTodo}
       />
     </>
