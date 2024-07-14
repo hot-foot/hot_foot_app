@@ -167,7 +167,7 @@ const TimerScreen = ({ route }) => {
         message2="종료하시겠어요?"
         onClose={handleCloseModal}
         leftBtnText={"취소"}
-        rightBtnText={"나가기"}
+        rightBtnText={"종료하기"}
         onConfirm={handleExitTimer}
       />
     </View>
