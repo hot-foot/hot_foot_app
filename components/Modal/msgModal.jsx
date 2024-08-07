@@ -6,12 +6,13 @@ const MsgModal = ({
   message1,
   message2,
   onClose,
+  onConfirm,
   leftBtnText,
   rightBtnText,
 }) => {
   return (
     <Modal
-      animationType="slide"
+      animationType="none"
       transparent={true}
       visible={isVisible}
       onRequestClose={onClose}
@@ -31,7 +32,7 @@ const MsgModal = ({
               <Text style={styles.leftBtnText}>{leftBtnText}</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={onClose}
+              onPress={onConfirm}
               style={styles.rightBtn}
               activeOpacity={1}
             >
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.80)",
   },
   modalView: {
-    width: 304,
+    width: 320,
     borderWidth: 2,
     borderColor: "#4B4B4B",
     borderStyle: "solid",
@@ -63,15 +64,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingTop: 40,
     paddingBottom: 40,
-    paddingRight: 24,
-    paddingLeft: 24,
+    paddingRight: 12,
+    paddingLeft: 12,
     borderTopLeftRadius: 6,
     borderTopRightRadius: 6,
   },
   message: {
     textAlign: "center",
     fontSize: 16,
-    fontWeight: "400",
+    fontFamily: "Pretendard_Regular",
+    color: "#1b1b1b",
   },
   buttonContainer: {
     flexDirection: "row",
@@ -102,13 +104,13 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     textAlign: "center",
     fontSize: 16,
-    fontWeight: "700",
+    fontFamily: "Pretendard_Bold",
   },
   leftBtnText: {
     color: "#1B1B1B",
     textAlign: "center",
     fontSize: 16,
-    fontWeight: "700",
+    fontFamily: "Pretendard_Bold",
   },
 });
 

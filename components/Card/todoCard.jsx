@@ -4,9 +4,10 @@ import {
   Swipeable,
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
+import { useIconImage } from "../../hooks/useIconImage";
 
-const TodoCard = ({ id, title, time, imagePath, onDelete }) => {
-  const localImage = require("../../assets/img/action/clothing.png");
+const TodoCard = ({ id, title, time, iconId, onDelete }) => {
+  const { images } = useIconImage();
 
   const renderRightActions = () => (
     <TouchableOpacity onPress={() => onDelete(id)} style={styles.deleteButton}>
@@ -18,7 +19,7 @@ const TodoCard = ({ id, title, time, imagePath, onDelete }) => {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Swipeable
         renderRightActions={renderRightActions}
-        onSwipeableOpen={() => onDelete(id)}
+        // onSwipeableOpen={() => onDelete(id)}
       >
         <View style={styles.containter}>
           <View style={styles.section}>
@@ -30,7 +31,7 @@ const TodoCard = ({ id, title, time, imagePath, onDelete }) => {
                   padding: 4,
                 }}
               >
-                <Image source={imagePath} style={styles.icon} />
+                <Image source={images[iconId]} style={styles.icon} />
               </View>
               <Text style={styles.text}>{title}</Text>
             </View>

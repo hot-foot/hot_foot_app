@@ -11,11 +11,21 @@ import {
 } from "react-native";
 import TodoCard from "../Card/todoCard";
 import PlusBtn from "../Btn/plusBtn";
-import { TODO_LIST } from "../../data/processData";
 
-const ProcessListSheet = ({ isVisible, onClose, onAdd, onPlus }) => {
+const ProcessListSheet = ({
+  isVisible,
+  onClose,
+  onAdd,
+  onPlus,
+  todoList,
+  onDeleteTask,
+}) => {
   const screenHeight = Dimensions.get("window").height;
   const halfScreenHeight = screenHeight * 0.4;
+
+  const handleDeleteTask = (id) => {
+    onDeleteTask(id);
+  };
 
   return (
     <Modal
@@ -42,21 +52,22 @@ const ProcessListSheet = ({ isVisible, onClose, onAdd, onPlus }) => {
             </View>
             <ScrollView style={{ maxHeight: halfScreenHeight }}>
               <View style={{ gap: 8 }}>
-                {TODO_LIST.map((item) => (
-                  <TouchableOpacity
-                    key={item.id}
-                    activeOpacity={0.8}
-                    onPress={() => onAdd(item)}
-                  >
-                    <TodoCard
-                      id={item.id}
-                      title={item.title}
-                      time={item.time}
-                      imagePath={item.imagePath}
-                      onDelete={() => {}}
-                    />
-                  </TouchableOpacity>
-                ))}
+                {todoList &&
+                  todoList.map((item) => (
+                    <TouchableOpacity
+                      key={item.id}
+                      activeOpacity={0.8}
+                      onPress={() => onAdd(item)}
+                    >
+                      <TodoCard
+                        id={item.id}
+                        title={item.name}
+                        time={item.minutes}
+                        iconId={item.iconId}
+                        onDelete={() => handleDeleteTask(item.id)}
+                      />
+                    </TouchableOpacity>
+                  ))}
               </View>
             </ScrollView>
             <View style={styles.actionItem}>
@@ -82,7 +93,6 @@ const styles = StyleSheet.create({
   },
   actionSheet: {
     backgroundColor: "white",
-    // alignItems: "center",
     paddingLeft: 24,
     paddingRight: 24,
   },
@@ -99,20 +109,13 @@ const styles = StyleSheet.create({
     fontFamily: "Pretendard_SemiBold",
     flex: 1,
     textAlign: "center",
+    left: 8,
   },
   actionItem: {
-    // paddingVertical: 34,
     paddingBottom: 34,
     paddingTop: 16,
     width: "100%",
     alignItems: "center",
-  },
-  actionText: {
-    fontSize: 20,
-    fontWeight: 500,
-    color: "#1F1F1F",
-    paddingTop: 10,
-    paddingBottom: 10,
   },
   icon: {
     width: 18,

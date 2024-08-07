@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 
 export default StyleSheet.create({
   container: {
@@ -10,67 +11,74 @@ export default StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     backgroundColor: "#F5F5F5",
-    paddingTop: 59,
-    paddingBottom: 12,
-    paddingLeft: 24,
-    paddingRight: 24,
+    paddingTop: verticalScale(59),
+    paddingBottom: verticalScale(12),
+    paddingLeft: scale(24),
+    paddingRight: scale(24),
     borderBottomColor: "#4B4B4B",
-    borderBottomWidth: 2,
+    borderBottomWidth: moderateScale(2),
   },
   text: {
     color: "#1B1B1B",
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontFamily: "Pretendard_SemiBold",
     alignSelf: "center",
-    right: 12,
+    right: scale(12),
   },
   icon: {
-    height: 24,
-    width: 24,
+    height: moderateScale(24),
+    width: moderateScale(24),
   },
   iconBox: { alignSelf: "center" },
-  padding: { paddingLeft: 24, paddingRight: 24 },
+  padding: { paddingLeft: scale(24), paddingRight: scale(24) },
   contentContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
   content: {
-    marginTop: 24,
-    gap: 8,
-    marginBottom: 55,
+    marginTop: verticalScale(24),
+    gap: scale(8), // Note: React Native doesn't support 'gap' in Flexbox yet as of my last update.
+    marginBottom: verticalScale(55),
   },
   contentTitle: {
     color: "#1B1B1B",
     fontFamily: "Pretendard_Bold",
-    fontSize: 20,
-    marginBottom: 20,
-    paddingLeft: 24,
-    paddingRight: 24,
+    fontSize: moderateScale(20),
+    marginBottom: verticalScale(20),
+    paddingLeft: scale(24),
+    paddingRight: scale(24),
   },
   contentText: {
     color: "#1B1B1B",
     fontFamily: "Pretendard_SemiBold",
-    fontSize: 16,
+    fontSize: moderateScale(16),
   },
   contentDes: {
     color: "#636363",
     fontFamily: "Pretendard_Regular",
-    fontSize: 12,
-    marginBottom: 4,
+    fontSize: moderateScale(12),
+    marginBottom: verticalScale(4),
   },
   line: {
     width: "100%",
     backgroundColor: "#4B4B4B",
-    marginBottom: 10,
-    marginTop: 12,
+    marginBottom: verticalScale(10),
+    marginTop: verticalScale(12),
   },
   time: {
     fontFamily: "Pretendard_SemiBold",
-    fontSize: 16,
+    fontSize: moderateScale(16),
     color: "#969696",
     textAlign: "center",
-    paddingTop: 4,
-    paddingBottom: 4,
+    paddingTop: verticalScale(4),
+    paddingBottom: verticalScale(4),
+  },
+  timeSection: {
+    borderColor: "#B9B9B9",
+    borderWidth: moderateScale(2),
+    width: scale(100),
+    borderRadius: moderateScale(4),
+    backgroundColor: "#E1E1E1",
   },
   timeSection: {
     borderColor: "#B9B9B9",
@@ -78,5 +86,12 @@ export default StyleSheet.create({
     width: 100,
     borderRadius: 4,
     backgroundColor: "#E1E1E1",
+  },
+  timeSectionActive: {
+    borderColor: "#4CAF50",
+    backgroundColor: "#A5D6A7",
+  },
+  timeActive: {
+    color: "#1B5E20",
   },
 });

@@ -1,14 +1,10 @@
-import React, { useRef, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableWithoutFeedback,
-} from "react-native";
-import { useEffect } from "react";
+import React, { useRef } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useEffect, useState } from "react";
 import SlimToggleSwitch from "../ToggleSwitch/slimToggleSwitch";
 import DotMenu from "./dotMenu";
+import { useDatabase } from "../../hooks/useDatabase";
+import { useCourse } from "../../hooks/useCourse";
 
 const PreparationCard = ({
   isDisabled,
@@ -20,7 +16,14 @@ const PreparationCard = ({
   id,
   setActiveModalId,
   activeModalId,
+  updateData,
+  onPress,
 }) => {
+  const { openDatabase } = useDatabase();
+  const db = openDatabase();
+  const { deleteCourse, copyCourse, updateActive } = useCourse(db);
+  const [active, setActive] = useState(!isDisabled);
+
   const getTextColorStyle = () => ({
     color: isDisabled ? "#969696" : "#1B1B1B",
   });
@@ -37,26 +40,36 @@ const PreparationCard = ({
     }
   }, [activeModalId]);
 
-  const optionModalRef = useRef < View > null;
+  const optionModalRef = useRef(null);
   const handlePressOutside = () => {
     if (optionModalRef.current) {
       setActiveModalId("");
     }
   };
 
-  const handleDeleteClick = () => {
-    console.log("delete", id);
+  const handleDeleteClick = async () => {
+    deleteCourse(id);
+    updateData();
   };
 
-  const handleCopyClick = () => {
-    console.log("copy", id);
+  const handleCopyClick = async () => {
+    copyCourse(id);
+    updateData();
+  };
+
+  const handleCardPress = () => {
+    onPress(id);
   };
 
   console.log("id", id);
   console.log("activeModalId", activeModalId);
 
   return (
-    <TouchableWithoutFeedback onPress={handlePressOutside}>
+    <TouchableOpacity
+      onPress={handleCardPress}
+      onPressOut={handlePressOutside}
+      activeOpacity={0.8}
+    >
       <View>
         <View style={[styles.card, getBackgoundColorStyle()]}>
           <View style={styles.row}>
@@ -82,9 +95,12 @@ const PreparationCard = ({
             <View style={styles.rightColumn}>
               <View>
                 <SlimToggleSwitch
-                  isEnable={isDisabled}
-                  onClick={() => {}}
-                  id={1}
+                  isEnable={active}
+                  onClick={() => {
+                    updateActive(id, !active);
+                    setActive(!active);
+                  }}
+                  id={id}
                 />
               </View>
               <DotMenu
@@ -96,7 +112,7 @@ const PreparationCard = ({
           </View>
         </View>
       </View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   );
 };
 
@@ -131,11 +147,11 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: "Pretendard_SemiBold",
   },
   subText: {
     fontSize: 14,
-    fontWeight: "400",
+    fontFamily: "Pretendard_Regular",
   },
   icon: {
     width: 24,

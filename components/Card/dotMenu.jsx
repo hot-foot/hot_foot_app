@@ -16,7 +16,7 @@ const DotMenu = ({ onCopy, onDelete, onPress }) => {
     width: 0,
     height: 0,
   });
-  const buttonRef = useRef < TouchableOpacity > null;
+  const buttonRef = useRef(null);
 
   const openModal = () => {
     buttonRef.current?.measure((x, y, width, height, pageX, pageY) => {
@@ -38,7 +38,11 @@ const DotMenu = ({ onCopy, onDelete, onPress }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity ref={buttonRef} onPress={openModal}>
+      <TouchableOpacity
+        ref={buttonRef}
+        onPress={openModal}
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      >
         <Image
           source={require("../../assets/img/Icon/dotMenuIcon.png")}
           style={[styles.icon, { alignSelf: "center" }]}

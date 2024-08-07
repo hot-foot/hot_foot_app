@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,11 +8,14 @@ import {
   Dimensions,
   Image,
 } from "react-native";
-import { TODO_ICON } from "../../data/processData";
+import { useIconImage } from "../../hooks/useIconImage";
 
 const TodoIconSheet = ({ isVisible, onClose, onAdd }) => {
   const screenHeight = Dimensions.get("window").height;
   const halfScreenHeight = screenHeight * 0.4;
+  const [isPressed, setIsPressed] = useState(null);
+  const [selectedIconId, setSelectedIconId] = useState(null);
+  const { images } = useIconImage();
 
   return (
     <Modal
@@ -47,15 +50,36 @@ const TodoIconSheet = ({ isVisible, onClose, onAdd }) => {
                 justifyContent: "center",
               }}
             >
-              {TODO_ICON.map((item) => (
+              {images.map((imagePath, id) => (
                 <TouchableOpacity
-                  key={item.id}
-                  activeOpacity={0.8}
-                  onPress={() => {}}
+                  key={id}
+                  activeOpacity={1}
+                  onPress={() => {
+                    setSelectedIconId(id);
+                    onAdd(id);
+                    setIsPressed(null);
+                  }}
+                  onPressIn={() => setIsPressed(id)}
+                  onPressOut={() => setIsPressed(null)}
+                  style={[
+                    styles.iconContainer,
+                    {
+                      backgroundColor:
+                        selectedIconId === id
+                          ? "#777777"
+                          : isPressed === id
+                          ? "#969696"
+                          : "#E1E1E1",
+                      borderColor:
+                        selectedIconId === id
+                          ? "#777777"
+                          : isPressed === id
+                          ? "#969696"
+                          : "#E1E1E1",
+                    },
+                  ]}
                 >
-                  <View style={styles.iconContainer}>
-                    <Image source={item.imagePath} style={styles.todoIcon} />
-                  </View>
+                  <Image source={imagePath} style={styles.todoIcon} />
                 </TouchableOpacity>
               ))}
             </View>

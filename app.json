@@ -13,17 +13,40 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.suyoooi.hotfoot",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.6",
+      "sound": true,
+      "permissions": ["NOTIFICATIONS"],
+      "infoPlist": {
+        "NSUserNotificationUsageDescription": "푸시 알림을 허용하면 새로운 알림을 받을 수 있습니다.",
+        "UIBackgroundModes": ["fetch", "remote-notification"],
+        "CFBundleAllowMixedLocalizations": true,
+        "CFBundleDevelopmentRegion": "ko",
+        "CFBundleLocalizations": ["ko"]
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/img/info/app_icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "sound": true,
+      "permissions": ["NOTIFICATIONS"]
+    },
+    "notification": {
+      "iosDisplayInForeground": true,
+      "android": {
+        "sound": true,
+        "icon": "./assets/icon.png"
+      },
+      "ios": {
+        "sound": true,
+        "icon": "./assets/icon.png"
       }
     },
     "web": {
+      "bundler": "metro",
       "favicon": "./assets/favicon.png"
     },
     "extra": {
@@ -31,6 +54,24 @@
         "projectId": "92cf28cf-62ad-4456-aacd-d33c6d64b0dd"
       }
     },
-    "owner": "suyoooi"
+    "owner": "suyoooi",
+    "plugins": [
+      "expo-asset",
+      "expo-font",
+      [
+        "expo-notifications",
+        {
+          "sounds": [
+            "./assets/sounds/BB-06_finish.mp3",
+            "./assets/sounds/BB-06_start.mp3",
+            "./assets/sounds/BB-06_start_10.mp3",
+            "./assets/sounds/BB-06_start_20.mp3",
+            "./assets/sounds/BB-06_next.mp3",
+            "./assets/sounds/BB-06_go_out5.mp3",
+            "./assets/sounds/BB-06_go_out10.mp3"
+          ]
+        }
+      ]
+    ]
   }
 }
